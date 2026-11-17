@@ -57,6 +57,34 @@ input:focus{outline:2px solid var(--ink);outline-offset:-1px}
 footer{color:var(--mute);font-size:13px;padding:26px 0 60px;border-top:1px solid var(--rule);margin-top:26px}
 .hide{display:none}
 </style>
+<!-- page-transitions:v1 -->
+<style>
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:hlOut .22s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hlOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes hlIn{from{opacity:0;transform:translateY(10px)}}
+html.pt-leave body{opacity:0;transform:translateY(-6px);transition:opacity .2s ease,transform .2s ease}
+html.pt-enter body{animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
+.pt-ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.22;transform:scale(0);animation:ptRip .55s ease-out forwards}
+@keyframes ptRip{to{transform:scale(1);opacity:0}}
+.pt-flash{animation:ptFlash 1.2s ease}
+@keyframes ptFlash{0%{box-shadow:inset 0 0 0 9999px rgba(185,129,31,.10)}100%{box-shadow:inset 0 0 0 9999px rgba(185,129,31,0)}}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}html.pt-leave body,html.pt-enter body{animation:none;transition:none;opacity:1;transform:none}.pt-ripple,.pt-flash{animation:none;display:none}}
+</style>
+<script>
+(function(){var d=document,h=d.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches,vt='onpagereveal' in window;
+if(!vt&&!rm){h.classList.add('pt-enter');setTimeout(function(){h.classList.remove('pt-enter')},500);}
+addEventListener('pageshow',function(e){if(e.persisted)h.classList.remove('pt-leave')});
+d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');if(!el)return;
+ if(!rm&&(el.matches('.btn,button,.way,.slot,.day,.go'))){var r=el.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,c=d.createElement('span');c.className='pt-ripple';c.style.width=c.style.height=s+'px';c.style.left=(e.clientX-r.left-s/2)+'px';c.style.top=(e.clientY-r.top-s/2)+'px';if(getComputedStyle(el).position==='static')el.style.position='relative';el.style.overflow='hidden';el.appendChild(c);setTimeout(function(){c.remove()},600);}
+ if(el.tagName!=='A'||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||el.target==='_blank'||el.hasAttribute('data-chat')||el.hasAttribute('download'))return;
+ var u=new URL(el.href,location.href);if(u.origin!==location.origin)return;
+ if(u.pathname===location.pathname&&u.hash){var t=d.getElementById(u.hash.slice(1));if(t){setTimeout(function(){t.classList.remove('pt-flash');void t.offsetWidth;t.classList.add('pt-flash')},450)}return;}
+ if(vt||rm||u.href===location.href)return;
+ e.preventDefault();h.classList.add('pt-leave');setTimeout(function(){location.href=u.href},190);
+},true);})();
+</script>
 </head>
 <body>
 <div class="demo" id="demo">Demo booking page for a fictional clinic, made by Halora. <a href="/">Back to Halora</a></div>
