@@ -82,8 +82,8 @@ d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');
 <header><a class="logo" href="/" id="home">Halora<span>.</span></a><button class="lang" id="lang">العربية</button></header>
 
 <div id="flow">
-<h1 data-t="h1">Book a call with Ziad</h1>
-<p class="lead" data-t="lead">20 minutes on Google Meet. I'll show you Noor answering a clinic's WhatsApp and phone, and we'll see if it fits your clinic.</p>
+<h1 data-t="h1">Book a call</h1>
+<p class="lead" data-t="lead">20 minutes on Google Meet. We'll show you Noor answering a clinic's WhatsApp, website chat and phone, and see if it fits your clinic.</p>
 <ul class="facts"><li data-t="f1">20 minutes</li><li data-t="f2">Google Meet link by email</li><li data-t="f3">English or Arabic</li></ul>
 
 <div class="step"><h2><em>1</em><span data-t="s1">Day</span></h2><div class="days" id="days"><span class="muted" data-t="loading">Loading free times…</span></div></div>
@@ -116,7 +116,7 @@ d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');
 (function(){
 var API='https://autova.app.n8n.cloud/webhook/halora-call';
 var ar=new URLSearchParams(location.search).get('lang')==='ar';
-var L={en:{},ar:{h1:'احجز مكالمة مع زياد',lead:'٢٠ دقيقة على Google Meet. أعرض لك نور وهي ترد على واتساب ومكالمات العيادة، ونرى إن كانت تناسب عيادتك.',f1:'٢٠ دقيقة',f2:'رابط Google Meet على بريدك',f3:'بالعربي أو الإنجليزي',s1:'اليوم',s2:'الوقت (بتوقيت دبي)',s3:'بياناتك',loading:'جارٍ تحميل الأوقات المتاحة…',pick:'اختر اليوم أولاً.',none:'لا توجد أوقات متاحة في هذا اليوم.',name:'اسمك',clinic:'العيادة أو النشاط',email:'البريد الإلكتروني (للدعوة)',phone:'رقم الواتساب',note:'هل هناك شيء تود أن أعرفه؟ (اختياري)',go:'احجز المكالمة',sending:'جارٍ الحجز…',ok:'تم الحجز',okm:'دعوة التقويم في طريقها إلى بريدك. نراك قريباً.',meet:'افتح رابط Meet',foot:'تفضّل واتساب؟',msg:'راسلني',net:'تعذّر الاتصال. حاول مرة أخرى.',fill:'يرجى تعبئة الاسم والعيادة والبريد ورقم الواتساب.',fail:'تعذّر تحميل الأوقات. راسلني على واتساب.'}};
+var L={en:{},ar:{h1:'احجز مكالمة',lead:'٢٠ دقيقة على Google Meet. نعرض لك نور وهي ترد على واتساب ودردشة الموقع ومكالمات العيادة، ونرى إن كانت تناسب عيادتك.',f1:'٢٠ دقيقة',f2:'رابط Google Meet على بريدك',f3:'بالعربي أو الإنجليزي',s1:'اليوم',s2:'الوقت (بتوقيت دبي)',s3:'بياناتك',loading:'جارٍ تحميل الأوقات المتاحة…',pick:'اختر اليوم أولاً.',none:'لا توجد أوقات متاحة في هذا اليوم.',name:'اسمك',clinic:'العيادة أو النشاط',email:'البريد الإلكتروني (للدعوة)',phone:'رقم الواتساب',note:'هل هناك شيء تود أن أعرفه؟ (اختياري)',go:'احجز المكالمة',sending:'جارٍ الحجز…',ok:'تم الحجز',okm:'دعوة التقويم في طريقها إلى بريدك. نراك قريباً.',meet:'افتح رابط Meet',foot:'تفضّل واتساب؟',msg:'راسلني',net:'تعذّر الاتصال. حاول مرة أخرى.',fill:'يرجى تعبئة الاسم والعيادة والبريد ورقم الواتساب.',fail:'تعذّر تحميل الأوقات. راسلني على واتساب.'}};
 var EN={none:'No free times on this day.',sending:'Booking…',net:'Connection problem. Please try again.',fill:'Please fill in your name, clinic, email and WhatsApp number.',fail:'Could not load times. Please message me on WhatsApp.'};
 function t(k){return ar?(L.ar[k]||EN[k]||k):(EN[k]||k)}
 var $=function(i){return document.getElementById(i)};
