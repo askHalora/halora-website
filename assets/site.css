@@ -299,3 +299,5 @@ html[dir=rtl] .xtag{letter-spacing:0}
 .js .hero .try,.js .hero .next{opacity:0;animation:fadeUp .8s var(--ease) forwards;animation-delay:.28s}.js .hero .next{animation-delay:.36s}
 .vd .lang-btn{min-width:130px;justify-content:center}
 @media (prefers-reduced-motion:reduce){.try-h .dot{animation:none}.js .hero .try,.js .hero .next{opacity:1;animation:none}}
+
+.new{display:inline-block;margin-inline-start:6px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--clay);color:#fff;padding:2px 7px;border-radius:20px;vertical-align:2px}html[dir=rtl] .new{letter-spacing:0}
