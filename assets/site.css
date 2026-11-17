@@ -250,3 +250,24 @@ html[dir=rtl] .typing{padding:10px 64px 6px 0}
   .js .rv,.js .log .ln,.js .log .sys,.js .hero .label,.js .hero h1,.js .hero .lead,.js .hero .ctas,.js .hero .note{opacity:1!important;transform:none!important;animation:none!important;transition:none!important}
   .btn:hover{transform:none}.progress,.typing{display:none!important}
 }
+
+/* ---------- 1-minute voice demo ---------- */
+.btn.voice{background:var(--green);border-color:var(--green)}
+.btn.voice:hover{background:var(--ink);border-color:var(--ink)}
+.vd{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(15,37,35,.55);-webkit-backdrop-filter:blur(6px);backdrop-filter:blur(6px);padding:16px;animation:fadeUp .3s ease}
+.vd-box{background:var(--card);max-width:400px;width:100%;padding:28px 24px 22px;text-align:center;box-shadow:0 30px 80px -30px rgba(0,0,0,.5)}
+.vd-ring{position:relative;width:148px;height:148px;margin:6px auto 14px}
+.vd-ring svg{position:absolute;inset:0;transform:rotate(-90deg)}
+.vd-ring circle{fill:none;stroke-width:6}
+.vd-ring .bg{stroke:var(--paper-2)}.vd-ring .fg{stroke:var(--clay);stroke-linecap:round;transition:stroke-dashoffset 1s linear}
+.vd-av{position:absolute;inset:16px;border-radius:50%;display:grid;place-items:center;font-size:44px;font-weight:500;color:var(--green);background:linear-gradient(145deg,#f6ecd6,#e7d3a8);transition:transform .15s}
+.vd.speaking .vd-av{animation:vdPulse 1s ease-in-out infinite}
+@keyframes vdPulse{50%{transform:scale(1.06);box-shadow:0 0 0 10px rgba(14,92,87,.12)}}
+.vd h3{margin:0 0 4px;font-weight:500;font-size:20px}
+.vd .st{color:var(--mute);font-size:14px;min-height:22px;margin:0 0 4px}
+.vd .tm{font-variant-numeric:tabular-nums;font-size:13px;color:var(--mute);margin-bottom:16px}
+.vd .note{font-size:12px;color:var(--mute);margin:14px 0 0;line-height:1.5}
+.vd .acts{display:flex;gap:8px;justify-content:center;flex-wrap:wrap}
+.vd .end{background:#b3261e;border-color:#b3261e}
+.vd .end:hover{background:#8c1d18;border-color:#8c1d18}
+@media (prefers-reduced-motion:reduce){.vd.speaking .vd-av{animation:none}}
