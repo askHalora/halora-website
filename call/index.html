@@ -1,0 +1,119 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Book a call · Halora</title>
+<meta name="description" content="Book a 20-minute call with Halora to see how Noor answers your clinic's WhatsApp and calls.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap">
+<style>
+:root{--pearl:#F3F5F2;--card:#fff;--ink:#0F2523;--ink2:#34504d;--mute:#647a77;--rule:#d9e0dc;--teal:#0E5C57;--teal-soft:#e3efed;--saffron:#B9811F;--warn:#a2462a}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--pearl);color:var(--ink);font:16px/1.55 "Readex Pro",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+.wrap{max-width:760px;margin:0 auto;padding:0 16px}
+header{padding:22px 0;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.logo{font-weight:600;font-size:20px;color:var(--ink);text-decoration:none;letter-spacing:-.01em}.logo span{color:var(--saffron)}
+.lang{background:none;border:1px solid var(--rule);padding:7px 12px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink2);border-radius:6px}
+h1{font-size:clamp(30px,6vw,42px);line-height:1.1;margin:18px 0 8px;font-weight:500;letter-spacing:-.02em}
+.lead{color:var(--ink2);margin:0 0 8px}
+.facts{display:flex;flex-wrap:wrap;gap:8px 18px;color:var(--mute);font-size:14px;margin:0 0 22px;padding:0;list-style:none}
+.facts li:before{content:"";display:inline-block;width:6px;height:6px;border-radius:50%;background:var(--saffron);margin-inline-end:8px;vertical-align:middle}
+.step{background:var(--card);border:1px solid var(--rule);border-radius:10px;padding:20px;margin-bottom:12px}
+.step h2{font-size:15px;font-weight:500;margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.step h2 em{font-style:normal;color:var(--teal);font-weight:600}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.day,.slot{font:inherit;background:#fff;border:1px solid var(--rule);border-radius:8px;cursor:pointer;color:var(--ink)}
+.day{min-width:64px;padding:8px 6px;text-align:center}.day small{display:block;color:var(--mute);font-size:12px}.day b{font-weight:500;font-size:20px}
+.day[disabled]{opacity:.35;cursor:default}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(78px,1fr));gap:6px}
+.slot{padding:9px 4px;text-align:center;font-variant-numeric:tabular-nums}
+.sel{border-color:var(--teal)!important;background:var(--teal)!important;color:#fff!important}.sel small{color:#d5e8e5!important}
+.grid{display:grid;grid-template-columns:1fr 1fr;gap:0 12px}@media(max-width:540px){.grid{grid-template-columns:1fr}}
+.grid>*{min-width:0}
+label{display:block;font-size:13px;color:var(--mute);margin:12px 0 6px}
+input,textarea{width:100%;padding:12px;border:1px solid #c9d3cf;border-radius:8px;background:#fff;font:inherit;color:var(--ink)}
+textarea{min-height:76px;resize:vertical}
+input:focus,textarea:focus{outline:2px solid var(--teal);outline-offset:-1px}
+.hp{position:absolute;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);opacity:0}
+.days{max-width:100%}
+.go{width:100%;margin-top:16px;padding:14px;background:var(--ink);color:#fff;border:0;border-radius:8px;font:inherit;font-weight:500;font-size:16px;cursor:pointer}.go:disabled{opacity:.4;cursor:default}
+.muted{color:var(--mute);font-size:14px}.err{color:var(--warn);font-size:14px;margin-top:10px;min-height:20px}
+.done{text-align:center;padding:34px 20px}.done .tick{font-size:48px;color:var(--teal);line-height:1}
+.done a.btn{display:inline-block;margin-top:14px;padding:12px 18px;background:var(--teal);color:#fff;text-decoration:none;border-radius:8px}
+footer{color:var(--mute);font-size:13px;padding:26px 0 60px;border-top:1px solid var(--rule);margin-top:26px}
+footer a{color:var(--ink2)}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="wrap">
+<header><a class="logo" href="/" id="home">Halora<span>.</span></a><button class="lang" id="lang">العربية</button></header>
+
+<div id="flow">
+<h1 data-t="h1">Book a call with Ziad</h1>
+<p class="lead" data-t="lead">20 minutes on Google Meet. I'll show you Noor answering a clinic's WhatsApp and phone, and we'll see if it fits your clinic.</p>
+<ul class="facts"><li data-t="f1">20 minutes</li><li data-t="f2">Google Meet link by email</li><li data-t="f3">English or Arabic</li></ul>
+
+<div class="step"><h2><em>1</em><span data-t="s1">Day</span></h2><div class="days" id="days"><span class="muted" data-t="loading">Loading free times…</span></div></div>
+<div class="step"><h2><em>2</em><span data-t="s2">Time (Dubai)</span></h2><div id="sinfo" class="muted" data-t="pick">Choose a day first.</div><div class="slots" id="slots"></div></div>
+<form class="step" id="f" novalidate><h2><em>3</em><span data-t="s3">Your details</span></h2>
+  <div class="grid">
+    <div><label for="nm" data-t="name">Your name</label><input id="nm" autocomplete="name" required maxlength="80"></div>
+    <div><label for="cl" data-t="clinic">Clinic or business</label><input id="cl" autocomplete="organization" required maxlength="120"></div>
+    <div><label for="em" data-t="email">Email (for the invite)</label><input id="em" type="email" autocomplete="email" required maxlength="120"></div>
+    <div><label for="ph" data-t="phone">WhatsApp number</label><input id="ph" type="tel" autocomplete="tel" placeholder="+971 50 123 4567" dir="ltr" required></div>
+  </div>
+  <label for="nt" data-t="note">Anything I should know? (optional)</label><textarea id="nt" maxlength="400"></textarea>
+  <div class="hp" aria-hidden="true"><input id="web" tabindex="-1" autocomplete="off"></div>
+  <button class="go" id="go" type="submit" disabled data-t="go">Book the call</button>
+  <div class="err" id="err" role="alert"></div>
+</form>
+</div>
+
+<div class="step done hide" id="done">
+  <div class="tick">✓</div>
+  <h1 data-t="ok">You're booked</h1>
+  <p class="lead" id="when"></p>
+  <p class="muted" data-t="okm">A calendar invite is on its way to your email. See you then.</p>
+  <a class="btn hide" id="meet" target="_blank" rel="noopener" data-t="meet">Open the Meet link</a>
+</div>
+
+<footer><span data-t="foot">Prefer WhatsApp?</span> <a href="https://wa.me/201026752686" id="wa" data-t="msg">Message me</a> · <a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a></footer>
+</div>
+<script>
+(function(){
+var API='https://autova.app.n8n.cloud/webhook/halora-call';
+var ar=new URLSearchParams(location.search).get('lang')==='ar';
+var L={en:{},ar:{h1:'احجز مكالمة مع زياد',lead:'٢٠ دقيقة على Google Meet. أعرض لك نور وهي ترد على واتساب ومكالمات العيادة، ونرى إن كانت تناسب عيادتك.',f1:'٢٠ دقيقة',f2:'رابط Google Meet على بريدك',f3:'بالعربي أو الإنجليزي',s1:'اليوم',s2:'الوقت (بتوقيت دبي)',s3:'بياناتك',loading:'جارٍ تحميل الأوقات المتاحة…',pick:'اختر اليوم أولاً.',none:'لا توجد أوقات متاحة في هذا اليوم.',name:'اسمك',clinic:'العيادة أو النشاط',email:'البريد الإلكتروني (للدعوة)',phone:'رقم الواتساب',note:'هل هناك شيء تود أن أعرفه؟ (اختياري)',go:'احجز المكالمة',sending:'جارٍ الحجز…',ok:'تم الحجز',okm:'دعوة التقويم في طريقها إلى بريدك. نراك قريباً.',meet:'افتح رابط Meet',foot:'تفضّل واتساب؟',msg:'راسلني',net:'تعذّر الاتصال. حاول مرة أخرى.',fill:'يرجى تعبئة الاسم والعيادة والبريد ورقم الواتساب.',fail:'تعذّر تحميل الأوقات. راسلني على واتساب.'}};
+var EN={none:'No free times on this day.',sending:'Booking…',net:'Connection problem. Please try again.',fill:'Please fill in your name, clinic, email and WhatsApp number.',fail:'Could not load times. Please message me on WhatsApp.'};
+function t(k){return ar?(L.ar[k]||EN[k]||k):(EN[k]||k)}
+var $=function(i){return document.getElementById(i)};
+function apply(){document.documentElement.lang=ar?'ar':'en';document.documentElement.dir=ar?'rtl':'ltr';$('lang').textContent=ar?'English':'العربية';$('home').href=ar?'/ar/':'/';
+ document.querySelectorAll('[data-t]').forEach(function(e){var k=e.getAttribute('data-t');if(!e.dataset.en)e.dataset.en=e.textContent;e.textContent=ar&&L.ar[k]?L.ar[k]:e.dataset.en;});}
+$('lang').onclick=function(){ar=!ar;var u=new URL(location.href);ar?u.searchParams.set('lang','ar'):u.searchParams.delete('lang');history.replaceState(null,'',u);apply();if(days)drawDays();};
+apply();
+var days=null,day=null,time=null;
+function fmt(d,o){return new Date(d+'T12:00:00Z').toLocaleDateString(ar?'ar-AE':'en-GB',Object.assign({timeZone:'UTC'},o))}
+function drawDays(){var box=$('days');box.innerHTML='';days.forEach(function(d){var b=document.createElement('button');b.type='button';b.className='day'+(day===d?' sel':'');b.disabled=!d.slots.length;
+ b.innerHTML='<small>'+fmt(d.date,{weekday:'short'})+'</small><b>'+fmt(d.date,{day:'numeric'})+'</b><small>'+fmt(d.date,{month:'short'})+'</small>';
+ b.onclick=function(){day=d;time=null;drawDays();drawSlots();check();};box.appendChild(b);});}
+function drawSlots(){var box=$('slots');box.innerHTML='';if(!day){$('sinfo').textContent=t('pick');return;}
+ $('sinfo').textContent=day.slots.length?'':t('none');
+ day.slots.forEach(function(s){var b=document.createElement('button');b.type='button';b.className='slot'+(time===s?' sel':'');b.textContent=s;b.onclick=function(){time=s;drawSlots();check();};box.appendChild(b);});}
+function check(){$('go').disabled=!(day&&time);}
+function load(){fetch(API+'?days=14',{cache:'no-store'}).then(function(r){return r.json()}).then(function(j){if(!j.ok)throw 0;days=j.days;day=days.filter(function(d){return d.slots.length})[0]||null;drawDays();drawSlots();})
+ .catch(function(){$('days').innerHTML='<span class="muted">'+t('fail')+'</span>';});}
+load();
+$('f').onsubmit=function(e){e.preventDefault();var err=$('err');err.textContent='';
+ var p={name:$('nm').value.trim(),clinic:$('cl').value.trim(),email:$('em').value.trim(),phone:$('ph').value.trim(),note:$('nt').value.trim(),website:$('web').value,date:day&&day.date,time:time,language:ar?'ar':'en'};
+ if(!p.name||!p.clinic||!p.email||!p.phone){err.textContent=t('fill');return;}
+ var g=$('go');g.disabled=true;g.textContent=t('sending');
+ fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(p)}).then(function(r){return r.json()}).then(function(j){
+  if(j.ok){$('flow').classList.add('hide');$('done').classList.remove('hide');$('when').textContent=j.when||(p.date+' '+p.time);if(j.meet){$('meet').href=j.meet;$('meet').classList.remove('hide');}window.scrollTo(0,0);return;}
+  err.textContent=j.error||t('net');g.textContent=ar?L.ar.go:'Book the call';load();time=null;check();})
+ .catch(function(){err.textContent=t('net');g.textContent=ar?L.ar.go:'Book the call';check();});};
+})();
+</script>
+</body>
+</html>
