@@ -1,0 +1,3 @@
+User-agent: *
+Allow: /
+Sitemap: https://askhalora.com/sitemap.xml
