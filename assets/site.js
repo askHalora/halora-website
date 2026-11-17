@@ -63,7 +63,7 @@
   if (!('IntersectionObserver' in window) || reduce) { d.querySelectorAll('.log .ln,.log .sys').forEach(function (e) { e.classList.add('in'); }); return; }
 
   // reveal groups with a light stagger
-  var groups = ['.sec-h', '.cols > div', '.ledger tbody tr', '.tl > *', '.portal > *', '.mock', '.plans > *', '.plans-note', '.pilot > *', '.founder > *', '.faq details', 'section .list > li', 'footer .wrap > *'];
+  var groups = ['.sec-h', '.cols > div', '.xf', '.xb', '.ledger tbody tr', '.tl > *', '.portal > *', '.mock', '.plans > *', '.plans-note', '.pilot > *', '.founder > *', '.faq details', 'section .list > li', 'footer .wrap > *'];
   var io = new IntersectionObserver(function (es) {
     es.forEach(function (e) { if (e.isIntersecting) { e.target.classList.add('in'); io.unobserve(e.target); } });
   }, { rootMargin: '0px 0px -8% 0px', threshold: 0.08 });
