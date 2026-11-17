@@ -156,8 +156,8 @@
   var d = document, ar = d.documentElement.lang === 'ar';
   var AGENT = 'agent_1601m7axax44ejb9ffwxa8t3gs2e', LIMIT = 60, MAXDAY = 3;
   var LIB = 'https://unpkg.com/@elevenlabs/client@1.32.1/dist/lib.iife.js';
-  var T = ar ? { t: 'مكالمة تجريبية مع نور', con: 'جارٍ الاتصال…', mic: 'اسمح باستخدام الميكروفون للبدء', lis: 'نور تستمع… تكلّم الآن', spk: 'نور تتكلم…', end: 'إنهاء المكالمة', done: 'انتهت المكالمة. أعجبتك؟', book: 'احجز مكالمة', pilot: 'ابدأ تجربة مجانية', close: 'إغلاق', left: 'ثانية متبقية', err: 'تعذّر الاتصال. تأكد من السماح بالميكروفون وحاول مرة أخرى.', lim: 'وصلت للحد اليومي للتجربة. احجز مكالمة لترى العرض كاملاً.', note: 'عيادة تجريبية. جرّب: «أبي أحجز تنظيف أسنان بكرة». لا تشارك معلومات صحية شخصية.' }
-             : { t: 'Demo call with Noor', con: 'Connecting…', mic: 'Allow the microphone to start', lis: 'Noor is listening… go ahead and speak', spk: 'Noor is speaking…', end: 'End call', done: 'Call ended. Liked it?', book: 'Book a call', pilot: 'Start a free pilot', close: 'Close', left: 's left', err: 'Could not connect. Please allow the microphone and try again.', lim: "You've reached today's demo limit. Book a call to see the full demo.", note: 'Demo clinic. Try: "I\'d like to book a cleaning tomorrow." Please don\'t share personal health details.' };
+  var T = ar ? { t: 'مكالمة تجريبية مع نور', pick: 'اختر لغة المكالمة', con: 'جارٍ الاتصال…', mic: 'اسمح باستخدام الميكروفون للبدء', lis: 'نور تستمع… تكلّم الآن', spk: 'نور تتكلم…', end: 'إنهاء المكالمة', done: 'انتهت المكالمة. أعجبتك؟', book: 'احجز مكالمة', pilot: 'ابدأ تجربة مجانية', close: 'إغلاق', left: 'ثانية متبقية', err: 'تعذّر الاتصال. تأكد من السماح بالميكروفون وحاول مرة أخرى.', lim: 'وصلت للحد اليومي للتجربة. احجز مكالمة لترى العرض كاملاً.', note: 'عيادة تجريبية. جرّب: «أبي أحجز تنظيف أسنان بكرة». لا تشارك معلومات صحية شخصية.' }
+             : { t: 'Demo call with Noor', pick: 'Choose the call language', con: 'Connecting…', mic: 'Allow the microphone to start', lis: 'Noor is listening… go ahead and speak', spk: 'Noor is speaking…', end: 'End call', done: 'Call ended. Liked it?', book: 'Book a call', pilot: 'Start a free pilot', close: 'Close', left: 's left', err: 'Could not connect. Please allow the microphone and try again.', lim: "You've reached today's demo limit. Book a call to see the full demo.", note: 'Demo clinic. Try: "I\'d like to book a cleaning tomorrow." Please don\'t share personal health details.' };
   function load(cb) { if (window.ElevenLabsClient) return cb(); var s = d.createElement('script'); s.src = LIB; s.onload = function () { cb(); }; s.onerror = function () { cb(new Error('load')); }; d.head.appendChild(s); }
   function tries() { try { var o = JSON.parse(localStorage.getItem('hl_vd') || '{}'), k = new Date().toDateString(); return o.d === k ? o.n : 0; } catch (e) { return 0; } }
   function addTry() { try { var k = new Date().toDateString(); localStorage.setItem('hl_vd', JSON.stringify({ d: k, n: tries() + 1 })); } catch (e) {} }
@@ -179,23 +179,43 @@
     ov.addEventListener('click', function (e) { if (e.target === ov) close(); });
     d.addEventListener('keydown', function esc(e) { if (e.key === 'Escape') { d.removeEventListener('keydown', esc); close(); } });
     if (tries() >= MAXDAY) { finish(T.lim); return; }
-    st.textContent = T.mic; btn(T.close, 'line', close);
-    load(function (err) {
-      if (err || !window.ElevenLabsClient) return finish(T.err);
-      st.textContent = T.con;
-      window.ElevenLabsClient.Conversation.startSession({
-        agentId: AGENT, connectionType: 'websocket',
-        onConnect: function () {
-          addTry(); st.textContent = T.lis; setTimeout(function () { try { conv && conv.sendContextualUpdate(ar ? 'The caller opened the Arabic website. Speak Gulf Arabic unless they speak English.' : 'The caller opened the English website. Speak English. Switch to Arabic only if the caller speaks Arabic.'); } catch (e) {} }, 300); acts.innerHTML = ''; btn(T.end, 'end', function () { finish(); });
-          timer = setInterval(function () { left--; tm.textContent = left + ' ' + T.left; fg.setAttribute('stroke-dashoffset', String(C * (1 - left / LIMIT))); if (left <= 0) finish(); }, 1000);
-          tm.textContent = left + ' ' + T.left;
-        },
-        onModeChange: function (m) { if (ended) return; var sp = m && m.mode === 'speaking'; ov.classList.toggle('speaking', sp); st.textContent = sp ? T.spk : T.lis; },
-        onDisconnect: function () { if (!ended) finish(); },
-        onError: function () { if (!ended) finish(T.err); }
-      }).then(function (c) { conv = c; if (ended) { try { c.endSession(); } catch (e) {} } })
-        .catch(function () { finish(T.err); });
-    });
+    // Step 1: the visitor chooses the call language.
+    st.textContent = T.pick;
+    btn('English', 'lang-btn', function () { go('en'); });
+    btn('العربية', 'lang-btn', function () { go('ar'); });
+    function go(lang) {
+      acts.innerHTML = ''; st.textContent = T.mic; btn(T.close, 'line', close);
+      var G = lang === 'ar'
+        ? { first: 'أهلاً وسهلاً! معك نور من استقبال عيادة برايت سمايل. كيف أقدر أساعدك اليوم؟', ctx: 'The caller chose Arabic. Speak natural Gulf Arabic for the whole call unless the caller switches to English.' }
+        : { first: "Hello! This is Noor from BrightSmile Dental reception. How can I help you today?", ctx: 'The caller chose English. Speak English for the whole call. Switch to Arabic only if the caller clearly speaks Arabic.' };
+      load(function (err) {
+        if (err || !window.ElevenLabsClient) return finish(T.err);
+        start(true);
+      });
+      function start(withOverrides) {
+        st.textContent = T.con;
+        var connected = false, retried = false;
+        var opts = {
+          agentId: AGENT, connectionType: 'websocket',
+          onConnect: function () {
+            connected = true; addTry(); st.textContent = T.lis;
+            setTimeout(function () { try { conv && conv.sendContextualUpdate(G.ctx); } catch (e) {} }, 250);
+            acts.innerHTML = ''; btn(T.end, 'end', function () { finish(); });
+            timer = setInterval(function () { left--; tm.textContent = left + ' ' + T.left; fg.setAttribute('stroke-dashoffset', String(C * (1 - left / LIMIT))); if (left <= 0) finish(); }, 1000);
+            tm.textContent = left + ' ' + T.left;
+          },
+          onModeChange: function (m) { if (ended) return; var sp = m && m.mode === 'speaking'; ov.classList.toggle('speaking', sp); st.textContent = sp ? T.spk : T.lis; },
+          onDisconnect: function () { if (ended) return; if (withOverrides && !retried && left > LIMIT - 4) { retried = true; clearInterval(timer); left = LIMIT; conv = null; start(false); return; } finish(); },
+          onError: function () { if (ended) return; if (withOverrides && !retried && left > LIMIT - 4) { retried = true; clearInterval(timer); left = LIMIT; conv = null; start(false); return; } finish(T.err); }
+        };
+        // Ask the agent to open in the chosen language. If the agent doesn't allow this, we reconnect without it
+        // and steer the language with a contextual message instead.
+        if (withOverrides) opts.overrides = { agent: { language: lang, firstMessage: G.first } };
+        window.ElevenLabsClient.Conversation.startSession(opts)
+          .then(function (c) { conv = c; if (ended) { try { c.endSession(); } catch (e) {} } })
+          .catch(function () { if (withOverrides && !retried) { retried = true; start(false); } else finish(T.err); });
+      }
+    }
   }
   d.querySelectorAll('[data-voice]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); open(); }); });
 })();
