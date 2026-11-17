@@ -1,0 +1,121 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Book a visit · BrightSmile Dental (demo)</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,400;6..72,500&family=Instrument+Sans:wght@400;500;600&family=IBM+Plex+Sans+Arabic:wght@400;500;600&display=swap">
+<style>
+:root{--paper:#f6f2ea;--card:#fffdf8;--ink:#1c1b18;--ink2:#3b3833;--mute:#6e675c;--rule:#ddd5c5;--brand:#1f4d45;--brand-soft:#e6eee9;--warn:#a2462a}
+*{box-sizing:border-box}html,body{margin:0}
+body{background:var(--paper);color:var(--ink);font:16px/1.55 "Instrument Sans",system-ui,sans-serif;-webkit-font-smoothing:antialiased}
+html[dir=rtl] body{font-family:"IBM Plex Sans Arabic",system-ui,sans-serif}
+.serif{font-family:Newsreader,Georgia,serif;font-weight:400;letter-spacing:-.015em}
+html[dir=rtl] .serif{font-family:"IBM Plex Sans Arabic",sans-serif;font-weight:600;letter-spacing:0}
+.demo{background:var(--ink);color:#efe9dd;font-size:13px;text-align:center;padding:8px 14px}
+.demo a{color:#e6b08f}
+.wrap{max-width:720px;margin:0 auto;padding:0 18px}
+header{padding:26px 0 8px;display:flex;justify-content:space-between;align-items:center;gap:12px}
+.clinic{display:flex;align-items:center;gap:12px}
+.clinic i{width:42px;height:42px;border-radius:50%;background:var(--brand);color:#fff;display:grid;place-items:center;font-style:normal;font-family:Newsreader,serif;font-size:21px}
+.clinic b{display:block;font-size:17px}.clinic small{color:var(--mute)}
+.lang{background:none;border:1px solid var(--rule);padding:7px 12px;font:inherit;font-size:14px;cursor:pointer;color:var(--ink2)}
+h1{font-size:clamp(32px,6vw,44px);line-height:1.08;margin:22px 0 8px}
+.lead{color:var(--ink2);margin:0 0 22px}
+.ways{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:26px}
+@media(max-width:560px){.ways{grid-template-columns:1fr}}
+.way{display:block;text-decoration:none;color:inherit;background:var(--card);border:1px solid var(--rule);padding:16px;cursor:pointer;text-align:start;font:inherit}
+.way b{display:block;font-size:16px;margin-bottom:2px}.way span{color:var(--mute);font-size:14px}
+.way.on{border-color:var(--brand);box-shadow:inset 0 0 0 1px var(--brand);background:var(--brand-soft)}
+.way:hover{border-color:var(--ink2)}
+.step{background:var(--card);border:1px solid var(--rule);padding:20px;margin-bottom:12px}
+.step h2{font-size:15px;margin:0 0 12px;display:flex;gap:10px;align-items:baseline}
+.step h2 em{font-style:normal;font-family:Newsreader,serif;color:var(--brand);font-size:20px}
+.svcs{display:grid;grid-template-columns:1fr 1fr;gap:8px}@media(max-width:480px){.svcs{grid-template-columns:1fr}}
+.svc,.day,.slot{font:inherit;background:#fff;border:1px solid var(--rule);cursor:pointer;color:var(--ink);text-align:start}
+.svc{padding:11px 13px}.svc b{display:block;font-weight:500;font-size:15px}.svc small{color:var(--mute)}
+.days{display:flex;gap:6px;overflow-x:auto;padding-bottom:4px}
+.day{min-width:62px;padding:8px 6px;text-align:center}.day small{display:block;color:var(--mute);font-size:12px}.day b{font-family:Newsreader,serif;font-weight:400;font-size:22px}
+.day[disabled]{opacity:.35;cursor:default}
+.slots{display:grid;grid-template-columns:repeat(auto-fill,minmax(76px,1fr));gap:6px}
+.slot{padding:9px 4px;text-align:center;font-variant-numeric:tabular-nums}
+.sel{border-color:var(--brand)!important;background:var(--brand)!important;color:#fff!important}.sel small{color:#dfe9e4!important}
+label{display:block;font-size:12px;letter-spacing:.08em;text-transform:uppercase;color:var(--mute);margin:12px 0 6px}
+html[dir=rtl] label{letter-spacing:0;font-size:13px}
+input[type=text],input[type=tel]{width:100%;padding:12px;border:1px solid #cfc6b4;background:#fff;font:inherit}
+input:focus{outline:2px solid var(--ink);outline-offset:-1px}
+.check{display:flex;gap:10px;margin-top:14px;font-size:14px;color:var(--ink2)}.check input{margin-top:3px;accent-color:var(--brand)}
+.go{width:100%;margin-top:16px;padding:14px;background:var(--ink);color:#fff;border:0;font:inherit;font-weight:600;font-size:16px;cursor:pointer}.go:disabled{opacity:.4;cursor:default}
+.muted{color:var(--mute);font-size:14px}.err{color:var(--warn);font-size:14px;margin-top:10px;min-height:20px}
+.done{text-align:center;padding:34px 20px}.done .tick{font-family:Newsreader,serif;font-size:56px;color:var(--brand);line-height:1}
+.alt{background:var(--card);border:1px solid var(--rule);padding:24px;margin-bottom:12px}
+.alt p{margin:0 0 16px;color:var(--ink2)}
+.btn{display:inline-block;padding:13px 20px;background:var(--ink);color:#fff;text-decoration:none;font-weight:600}
+.btn.wa{background:#1f4d45}
+footer{color:var(--mute);font-size:13px;padding:26px 0 60px;border-top:1px solid var(--rule);margin-top:26px}
+.hide{display:none}
+</style>
+</head>
+<body>
+<div class="demo" id="demo">Demo booking page for a fictional clinic, made by Halora. <a href="/">Back to Halora</a></div>
+<div class="wrap">
+<header><div class="clinic"><i id="logo">B</i><div><b id="cname">BrightSmile Dental</b><small id="caddr">Jumeirah, Dubai</small></div></div><button class="lang" id="lang">العربية</button></header>
+
+<h1 class="serif" data-t="h1">Book your visit</h1>
+<p class="lead" data-t="lead">Choose the way that suits you. All three reach the same calendar, so your time is held the moment it's confirmed.</p>
+
+<div class="ways">
+  <button class="way on" data-w="form"><b data-t="w1">Book online</b><span data-t="w1s">Pick a time in under a minute</span></button>
+  <button class="way" data-w="wa"><b data-t="w2">WhatsApp</b><span data-t="w2s">Chat with our receptionist, day or night</span></button>
+  <button class="way" data-w="call"><b data-t="w3">Call</b><span data-t="w3s">Speak to us in Arabic or English</span></button>
+</div>
+
+<div id="pane-form">
+  <div class="step"><h2><em>1</em><span data-t="s1">Treatment</span></h2><div class="svcs" id="svcs"><span class="muted" data-t="loading">Loading…</span></div></div>
+  <div class="step"><h2><em>2</em><span data-t="s2">Day</span></h2><div class="days" id="days"></div></div>
+  <div class="step"><h2><em>3</em><span data-t="s3">Time</span></h2><div id="sinfo" class="muted" data-t="pick">Choose a treatment and a day first.</div><div class="slots" id="slots"></div></div>
+  <div class="step"><h2><em>4</em><span data-t="s4">Your details</span></h2>
+    <label for="nm" data-t="name">Full name</label><input type="text" id="nm" autocomplete="name">
+    <label for="ph" data-t="phone">WhatsApp number</label><input type="tel" id="ph" autocomplete="tel" placeholder="+971 5…" dir="ltr">
+    <div class="check"><input type="checkbox" id="ok"><label for="ok" style="margin:0;text-transform:none;letter-spacing:0;font-size:14px;color:inherit" data-t="consent">The clinic may contact me on WhatsApp about this appointment.</label></div>
+    <button class="go" id="go" disabled data-t="book">Confirm booking</button>
+    <div class="err" id="err"></div>
+  </div>
+</div>
+<div id="pane-done" class="step done hide"><div class="tick">✓</div><h2 class="serif" style="font-size:28px;justify-content:center" data-t="booked">You're booked</h2><p id="sum" style="font-weight:600"></p><p class="muted" data-t="doneHint">You'll get a WhatsApp reminder the day before. To change it, just message us.</p></div>
+
+<div id="pane-wa" class="alt hide"><p data-t="waText">Message us on WhatsApp and our receptionist Noor will answer in seconds, in Arabic or English, and book you in. You can also send a voice note.</p><a class="btn wa" id="walink" href="#" target="_blank" rel="noopener" data-t="waBtn">Open WhatsApp</a></div>
+<div id="pane-call" class="alt hide"><p data-t="callText">Call the clinic and Noor, our receptionist, will pick up in Arabic or English, day or night, and book you in. You'll get the details on WhatsApp.</p><a class="btn" id="calllink" href="#" target="_blank" rel="noopener" data-t="callBtn">Talk to Noor by voice (demo)</a><p class="muted" style="margin-top:12px" data-t="callNote">In this demo the call opens in your browser. A real clinic shows its phone number here.</p></div>
+
+<footer id="foot">BrightSmile Dental is a fictional demo clinic. Booking page by Halora · askhalora.com</footer>
+</div>
+<script>
+(function(){
+var API='https://autova.app.n8n.cloud/webhook/noor-booking-api';
+var VOICE='https://elevenlabs.io/app/talk-to?agent_id=agent_1601m7axax44ejb9ffwxa8t3gs2e';
+var T={en:{h1:'Book your visit',lead:'Choose the way that suits you. All three reach the same calendar, so your time is held the moment it’s confirmed.',w1:'Book online',w1s:'Pick a time in under a minute',w2:'WhatsApp',w2s:'Chat with our receptionist, day or night',w3:'Call',w3s:'Speak to us in Arabic or English',s1:'Treatment',s2:'Day',s3:'Time',s4:'Your details',loading:'Loading…',pick:'Choose a treatment and a day first.',checking:'Checking free times…',none:'No free times that day. Please try another day.',free:'Free times, Dubai time',name:'Full name',phone:'WhatsApp number',consent:'The clinic may contact me on WhatsApp about this appointment.',book:'Confirm booking',booking:'Booking…',booked:'You’re booked',doneHint:'You’ll get a WhatsApp reminder the day before. To change it, just message us.',waText:'Message us on WhatsApp and our receptionist Noor will answer in seconds, in Arabic or English, and book you in. You can also send a voice note.',waBtn:'Open WhatsApp',callText:'Call the clinic and Noor, our receptionist, will pick up in Arabic or English, day or night, and book you in. You’ll get the details on WhatsApp.',callBtn:'Talk to Noor by voice (demo)',callNote:'In this demo the call opens in your browser. A real clinic shows its phone number here.',from:'from',min:'min',net:'Connection problem. Please try again.',waMsg:'Hi, I’d like to book an appointment.',lang:'العربية'},
+ar:{h1:'احجز موعدك',lead:'اختر الطريقة التي تناسبك. الثلاث تصل لنفس التقويم، ويُحجز وقتك لحظة التأكيد.',w1:'احجز أونلاين',w1s:'اختر الوقت خلال دقيقة',w2:'واتساب',w2s:'تحدث مع الاستقبال ليلاً أو نهاراً',w3:'اتصال',w3s:'كلمنا بالعربي أو الإنجليزي',s1:'العلاج',s2:'اليوم',s3:'الوقت',s4:'بياناتك',loading:'جارٍ التحميل…',pick:'اختر العلاج واليوم أولاً.',checking:'نبحث عن الأوقات المتاحة…',none:'لا توجد أوقات متاحة في هذا اليوم. جرّب يوماً آخر.',free:'الأوقات المتاحة بتوقيت دبي',name:'الاسم الكامل',phone:'رقم الواتساب',consent:'أوافق أن تتواصل معي العيادة على واتساب بخصوص هذا الموعد.',book:'تأكيد الحجز',booking:'جارٍ الحجز…',booked:'تم الحجز',doneHint:'ستصلك رسالة تذكير على واتساب قبل الموعد بيوم. وللتغيير راسلنا فقط.',waText:'راسلنا على واتساب وسترد عليك نور، موظفة الاستقبال، خلال ثوانٍ بالعربي أو الإنجليزي وتحجز لك. وتقدر ترسل رسالة صوتية.',waBtn:'افتح واتساب',callText:'اتصل بالعيادة وسترد عليك نور بالعربي أو الإنجليزي في أي وقت، وتحجز لك، وتصلك التفاصيل على واتساب.',callBtn:'تحدّث مع نور بالصوت (تجريبي)',callNote:'في هذه التجربة تفتح المكالمة في المتصفح. العيادة الحقيقية تعرض رقم هاتفها هنا.',from:'من',min:'دقيقة',net:'تعذّر الاتصال. حاول مرة أخرى.',waMsg:'أهلاً، أبغى أحجز موعد.',lang:'English'}};
+var SVC_AR=[[/child|kid/i,'كشف أطفال (من 3 سنوات)'],[/root canal/i,'علاج عصب'],[/align|brace/i,'تقويم شفاف'],[/implant/i,'زراعة أسنان'],[/whiten/i,'تبييض الأسنان'],[/clean/i,'تنظيف الأسنان'],[/fill/i,'حشوة'],[/extract/i,'خلع'],[/consult|check/i,'كشف واستشارة']];
+var lang=/(^|[?&])lang=ar/.test(location.search)||(navigator.language||'').indexOf('ar')===0?'ar':'en';
+var S={cfg:null,svc:'',date:'',time:'',dent:''};
+function $(i){return document.getElementById(i)}
+function t(k){return T[lang][k]||T.en[k]}
+function lab(n){if(lang!=='ar')return n;for(var i=0;i<SVC_AR.length;i++)if(SVC_AR[i][0].test(n))return SVC_AR[i][1];return n}
+function apply(){document.documentElement.lang=lang;document.documentElement.dir=lang==='ar'?'rtl':'ltr';document.querySelectorAll('[data-t]').forEach(function(e){e.textContent=t(e.getAttribute('data-t'))});$('lang').textContent=t('lang');if(S.cfg){svcs();days();}links();can()}
+function links(){var wa=(S.cfg&&S.cfg.whatsapp)||'15551786281';$('walink').href='https://wa.me/'+wa+'?text='+encodeURIComponent(t('waMsg'));$('calllink').href=VOICE}
+function svcs(){var b=$('svcs');b.innerHTML='';(S.cfg.services||[]).forEach(function(s){var e=document.createElement('button');e.className='svc'+(S.svc===s.name?' sel':'');e.innerHTML='<b></b><small></small>';e.querySelector('b').textContent=lab(s.name);e.querySelector('small').textContent=(s.from?t('from')+' ':'')+S.cfg.currency+' '+Number(s.price).toLocaleString('en-US')+(s.minutes?' · '+s.minutes+' '+t('min'):'');e.onclick=function(){S.svc=s.name;S.time='';svcs();load();can()};b.appendChild(e)})}
+function days(){var b=$('days');b.innerHTML='';(S.cfg.days||[]).forEach(function(d){var dt=new Date(d.date+'T12:00:00'),loc=lang==='ar'?'ar-u-nu-latn':'en-GB';var e=document.createElement('button');e.className='day'+(S.date===d.date?' sel':'');if(!d.open)e.disabled=true;e.innerHTML='<small>'+dt.toLocaleDateString(loc,{weekday:'short'})+'</small><b>'+d.day+'</b><small>'+dt.toLocaleDateString(loc,{month:'short'})+'</small>';e.onclick=function(){S.date=d.date;S.time='';days();load();can()};b.appendChild(e)})}
+function load(){var b=$('slots');b.innerHTML='';if(!S.svc||!S.date){$('sinfo').textContent=t('pick');return}$('sinfo').textContent=t('checking');fetch(API+'?action=slots&date='+S.date+'&service='+encodeURIComponent(S.svc)).then(function(r){return r.json()}).then(function(j){var sl=j.slots||[];$('sinfo').textContent=sl.length?t('free'):t('none');sl.forEach(function(s){var e=document.createElement('button');e.className='slot'+(S.time===s.time?' sel':'');e.textContent=s.time;e.dir='ltr';e.onclick=function(){S.time=s.time;S.dent=s.dentist;b.querySelectorAll('.slot').forEach(function(x){x.classList.toggle('sel',x===e)});can()};b.appendChild(e)})}).catch(function(){$('sinfo').textContent=t('net')})}
+function can(){$('go').disabled=!(S.svc&&S.date&&S.time&&$('nm').value.trim().length>1&&$('ph').value.replace(/\D/g,'').length>=8&&$('ok').checked)}
+['nm','ph','ok'].forEach(function(i){$(i).addEventListener('input',can);$(i).addEventListener('change',can)});
+document.querySelectorAll('.way').forEach(function(w){w.onclick=function(){document.querySelectorAll('.way').forEach(function(x){x.classList.toggle('on',x===w)});var k=w.getAttribute('data-w');$('pane-form').classList.toggle('hide',k!=='form');$('pane-wa').classList.toggle('hide',k!=='wa');$('pane-call').classList.toggle('hide',k!=='call');$('pane-done').classList.add('hide')}});
+$('lang').onclick=function(){lang=lang==='ar'?'en':'ar';apply();if(S.svc&&S.date)load()};
+$('go').onclick=function(){var b=$('go');b.disabled=true;b.textContent=t('booking');$('err').textContent='';fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify({name:$('nm').value.trim(),phone:$('ph').value,service:S.svc,date:S.date,time:S.time,dentist:S.dent,consent:'yes',language:lang,website:''})}).then(function(r){return r.json()}).then(function(j){b.textContent=t('book');if(j.ok){$('pane-form').classList.add('hide');$('pane-done').classList.remove('hide');$('sum').textContent=j.summary||'';window.scrollTo(0,0)}else{$('err').textContent=j.message||'';S.time='';load();can()}}).catch(function(){b.textContent=t('book');$('err').textContent=t('net');can()})};
+apply();
+fetch(API+'?action=config').then(function(r){return r.json()}).then(function(c){S.cfg=c;$('cname').textContent=c.clinic;$('caddr').textContent=c.address||'';$('logo').textContent=String(c.clinic||'B').charAt(0);apply()}).catch(function(){$('svcs').textContent=t('net')});
+})();
+</script>
+</body>
+</html>
