@@ -151,8 +151,8 @@
   var d = document, ar = d.documentElement.lang === 'ar';
   var AGENT = 'agent_1601m7axax44ejb9ffwxa8t3gs2e', LIMIT = 60, MAXDAY = 3;
   var LIB = 'https://unpkg.com/@elevenlabs/client@1.32.1/dist/lib.iife.js';
-  var T = ar ? { t: 'مكالمة تجريبية مع نور', con: 'جارٍ الاتصال…', mic: 'اسمح باستخدام الميكروفون للبدء', lis: 'نور تستمع… تكلّم الآن', spk: 'نور تتكلم…', end: 'إنهاء المكالمة', done: 'انتهت المكالمة. أعجبتك؟', book: 'احجز مكالمة مع زياد', pilot: 'ابدأ تجربة مجانية', close: 'إغلاق', left: 'ثانية متبقية', err: 'تعذّر الاتصال. تأكد من السماح بالميكروفون وحاول مرة أخرى.', lim: 'وصلت للحد اليومي للتجربة. احجز مكالمة لترى العرض كاملاً.', note: 'عيادة تجريبية. جرّب: «أبي أحجز تنظيف أسنان بكرة». لا تشارك معلومات صحية شخصية.' }
-             : { t: 'Demo call with Noor', con: 'Connecting…', mic: 'Allow the microphone to start', lis: 'Noor is listening… go ahead and speak', spk: 'Noor is speaking…', end: 'End call', done: 'Call ended. Liked it?', book: 'Book a call with Ziad', pilot: 'Start a free pilot', close: 'Close', left: 's left', err: 'Could not connect. Please allow the microphone and try again.', lim: "You've reached today's demo limit. Book a call to see the full demo.", note: 'Demo clinic. Try: "I\'d like to book a cleaning tomorrow." Please don\'t share personal health details.' };
+  var T = ar ? { t: 'مكالمة تجريبية مع نور', con: 'جارٍ الاتصال…', mic: 'اسمح باستخدام الميكروفون للبدء', lis: 'نور تستمع… تكلّم الآن', spk: 'نور تتكلم…', end: 'إنهاء المكالمة', done: 'انتهت المكالمة. أعجبتك؟', book: 'احجز مكالمة', pilot: 'ابدأ تجربة مجانية', close: 'إغلاق', left: 'ثانية متبقية', err: 'تعذّر الاتصال. تأكد من السماح بالميكروفون وحاول مرة أخرى.', lim: 'وصلت للحد اليومي للتجربة. احجز مكالمة لترى العرض كاملاً.', note: 'عيادة تجريبية. جرّب: «أبي أحجز تنظيف أسنان بكرة». لا تشارك معلومات صحية شخصية.' }
+             : { t: 'Demo call with Noor', con: 'Connecting…', mic: 'Allow the microphone to start', lis: 'Noor is listening… go ahead and speak', spk: 'Noor is speaking…', end: 'End call', done: 'Call ended. Liked it?', book: 'Book a call', pilot: 'Start a free pilot', close: 'Close', left: 's left', err: 'Could not connect. Please allow the microphone and try again.', lim: "You've reached today's demo limit. Book a call to see the full demo.", note: 'Demo clinic. Try: "I\'d like to book a cleaning tomorrow." Please don\'t share personal health details.' };
   function load(cb) { if (window.ElevenLabsClient) return cb(); var s = d.createElement('script'); s.src = LIB; s.onload = function () { cb(); }; s.onerror = function () { cb(new Error('load')); }; d.head.appendChild(s); }
   function tries() { try { var o = JSON.parse(localStorage.getItem('hl_vd') || '{}'), k = new Date().toDateString(); return o.d === k ? o.n : 0; } catch (e) { return 0; } }
   function addTry() { try { var k = new Date().toDateString(); localStorage.setItem('hl_vd', JSON.stringify({ d: k, n: tries() + 1 })); } catch (e) {} }
@@ -181,7 +181,7 @@
       window.ElevenLabsClient.Conversation.startSession({
         agentId: AGENT, connectionType: 'websocket',
         onConnect: function () {
-          addTry(); st.textContent = T.lis; acts.innerHTML = ''; btn(T.end, 'end', function () { finish(); });
+          addTry(); st.textContent = T.lis; setTimeout(function () { try { conv && conv.sendContextualUpdate(ar ? 'The caller opened the Arabic website. Speak Gulf Arabic unless they speak English.' : 'The caller opened the English website. Speak English. Switch to Arabic only if the caller speaks Arabic.'); } catch (e) {} }, 300); acts.innerHTML = ''; btn(T.end, 'end', function () { finish(); });
           timer = setInterval(function () { left--; tm.textContent = left + ' ' + T.left; fg.setAttribute('stroke-dashoffset', String(C * (1 - left / LIMIT))); if (left <= 0) finish(); }, 1000);
           tm.textContent = left + ' ' + T.left;
         },
