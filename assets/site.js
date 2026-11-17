@@ -9,6 +9,8 @@
     ? { sending: 'جارٍ الإرسال…', ok: 'شكراً لك. سنتواصل معك على واتساب خلال 24 ساعة.', bad: 'يرجى مراجعة البيانات والمحاولة مرة أخرى.', net: 'تعذّر الاتصال. حاول مرة أخرى.', loading: 'جارٍ فتح المحادثة…' }
     : { sending: 'Sending…', ok: 'Thank you. We will message you on WhatsApp within 24 hours.', bad: 'Please check the form and try again.', net: 'Connection problem. Please try again.', loading: 'Opening the chat…' };
 
+  try { localStorage.removeItem('noor_web_chat'); } catch (e) {}
+  addEventListener('pagehide', function () { try { localStorage.removeItem('noor_web_chat'); } catch (e) {} });
   var loaded = false, bar = document.getElementById('trybar');
   function clickOpen() {
     var b = document.getElementById('nw-b'); if (!b) return false;
@@ -19,6 +21,9 @@
     if (bar) bar.classList.add('hide');
     if (loaded) { clickOpen(); return; }
     loaded = true;
+    // Demo privacy: every visit starts a fresh, anonymous chat. Nothing from earlier visits is shown or reused,
+    // and the demo ID is a test number, so no real booking is made and test data is cleaned from the system.
+    try { localStorage.setItem('noor_web_chat', JSON.stringify({ name: ar ? 'زائر الموقع' : 'Website visitor', phone: '9715000009' + String(Math.floor(Math.random() * 9e4) + 1e4), log: [] })); } catch (e) {}
     var s = document.createElement('script');
     s.src = N8N + 'noor-webchat-b218e111470c';
     var d = document.body.dataset;
