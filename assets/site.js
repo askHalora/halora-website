@@ -102,3 +102,46 @@
   }, { rootMargin: '-45% 0px -50% 0px' });
   Object.keys(links).forEach(function (id) { var s = d.getElementById(id); if (s) so.observe(s); });
 })();
+
+/* Chat feel: a warm, human-style receptionist look for the demo chat (avatar, online status, typing, timestamps). */
+(function () {
+  var d = document, ar = d.documentElement.lang === 'ar';
+  var L = ar ? { st: 'متصلة الآن', hi: 'أهلاً وسهلاً! معك نور من استقبال العيادة 😊 كيف أقدر أساعدك اليوم؟ تقدر تسألني عن الأسعار أو المواعيد أو تحجز زيارة.', demo: 'عيادة تجريبية' }
+               : { st: 'Online now', hi: "Hi there! I'm Noor from the front desk 😊 How can I help you today? Ask me about prices, opening hours, or book a visit.", demo: 'Demo clinic' };
+  var css = '#nw-h{display:flex;align-items:center;gap:12px}#nw-h .nw-av{width:40px;height:40px;border-radius:50%;flex:none;position:relative;display:grid;place-items:center;font-weight:600;font-size:17px;color:#0E5C57;background:linear-gradient(145deg,#f6ecd6,#e7d3a8)}' +
+    '#nw-h .nw-av:after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#25D366;border:2px solid #0E5C57}' +
+    '#nw-h small .nw-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#25D366;margin-inline-end:6px;vertical-align:1px}' +
+    '#nw-m .nw-a{position:relative}#nw-m .nw-time{display:block;font-size:10.5px;opacity:.55;margin-top:4px;text-align:end}' +
+    '.nw-typing{display:inline-flex;gap:4px;padding:12px 14px;background:#fff;border-radius:16px;margin:4px 0;box-shadow:0 1px 1px rgba(0,0,0,.04)}' +
+    '.nw-typing i{width:7px;height:7px;border-radius:50%;background:#0E5C57;opacity:.3;animation:nwT 1s infinite}.nw-typing i:nth-child(2){animation-delay:.15s}.nw-typing i:nth-child(3){animation-delay:.3s}' +
+    '@keyframes nwT{0%,80%,100%{opacity:.25;transform:none}40%{opacity:1;transform:translateY(-3px)}}' +
+    '#nw-m>div{animation:nwIn .3s ease both}@keyframes nwIn{from{opacity:0;transform:translateY(6px)}}';
+  function now() { var t = new Date(); return ('0' + t.getHours()).slice(-2) + ':' + ('0' + t.getMinutes()).slice(-2); }
+  function stamp(el) { if (el.querySelector('.nw-time')) return; var s = d.createElement('span'); s.className = 'nw-time'; s.textContent = now(); el.appendChild(s); }
+  function enhance(p) {
+    if (p.dataset.human) return; p.dataset.human = '1';
+    var st = d.createElement('style'); st.textContent = css; d.head.appendChild(st);
+    var h = p.querySelector('#nw-h'), info = h && h.querySelector('div'), b = info && info.querySelector('b'), sm = info && info.querySelector('small');
+    if (h && info) {
+      var av = d.createElement('div'); av.className = 'nw-av'; av.textContent = ar ? 'ن' : 'N'; h.insertBefore(av, info);
+      var clinic = (b.textContent || '').replace(/\s*\(demo\)\s*/i, '').trim();
+      b.textContent = (ar ? 'نور · ' : 'Noor · ') + clinic;
+      sm.innerHTML = '<span class="nw-dot"></span>' + L.st + ' · ' + L.demo;
+    }
+    var m = p.querySelector('#nw-m'); if (!m) return;
+    var first = m.querySelector('.nw-a'); if (first) { first.textContent = L.hi; stamp(first); }
+    var typing = d.createElement('div'); typing.className = 'nw-typing'; typing.innerHTML = '<i></i><i></i><i></i>';
+    new MutationObserver(function (ms) {
+      ms.forEach(function (mu) {
+        [].forEach.call(mu.addedNodes, function (n) {
+          if (n.nodeType !== 1 || n === typing || !n.classList.contains('nw-q')) return;
+          stamp(n);
+          if (n.classList.contains('nw-a')) { if (typing.parentNode) typing.remove(); }
+          else { setTimeout(function () { m.appendChild(typing); m.scrollTop = m.scrollHeight; }, 350); }
+        });
+      });
+    }).observe(m, { childList: true });
+  }
+  var mo = new MutationObserver(function () { var p = d.getElementById('nw-p'); if (p) enhance(p); });
+  mo.observe(d.body, { childList: true, subtree: true });
+})();
