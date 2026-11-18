@@ -304,7 +304,7 @@ html.intro-pending:before{content:"";position:fixed;inset:0;background:#04110f;z
 .xf .xi.gi svg{width:20px;height:20px}
 /* four-column footer on wide screens */
 @media(min-width:761px){footer .wrap{grid-template-columns:1.4fr 1fr 1fr 1.4fr}}
-/* "Watch in 60 seconds" */
+/* "Watch the demo" */
 .bx.play{background:none;color:#e9f2ef;padding:10px 6px;gap:12px}
 .bx.play .pi{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:rgba(255,255,255,.12);border:1px solid rgba(255,255,255,.28);transition:background .2s,transform .2s;position:relative}
 .bx.play .pi:after{content:"";position:absolute;inset:-5px;border-radius:50%;border:1px solid rgba(224,179,79,.55);animation:pl2 2.4s ease-out infinite}

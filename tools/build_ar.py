@@ -48,7 +48,7 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}اتصل بنور · دقيقة واحدة</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>تحدّث مع نور الآن</a>
-   <a class="bx play" href="{B.VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>شاهد الفيديو في 60 ثانية</a>
+   <a class="bx play" href="{B.VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>شاهد الفيديو</a>
   </div>
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb="دبي">--:-- دبي</span><span class="tk" data-tick="{tick}">نور ترد على المرضى الآن</span></div>
   <div class="meta"><div><b dir="ltr">&lt;10 ث</b>أول رد</div><div><b>24/7</b>حتى الجمعة والأعياد</div><div><b>ع · EN</b>عربي وإنجليزي</div><div><b>14 يومًا</b>تجربة مجانية</div></div>
@@ -166,7 +166,7 @@ def footer(alt='/'):
 src=B.home_common(open(ORIG,encoding='utf-8').read(),header(),hero(),marquee(),bento(),night(),specialties(),roi(),compare(),footer(),askbar())
 src=B.set_head(src,B.seo(src[:src.index('</head>')],'ar','موظفة استقبال ذكية للعيادات في دبي والخليج · هالورا',
  'نور، موظفة الاستقبال الذكية لعيادات الخليج، ترد على واتساب ودردشة الموقع والمكالمات على مدار الساعة بالعربي والإنجليزي، وتحجز المواعيد مباشرة في تقويمك. تجربة مجانية 14 يومًا.',
- '/ar/','/','/ar/',[B.WEBSITE_LD('ar','/ar/'),B.VIDEO_LD('ar','هالورا في 60 ثانية','كيف ترد نور على مرضى العيادة عبر واتساب والموقع والهاتف وتحجز لهم المواعيد.'),B.faq_ld(B.faq_from_html(src))]))
+ '/ar/','/','/ar/',[B.WEBSITE_LD('ar','/ar/'),B.VIDEO_LD('ar','فيديو تعريفي بهالورا','كيف ترد نور على مرضى العيادة عبر واتساب والموقع والهاتف وتحجز لهم المواعيد، وما يراه المالك في لوحة التحكم، مع موقع العيادة وتطبيق المرضى.'),B.faq_ld(B.faq_from_html(src))]))
 open(f'{ROOT}/ar/index.html','w',encoding='utf-8').write(B.with_intro(src,'كل مريض · يجد ردًّا'))
 
 # ---------- Arabic sub-pages ----------

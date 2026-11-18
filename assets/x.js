@@ -115,7 +115,7 @@ var mb=$('.mbtn');if(mb)mb.addEventListener('click',function(){d.body.classList.
 /* explainer video popup: built on first click, so the 6 MB video never loads unless asked for */
 var vb=$$('[data-video]');
 if(vb.length){var ar=d.documentElement.lang==='ar',vm,vv,last;
- function build(){vm=d.createElement('div');vm.id='hl-video';vm.setAttribute('role','dialog');vm.setAttribute('aria-modal','true');vm.setAttribute('aria-label',ar?'فيديو هالورا في 60 ثانية':'Halora in 60 seconds');
+ function build(){vm=d.createElement('div');vm.id='hl-video';vm.setAttribute('role','dialog');vm.setAttribute('aria-modal','true');vm.setAttribute('aria-label',ar?'فيديو هالورا':'Halora demo video');
   vm.innerHTML='<div class="box"><button class="cl" type="button" aria-label="'+(ar?'إغلاق الفيديو':'Close video')+'">×</button><video controls playsinline preload="none" poster="/assets/halora-explainer-poster.jpg"></video></div>';
   d.body.appendChild(vm);vv=$('video',vm);
   vm.addEventListener('click',function(e){if(e.target===vm)close()});$('.cl',vm).addEventListener('click',close);

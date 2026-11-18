@@ -133,7 +133,7 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}Call Noor · 1 min</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>Chat with Noor live</a>
-   <a class="bx play" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>Watch in 60 seconds</a>
+   <a class="bx play" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>Watch the demo</a>
   </div>
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb>--:-- Dubai</span><span class="tk" data-tick="{tick}">Noor is answering patients right now</span></div>
   <div class="meta"><div><b>&lt;10 s</b>first reply</div><div><b>24/7</b>incl. Fridays &amp; Eid</div><div><b>EN · ع</b>Arabic &amp; English</div><div><b>14 days</b>free pilot</div></div>
@@ -270,7 +270,7 @@ src=home_common(open(ORIG,encoding='utf-8').read(),header(True),hero(),marquee()
 HOME_T='AI receptionist for clinics in Dubai & the Gulf · Halora'
 HOME_D='Noor, the AI receptionist for Gulf clinics, answers WhatsApp, website chat and phone calls 24/7 in Arabic and English and books appointments into your calendar. Free 14-day pilot.'
 src=set_head(src,seo(src[:src.index('</head>')],'en',HOME_T,HOME_D,'/','/','/ar/',
-   [WEBSITE_LD('en','/'),VIDEO_LD('en','Halora in 60 seconds','How Noor answers clinic patients on WhatsApp, web chat and phone, and books them in.'),faq_ld(faq_from_html(src))]))
+   [WEBSITE_LD('en','/'),VIDEO_LD('en','Halora demo video','How Noor answers clinic patients on WhatsApp, web chat and phone, books them in, and what owners see in the dashboard, plus the clinic website and patient app.'),faq_ld(faq_from_html(src))]))
 open(f'{ROOT}/index.html','w',encoding='utf-8').write(with_intro(src,'Every patient · Answered'))
 
 # ---------- sub-pages (shared by English and Arabic) ----------
