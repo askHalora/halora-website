@@ -264,7 +264,7 @@ def with_intro(h,tag): return h.replace('</head>',INTRO_HEAD+'</head>',1).replac
 def set_head(src,newhead):
     i=src.index('</head>'); return newhead+src[i:]
 WEBSITE_LD=lambda lang,path:{"@context":"https://schema.org","@type":"WebSite","name":"Halora","url":SITE+path,"inLanguage":lang,"publisher":{"@id":SITE+"/#org"}}
-VIDEO_LD=lambda lang,name,desc:{"@context":"https://schema.org","@type":"VideoObject","name":name,"description":desc,"contentUrl":SITE+VIDEO,"thumbnailUrl":SITE+"/assets/halora-explainer-poster.jpg","uploadDate":"2026-11-18","duration":"PT1M1S","inLanguage":lang}
+VIDEO_LD=lambda lang,name,desc:{"@context":"https://schema.org","@type":"VideoObject","name":name,"description":desc,"contentUrl":SITE+VIDEO,"thumbnailUrl":SITE+"/assets/halora-explainer-poster.jpg","uploadDate":"2026-11-18","duration":"PT1M14S","inLanguage":lang}
 
 src=home_common(open(ORIG,encoding='utf-8').read(),header(True),hero(),marquee(),bento(),night(),specialties(),roi(),compare(),footer(),askbar())
 HOME_T='AI receptionist for clinics in Dubai & the Gulf · Halora'
