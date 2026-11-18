@@ -1,3 +1,17 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"><url><loc>https://askhalora.com/</loc></url><url><loc>https://askhalora.com/ar/</loc></url>  <url><loc>https://askhalora.com/call/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<url><loc>https://askhalora.com/</loc></url>
+<url><loc>https://askhalora.com/ar/</loc></url>
+<url><loc>https://askhalora.com/call/</loc></url>
+<url><loc>https://askhalora.com/book/</loc></url>
+<url><loc>https://askhalora.com/sample/</loc></url>
+<url><loc>https://askhalora.com/glow/</loc></url>
+<url><loc>https://askhalora.com/product/whatsapp/</loc></url>
+<url><loc>https://askhalora.com/product/phone/</loc></url>
+<url><loc>https://askhalora.com/product/growth/</loc></url>
+<url><loc>https://askhalora.com/product/portal/</loc></url>
+<url><loc>https://askhalora.com/specialties/dental/</loc></url>
+<url><loc>https://askhalora.com/specialties/aesthetics/</loc></url>
+<url><loc>https://askhalora.com/specialties/physio/</loc></url>
+<url><loc>https://askhalora.com/specialties/ivf/</loc></url>
 </urlset>
