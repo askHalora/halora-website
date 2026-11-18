@@ -35,8 +35,12 @@ if($('.hx,.ph')){d.body.classList.add('dark-top');var onS=function(){d.body.clas
 $$('canvas.stars').forEach(function(c){var x=c.getContext('2d'),S=[],dpr=Math.min(2,w.devicePixelRatio||1);
  function sz(){c.width=c.offsetWidth*dpr;c.height=c.offsetHeight*dpr;S=[];var n=Math.round(c.offsetWidth*c.offsetHeight/5200);for(var i=0;i<n;i++)S.push({x:Math.random()*c.width,y:Math.random()*c.height,r:(Math.random()*1.1+.2)*dpr,p:Math.random()*6.28,s:.4+Math.random()*1.2})}
  sz();addEventListener('resize',sz);
- function f(t){x.clearRect(0,0,c.width,c.height);for(var i=0;i<S.length;i++){var s=S[i],a=.25+.6*Math.abs(Math.sin(s.p+t/1000*s.s));x.globalAlpha=a;x.fillStyle='#e8fff9';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill()}if(!rm)requestAnimationFrame(f)}
- requestAnimationFrame(f);});
+ /* only animate while the canvas is on screen and the tab is visible */
+ var vis=true,run=false;function f(t){run=false;x.clearRect(0,0,c.width,c.height);for(var i=0;i<S.length;i++){var s=S[i],a=.25+.6*Math.abs(Math.sin(s.p+t/1000*s.s));x.globalAlpha=a;x.fillStyle='#e8fff9';x.beginPath();x.arc(s.x,s.y,s.r,0,6.28);x.fill()}if(!rm&&vis&&!d.hidden)go()}
+ function go(){if(!run){run=true;requestAnimationFrame(f)}}
+ if('IntersectionObserver' in w)new IntersectionObserver(function(es){vis=es[0].isIntersecting;if(vis)go()}).observe(c);
+ d.addEventListener('visibilitychange',function(){if(!d.hidden&&vis)go()});
+ go();});
 
 /* rotating word */
 $$('.rot').forEach(function(r){var s=$$('span',r),i=0;if(s.length<2||rm)return;setInterval(function(){s[i].classList.remove('on');s[i].classList.add('out');var o=s[i];setTimeout(function(){o.classList.remove('out')},700);i=(i+1)%s.length;s[i].classList.add('on')},2400)});
@@ -84,7 +88,7 @@ if(ns){var ck=$('.clock b',ns),evs=$$('.ev',ns),bg=$('.bg',ns),moon=$('.moon',ns
 var spw=$('[data-sp]');
 if(spw){var SP=JSON.parse(spw.getAttribute('data-sp')),tabs=$$('.sp-tabs button'),ms=$('.phone .ms'),nm=$('.phone .bar b'),info=$('.sp .info'),tm=[];
  function show(k){tm.forEach(clearTimeout);tm=[];var s=SP[k];tabs.forEach(function(t){t.classList.toggle('on',t.getAttribute('data-k')===k)});
-  nm.textContent=s.clinic;info.innerHTML='<span class="label">'+s.label+'</span><h3>'+s.title+'</h3><p style="color:var(--ink-2);margin:0">'+s.text+'</p><ul>'+s.pts.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul><p style="margin:22px 0 0"><a class="bx dark" href="'+s.href+'">See '+s.name+' page →</a></p>';
+  nm.textContent=s.clinic;info.innerHTML='<span class="label">'+s.label+'</span><h3>'+s.title+'</h3><p style="color:var(--ink-2);margin:0">'+s.text+'</p><ul>'+s.pts.map(function(x){return '<li>'+x+'</li>'}).join('')+'</ul><p style="margin:22px 0 0"><a class="bx dark" href="'+s.href+'">'+(s.cta||('See '+s.name+' page →'))+'</a></p>';
   ms.innerHTML='';var at=200;s.chat.forEach(function(c){var who=c[0],txt=c[1];if(who==='n'){tm.push(setTimeout(function(){var ty=d.createElement('div');ty.className='ty';ty.innerHTML='<b></b><b></b><b></b>';ms.appendChild(ty);setTimeout(function(){ty.remove()},700)},at));at+=750}
    tm.push(setTimeout(function(){var e=d.createElement('div');if(who==='c'){e.className='chip'}else{e.className='w '+who+(txt==='~voice'?' v':'')}e.innerHTML=txt==='~voice'?'▶ <i></i> 0:07':txt;ms.appendChild(e);while(ms.children.length>9)ms.removeChild(ms.firstChild)},at));at+=who==='p'?900:1100})}
  tabs.forEach(function(t){t.addEventListener('click',function(){show(t.getAttribute('data-k'))})});
@@ -107,4 +111,19 @@ if(ab){var shown=false,closed=false;try{closed=sessionStorage.getItem('hlAskX')=
 
 /* mobile menu */
 var mb=$('.mbtn');if(mb)mb.addEventListener('click',function(){d.body.classList.toggle('mopen')});
+
+/* explainer video popup: built on first click, so the 6 MB video never loads unless asked for */
+var vb=$$('[data-video]');
+if(vb.length){var ar=d.documentElement.lang==='ar',vm,vv,last;
+ function build(){vm=d.createElement('div');vm.id='hl-video';vm.setAttribute('role','dialog');vm.setAttribute('aria-modal','true');vm.setAttribute('aria-label',ar?'فيديو هالورا في 60 ثانية':'Halora in 60 seconds');
+  vm.innerHTML='<div class="box"><button class="cl" type="button" aria-label="'+(ar?'إغلاق الفيديو':'Close video')+'">×</button><video controls playsinline preload="none" poster="/assets/halora-explainer-poster.jpg"></video></div>';
+  d.body.appendChild(vm);vv=$('video',vm);
+  vm.addEventListener('click',function(e){if(e.target===vm)close()});$('.cl',vm).addEventListener('click',close);
+  vm.addEventListener('keydown',function(e){if(e.key==='Tab'){var f=[$('.cl',vm),vv];var i=f.indexOf(d.activeElement);e.preventDefault();f[(i+(e.shiftKey?f.length-1:1))%f.length].focus()}})}
+ function open(src){if(!vm)build();last=d.activeElement;if(!vv.getAttribute('src'))vv.src=src;vv.muted=false;vv.volume=1;
+  vm.classList.add('on');d.documentElement.classList.add('vid-open');$('.cl',vm).focus();var p=vv.play();if(p&&p.catch)p.catch(function(){})}
+ function close(){if(!vm||!vm.classList.contains('on'))return;vv.pause();vm.classList.remove('on');d.documentElement.classList.remove('vid-open');if(last&&last.focus)last.focus()}
+ vb.forEach(function(b){b.addEventListener('click',function(e){e.preventDefault();open(b.getAttribute('href'))})});
+ d.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
+ w.closeHaloraVideo=close}
 })();

@@ -25,6 +25,9 @@ P={
 'doc':'<path d="M7 3h7l5 5v13H7z"/><path d="M14 3v5h5M10 13h6M10 17h6"/>',
 'users':'<circle cx="9" cy="8" r="3"/><path d="M3 20c0-3.3 2.7-6 6-6s6 2.7 6 6M16 5a3 3 0 0 1 0 6M18 14c2 .7 3 2.8 3 6"/>',
 'building':'<path d="M4 21V5l8-2v18M12 8h8v13M8 8h.01M8 12h.01M8 16h.01M16 12h.01M16 16h.01M2 21h20"/>',
+'mega':'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1zM17 9a4 4 0 0 1 0 6M8 15l1 5"/>',
+'tool':'<path d="M14.5 6.5a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.5-6.5a4 4 0 0 1-5-5L13 5zM3 21l6-6"/>',
+'play':'<path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/>',
 }
 def ic(k): return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[k]+'</svg>'
 def gi(k,c): return f'<span class="gi" style="--c:{c}">{ic(k)}</span>'
@@ -41,16 +44,69 @@ SPECS=[('dental','Dental clinics','Whitening, implants, aligners, emergencies','
  ('physio','Physio & rehab','Session plans, rebooking, packages','move','#3b8f5a'),
  ('ivf','Fertility & IVF','Warm, private first-step conversations','seed','#b9811f')]
 
+SITE='https://askhalora.com'
+FONT_URL='https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap'
+VIDEO='/assets/halora-explainer.mp4'
+ORG_LD={"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":"Halora","url":SITE+"/","logo":SITE+"/assets/halora-512.png","image":SITE+"/assets/og.png","email":"ziad.elhoseiny@askhalora.com",
+ "description":"AI receptionist for clinics in Dubai and the Gulf: answers WhatsApp, website chat and phone calls in English and Arabic, 24/7, and books appointments.",
+ "areaServed":["AE","SA","QA","KW","BH","OM"],"knowsLanguage":["en","ar"],"founder":{"@type":"Person","name":"Ziad Elhoseiny"},"sameAs":[]}
+
+def fonts_nonblocking(h):
+    """Google Fonts without blocking first paint: preconnect both hosts, preload the CSS, apply it on load."""
+    h=re.sub(r'<link rel="preconnect" href="https://fonts.googleapis.com">\s*','',h)
+    return h.replace(f'<link rel="stylesheet" href="{FONT_URL}">',
+      '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
+      f'<link rel="preload" as="style" href="{FONT_URL}"><link rel="stylesheet" href="{FONT_URL}" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="{FONT_URL}"></noscript>',1)
+
+def seo(h,lang,title,desc,path,en,ar,ld=()):
+    """Rewrite a <head> (without </head>) so it has one clean, page-specific set of SEO tags."""
+    e=lambda s:html.escape(s,quote=True)
+    h=re.sub(r'<title>.*?</title>',f'<title>{e(title)}</title>',h,count=1,flags=re.S)
+    if '<meta name="description"' in h: h=re.sub(r'<meta name="description" content="[^"]*">',f'<meta name="description" content="{e(desc)}">',h,count=1)
+    else: h=h.replace('</title>',f'</title>\n<meta name="description" content="{e(desc)}">',1)
+    for pat in (r'<link rel="alternate"[^>]*>',r'<link rel="canonical"[^>]*>',r'<meta property="og:[^>]*>',r'<meta name="twitter:[^>]*>',r'<script type="application/ld\+json">.*?</script>'):
+        h=re.sub(pat,'',h,flags=re.S)
+    h=re.sub(r'\n\s*\n+','\n',h)
+    url=SITE+path; img=SITE+'/assets/og.png'
+    loc,alt=('ar_AE','en_US') if lang=='ar' else ('en_US','ar_AE')
+    tags=(f'<link rel="canonical" href="{url}">\n'
+      +(f'<link rel="alternate" hreflang="en" href="{SITE+en}"><link rel="alternate" hreflang="ar" href="{SITE+ar}"><link rel="alternate" hreflang="x-default" href="{SITE+en}">\n' if ar else '')+
+      f'<meta property="og:type" content="website"><meta property="og:site_name" content="Halora"><meta property="og:locale" content="{loc}"><meta property="og:locale:alternate" content="{alt}">'
+      f'<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{url}">'
+      f'<meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">\n'
+      f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{img}">\n')
+    for d in (ORG_LD,)+tuple(ld):
+        tags+='<script type="application/ld+json">'+json.dumps(d,ensure_ascii=False).replace('</','<\\/')+'</script>\n'
+    return h.rstrip()+'\n'+tags
+
+def faq_ld(pairs):
+    strip=lambda s:re.sub(r'<[^>]+>','',s).strip()
+    return {"@context":"https://schema.org","@type":"FAQPage","mainEntity":[{"@type":"Question","name":strip(q),"acceptedAnswer":{"@type":"Answer","text":strip(a)}} for q,a in pairs]}
+def faq_from_html(src):
+    return re.findall(r'<details><summary>(.*?)</summary><p>(.*?)</p></details>',src[src.index('id="faq"'):],flags=re.S)
+def crumbs_ld(items):
+    return {"@context":"https://schema.org","@type":"BreadcrumbList","itemListElement":[{"@type":"ListItem","position":i+1,"name":n,"item":SITE+u} for i,(n,u) in enumerate(items)]}
+def service_ld(name,desc,path,stype,lang):
+    return {"@context":"https://schema.org","@type":"Service","name":name,"serviceType":stype,"description":desc,"url":SITE+path,"inLanguage":lang,
+            "provider":{"@id":SITE+"/#org"},"areaServed":["AE","SA","QA","KW","BH","OM"],"availableLanguage":["en","ar"],"audience":{"@type":"BusinessAudience","audienceType":"Clinics"}}
+
+def tidy_base(src):
+    """Shared clean-ups for the older lower sections (both languages)."""
+    src=re.sub(r'(<div class="label">)\d\d · ',r'\1',src)  # numbering restarted after the v4 sections; drop it
+    emo={'📞':('phone','#c98f22'),'⏰':('bell','#d4669a'),'🔁':('loop','#3b8f5a'),'⭐':('star','#d9a441'),'🎙️':('mic','#5b7fd6'),'📣':('mega','#7c6cf2'),'📊':('chart','#0e5c57'),'🛠️':('tool','#61706c')}
+    for k,(i,c) in emo.items(): src=src.replace(f'<span class="xi" aria-hidden="true">{k}</span>',f'<span class="xi gi" style="--c:{c}">{ic(i)}</span>')
+    return src
+
 def mm(label,items,base):
     a=''.join(f'<a href="/{base}/{k}/">{gi(i,c)}<span><b>{t}</b><small>{s}</small></span></a>' for k,t,s,i,c in items)
     return f'<div class="mm"><button type="button" aria-haspopup="true">{label}</button><div class="panel">{a}</div></div>'
 
-def header(home=False):
+def header(home=False,alt='/ar/'):
     h='' if home else '/'
     return ('<header class="top"><div class="wrap">\n  <a class="wm" href="/">Halora<span>.</span></a>\n  <nav>'
       + mm('Product',PRODUCTS,'product') + mm('Specialties',SPECS,'specialties')
       + f'<a href="{h}#roi">ROI</a><a href="{h}#plans">Pricing</a><a href="{h}#faq">Questions</a></nav>\n'
-      + '  <a class="lang" href="/ar/" hreflang="ar" lang="ar">العربية</a>\n  <a class="btn line" href="/call/" data-call>Book a call</a>\n'
+      + f'  <a class="lang" href="{alt}" hreflang="ar" lang="ar">العربية</a>\n  <a class="btn line" href="/call/" data-call>Book a call</a>\n'
       + f'  <a class="btn" href="{h}#pilot">Free pilot</a>\n  <button class="mbtn" type="button" aria-label="Menu"><i></i><i></i><i></i></button>\n</div></header>')
 
 STORY=[
@@ -77,6 +133,7 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}Call Noor · 1 min</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>Chat with Noor live</a>
+   <a class="bx play" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>Watch in 60 seconds</a>
   </div>
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb>--:-- Dubai</span><span class="tk" data-tick="{tick}">Noor is answering patients right now</span></div>
   <div class="meta"><div><b>&lt;10 s</b>first reply</div><div><b>24/7</b>incl. Fridays &amp; Eid</div><div><b>EN · ع</b>Arabic &amp; English</div><div><b>14 days</b>free pilot</div></div>
@@ -162,12 +219,12 @@ def roi():
 <p class="fine">Assumes about 30% of slow-reply enquiries would have booked if answered at once. Your numbers will differ; the free pilot measures them for real.</p>
 </div><div class="out"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fb8b2">Revenue Noor could win back / month</span>
 <div class="big" data-r="rev">$0</div>
-<div style="margin-top:22px"><div class="row"><span>Enquiries slipping through / month</span><b data-r="lost">0</b></div><div class="row"><span>Extra bookings / month</span><b data-r="won">0</b></div><div class="row"><span>Return on the $299 plan</span><b data-r="x">0×</b></div></div>
+<div style="margin-top:22px"><div class="row"><span>Enquiries slipping through / month</span><b data-r="lost">0</b></div><div class="row"><span>Extra bookings / month</span><b data-r="won">0</b></div><div class="row"><span>Return on the Front Desk plan</span><b data-r="x">0×</b></div></div>
 <p><a class="bx gold" href="#pilot" style="margin-top:18px">Measure it free for 14 days →</a></p></div></div>
 </div></section>'''
 
 def compare():
-    rows=[('Answers at 2 am, Fridays and Eid','n','y'),('First reply in under 10 seconds','~ When free','y'),('Arabic and English, voice notes too','~ Depends on staff','y'),('Never forgets a reminder or follow-up','n','y'),('Handles 20 chats at the same time','n','y'),('Warm human touch at the desk','y','Your team, freed up'),('Monthly cost','AED 4,000+ salary, visa, leave','From $299')]
+    rows=[('Answers at 2 am, Fridays and Eid','n','y'),('First reply in under 10 seconds','~ When free','y'),('Arabic and English, voice notes too','~ Depends on staff','y'),('Never forgets a reminder or follow-up','n','y'),('Handles 20 chats at the same time','n','y'),('Warm human touch at the desk','y','Your team, freed up'),('Monthly cost','AED 4,000+ salary, visa, leave','A fraction of one salary')]
     def cell(v): return '<span class="y">✓</span>' if v=='y' else '<span class="n">✕</span>' if v=='n' else v.replace('~ ','')
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
     return f'''<section class="sx tight"><div class="wrap" style="max-width:920px">
@@ -180,84 +237,106 @@ def askbar():
 <div class="row1"><span class="av">{MARKSQ.replace('<svg','<svg width="38" height="38"')}</span><div><b>Ask Noor anything</b><small>She's the receptionist. Try her like a patient would.</small></div><span class="go">{ic('chat')}</span></div>
 <div class="chips"><button type="button">How much is whitening?</button><button type="button">Book me for Saturday</button><button type="button">هل تتكلمين عربي؟</button></div></div>'''
 
-def footer():
+def footer(alt='/ar/'):
     pl=''.join(f'<a href="/product/{k}/">{t}</a><br>' for k,t,*_ in PRODUCTS)
     sl=''.join(f'<a href="/specialties/{k}/">{t}</a><br>' for k,t,*_ in SPECS)
     return f'''<footer><div class="wrap">
   <div><a class="wm" href="/">Halora<span>.</span></a><p>AI receptionist for clinics in Dubai and the Gulf.</p></div>
   <div><p><b>Product</b><br>{pl}</p></div>
   <div><p><b>Specialties</b><br>{sl}</p></div>
-  <div><p><a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a><br><a href="/call/">Book a call</a><br><a href="/ar/" lang="ar">النسخة العربية</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">Client sign-in</a></p><p>© 2026 Halora. Demo clinics shown are fictional.</p></div>
+  <div><p><a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a><br><a href="/call/">Book a call</a><br><a href="{alt}" lang="ar">النسخة العربية</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">Client sign-in</a></p><p>© 2026 Halora. Demo clinics shown are fictional.</p></div>
 </div></footer>'''
 
 # ---------- homepage ----------
-src=open(ORIG,encoding='utf-8').read()
-src=src.replace('<link rel="stylesheet" href="/assets/site.css">','<link rel="stylesheet" href="/assets/site.css">\n<link rel="stylesheet" href="/assets/x.css">',1)
-src=re.sub(r'<header class="top">.*?</header>',lambda m:header(True),src,count=1,flags=re.S)
-a=src.index('<div class="wrap hero">'); b=src.index('<section id="problem">')
-src=src[:a]+hero()+'\n'+marquee()+'\n'+bento()+'\n'+night()+'\n'+specialties()+'\n'+roi()+'\n'+compare()+'\n'+src[b:]
-src=re.sub(r'<footer>.*?</footer>',lambda m:footer(),src,count=1,flags=re.S)
-src=src.replace('<button class="trybar"',askbar()+'\n<button class="trybar"',1)
-src=src.replace('<script src="/assets/site.js" defer></script>','<script src="/assets/site.js" defer></script>\n<script src="/assets/x.js" defer></script>',1)
+def home_common(src,hdr,hero_,mq,bn,nt,sp,ro,cp,ftr,ab):
+    src=fonts_nonblocking(src)
+    src=src.replace('<link rel="stylesheet" href="/assets/site.css">','<link rel="stylesheet" href="/assets/site.css">\n<link rel="stylesheet" href="/assets/x.css">',1)
+    src=re.sub(r'<header class="top">.*?</header>',lambda m:hdr,src,count=1,flags=re.S)
+    a=src.index('<div class="wrap hero">'); b=src.index('<section id="problem">')
+    src=src[:a]+hero_+'\n'+mq+'\n'+bn+'\n'+nt+'\n'+sp+'\n'+ro+'\n'+cp+'\n'+src[b:]
+    src=tidy_base(src)
+    src=re.sub(r'<footer>.*?</footer>',lambda m:ftr,src,count=1,flags=re.S)
+    src=src.replace('<button class="trybar"',ab+'\n<button class="trybar"',1)
+    src=src.replace('<script src="/assets/site.js" defer></script>','<script src="/assets/site.js" defer></script>\n<script src="/assets/x.js" defer></script>',1)
+    return src
 INTRO_HEAD='<script>try{if(sessionStorage.getItem("hlIntro")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-pending");setTimeout(function(){document.documentElement.classList.remove("intro-pending")},4000)}}catch(e){}</script>\n'
 def with_intro(h,tag): return h.replace('</head>',INTRO_HEAD+'</head>',1).replace('<body ','<body data-intro="'+tag+'" ',1)
+def set_head(src,newhead):
+    i=src.index('</head>'); return newhead+src[i:]
+WEBSITE_LD=lambda lang,path:{"@context":"https://schema.org","@type":"WebSite","name":"Halora","url":SITE+path,"inLanguage":lang,"publisher":{"@id":SITE+"/#org"}}
+VIDEO_LD=lambda lang,name,desc:{"@context":"https://schema.org","@type":"VideoObject","name":name,"description":desc,"contentUrl":SITE+VIDEO,"thumbnailUrl":SITE+"/assets/halora-explainer-poster.jpg","uploadDate":"2026-11-18","duration":"PT1M1S","inLanguage":lang}
+
+src=home_common(open(ORIG,encoding='utf-8').read(),header(True),hero(),marquee(),bento(),night(),specialties(),roi(),compare(),footer(),askbar())
+HOME_T='AI receptionist for clinics in Dubai & the Gulf · Halora'
+HOME_D='Noor, the AI receptionist for Gulf clinics, answers WhatsApp, website chat and phone calls 24/7 in Arabic and English and books appointments into your calendar. Free 14-day pilot.'
+src=set_head(src,seo(src[:src.index('</head>')],'en',HOME_T,HOME_D,'/','/','/ar/',
+   [WEBSITE_LD('en','/'),VIDEO_LD('en','Halora in 60 seconds','How Noor answers clinic patients on WhatsApp, web chat and phone, and books them in.'),faq_ld(faq_from_html(src))]))
 open(f'{ROOT}/index.html','w',encoding='utf-8').write(with_intro(src,'Every patient · Answered'))
 
-# ---------- sub-pages ----------
-head_tpl=src[:src.index('</head>')]
-def page_head(title,desc,url):
-    h=re.sub(r'<title>.*?</title>',f'<title>{title}</title>',head_tpl,flags=re.S)
-    h=re.sub(r'<meta name="description" content="[^"]*">',f'<meta name="description" content="{desc}">',h)
-    h=re.sub(r'<link rel="alternate"[^>]*>\n?','',h)
-    h=h.replace('<link rel="canonical" href="https://askhalora.com/">',f'<link rel="canonical" href="https://askhalora.com{url}">')
-    h=h.replace('<meta property="og:url" content="https://askhalora.com/">',f'<meta property="og:url" content="https://askhalora.com{url}">')
-    h=re.sub(r'<meta property="og:title" content="[^"]*">',f'<meta property="og:title" content="{title}">',h)
-    return h+'</head>'
+# ---------- sub-pages (shared by English and Arabic) ----------
+HEAD_EN=src[:src.index('</head>')]
+EN=dict(lang='en',pre='',home='/',crumb_home='Halora',try_='Try Noor now',call='Book a 20-min call',
+ what_k='What you get',what_h='Built for the way <b>Gulf clinics</b> work.',live_k='Going live',live_h='Live in <b>about a week.</b> We do the setup.',
+ q_k='Questions',q_h='Good to know',band='Try it free for 14 days. <b>Pay only if it brings in patients.</b>',band1='Start the free pilot',band2='See pricing',
+ replies='Noor · replies instantly',trybar='Talk to Noor',voice='0:07',
+ body='<body data-chat-clinic="BrightSmile Dental (demo)" data-chat-hello="Hi, I\'m Noor at BrightSmile Dental, a demo clinic. Ask me about prices, opening hours, or book a visit.">',
+ offer='<a class="offer-bar" id="offerbar" href="/#plans" data-end="2026-12-31T23:59:00+04:00"><b>Founding clinic offer</b> · 25% off for 12 months + 25% off setup · <span class="cd" data-cd>Ends 31 December</span> →</a>',
+ header=lambda alt:header(False,alt),footer=lambda alt:footer(alt),askbar=lambda:askbar())
 
 AV26=MARKSQ.replace('<svg','<svg width="26" height="26"')
-def chatmock(chat,clinic):
+def chatmock(chat,clinic,L=EN):
     m=''
     for i,(w_,t) in enumerate(chat):
         st=f' style="animation-delay:{.3+i*.45}s"'
         if w_=='c': m+=f'<div class="chip"{st}>{t}</div>'
-        elif t=='~voice': m+=f'<div class="w {w_} v"{st}>▶ <i></i> 0:07</div>'
+        elif t=='~voice': m+=f'<div class="w {w_} v"{st}>▶ <i></i> {L["voice"]}</div>'
         else: m+=f'<div class="w {w_}"{st}>{t}</div>'
-    return f'<div class="phone tilt"><div class="scr"><div class="bar"><span class="av">{AV26}</span><div><b>{clinic}</b><small>Noor · replies instantly</small></div></div><div class="ms">{m}</div></div></div>'
+    return f'<div class="phone tilt"><div class="scr"><div class="bar"><span class="av">{AV26}</span><div><b>{clinic}</b><small>{L["replies"]}</small></div></div><div class="ms">{m}</div></div></div>'
 
-def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,extra=''):
+SUBPAGES=[]  # (en_path) for sitemap
+def plain(s): return re.sub(r'<[^>]+>','',s).replace('"','').strip()
+def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,extra='',L=EN,desc=None,stype='AI receptionist',crumbs=None):
+    """path is the language-neutral path (/product/x/); Arabic pages live under /ar."""
+    url=L['pre']+path; en,ar=path,'/ar'+path
     fe=''.join(f'<div class="f rv">{ico3(k,c)}<h3>{t}</h3><p>{p}</p></div>' for k,c,t,p in feats)
     stp=''.join(f'<div class="rv"><b>{t}</b><p>{p}</p></div>' for t,p in steps)
     fq=''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q,a in faqs)
-    body=f'''<body data-chat-clinic="BrightSmile Dental (demo)" data-chat-hello="Hi, I'm Noor at BrightSmile Dental, a demo clinic. Ask me about prices, opening hours, or book a visit.">
-<a class="offer-bar" id="offerbar" href="/#plans" data-end="2026-12-31T23:59:00+04:00"><b>Founding clinic offer</b> · 25% off for 12 months + 25% off setup · <span class="cd" data-cd>Ends 31 December</span> →</a>
-{header()}
+    alt=ar if L['lang']=='en' else en
+    body=f'''{L['body']}
+{L['offer']}
+{L['header'](alt)}
 <main>
 <section class="ph"><div class="sky"><i></i></div><canvas class="stars" aria-hidden="true"></canvas>
 <div class="wrap"><div>
-<div class="crumbs"><a href="/">Halora</a> / {crumb}</div>
+<div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {crumb}</div>
 <div style="margin-top:26px">{ico3(iconk,color)}</div>
 <h1>{h1}</h1><p class="lead">{lead}</p>
-<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>Try Noor now</a><a class="bx glass" href="/call/" data-call>Book a 15-min call</a></div>
-</div>{chatmock(chat,clinic)}</div></section>
-<section class="sx"><div class="wrap"><div class="hd2 rv"><span class="k">What you get</span><h2>Built for the way <b>Gulf clinics</b> work.</h2></div><div class="feat">{fe}</div></div></section>
+<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>{L['try_']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a></div>
+</div>{chatmock(chat,clinic,L)}</div></section>
+<section class="sx"><div class="wrap"><div class="hd2 rv"><span class="k">{L['what_k']}</span><h2>{L['what_h']}</h2></div><div class="feat">{fe}</div></div></section>
 {extra}
-<section class="sx tight" style="background:var(--paper-2)"><div class="wrap"><div class="hd2 rv"><span class="k">Going live</span><h2>Live in <b>about a week.</b> We do the setup.</h2></div><div class="steps4">{stp}</div></div></section>
-<section class="sx tight"><div class="wrap" style="max-width:820px"><div class="hd2 rv"><span class="k">Questions</span><h2>Good to know</h2></div><div class="faq">{fq}</div></div></section>
-<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>Try it free for 14 days. <b>Pay only if it brings in patients.</b></h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="/#pilot">Start the free pilot</a><a class="bx glass" href="/#plans">See pricing</a></div></div></div></section>
+<section class="sx tight" style="background:var(--paper-2)"><div class="wrap"><div class="hd2 rv"><span class="k">{L['live_k']}</span><h2>{L['live_h']}</h2></div><div class="steps4">{stp}</div></div></section>
+<section class="sx tight" id="faq"><div class="wrap" style="max-width:820px"><div class="hd2 rv"><span class="k">{L['q_k']}</span><h2>{L['q_h']}</h2></div><div class="faq">{fq}</div></div></section>
+<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L['band']}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L['home']}#pilot">{L['band1']}</a><a class="bx glass" href="{L['home']}#plans">{L['band2']}</a></div></div></div></section>
 </main>
-{footer()}
-{askbar()}
-<button class="trybar" id="trybar" data-chat>Talk to Noor</button>
+{L['footer'](alt)}
+{L['askbar']()}
+<button class="trybar" id="trybar" data-chat>{L['trybar']}</button>
 <script src="/assets/site.js" defer></script>
 <script src="/assets/x.js" defer></script>
 </body></html>'''
-    os.makedirs(f'{ROOT}{path}',exist_ok=True)
-    open(f'{ROOT}{path}index.html','w',encoding='utf-8').write(page_head(title,lead.replace('"',''),path)+'\n'+body)
+    d=desc or plain(lead)
+    name=plain(h1)
+    cr=crumbs or [(L['crumb_home'],L['home']),(plain(crumb.split(' / ')[-1]),url)]
+    head=seo(L['head'] if 'head' in L else HEAD_EN,L['lang'],title,d,url,en,ar,[service_ld(plain(crumb.split(' / ')[-1]),d,url,stype,L['lang']),crumbs_ld(cr),faq_ld(faqs)])
+    os.makedirs(f'{ROOT}{url}',exist_ok=True)
+    open(f'{ROOT}{url}index.html','w',encoding='utf-8').write(head+'</head>\n'+body)
+    if L['lang']=='en': SUBPAGES.append(path)
 
-STEPS=[('15-minute call','We learn your services, prices, doctors and hours.'),('We build your Noor','Your knowledge, your tone, your calendar. You change nothing.'),('Your team tests it','Try it on your own phones and tell us what to adjust.'),('Go live','Switch on with a free 14-day pilot and watch the bookings.')]
+STEPS=[('20-minute call','We learn your services, prices, doctors and hours.'),('We build your Noor','Your knowledge, your tone, your calendar. You change nothing.'),('Your team tests it','Try it on your own phones and tell us what to adjust.'),('Go live','Switch on with a free 14-day pilot and watch the bookings.')]
 FQ_COMMON=[('Does Noor give medical advice?','No. Noor answers practical questions (prices, times, location, insurance) and hands anything medical to your team.'),('Can my team take over a chat?','Yes, at any moment, from the owner portal or WhatsApp. Noor steps back and can pick up again later.'),('Do I need to change my WhatsApp number?','We connect your WhatsApp Business number to the official WhatsApp Cloud API. We guide you through it and handle the technical part.')]
 
-subpage('/product/whatsapp/','Product / WhatsApp & web chat','WhatsApp & web chat · Halora','Every message answered <span class="glow">in seconds,</span> day and night.',
+subpage('/product/whatsapp/','Product / WhatsApp & web chat','WhatsApp AI receptionist for clinics · Halora','Every message answered <span class="glow">in seconds,</span> day and night.',
  'Noor replies to patients on WhatsApp and your website chat, answers their questions from your own price list, and books real free slots straight into your calendar.',
  'chat','#1fa971',SPD['dental']['chat'],'Pearl Dental (demo)',
  [('bolt','#c98f22','Replies in seconds','24/7, including Fridays, holidays and Eid. The first clear answer usually wins the booking.'),
@@ -266,10 +345,10 @@ subpage('/product/whatsapp/','Product / WhatsApp & web chat','WhatsApp & web cha
   ('lang','#7c6cf2','Gulf Arabic & English','Answers in the patient\'s language and switches when they do.'),
   ('users','#d4669a','Hands over to your team','Anything sensitive or unusual goes to a person, instantly, with the full chat.'),
   ('shield','#0f2523','Safe by design','No medical advice, never asks for ID or card details, and only confirms bookings that really happened.')],
- STEPS,FQ_COMMON,
+ STEPS,FQ_COMMON,stype='WhatsApp and website chat receptionist',
  extra=f'<section class="sx tight" id="voice"><div class="wrap"><div class="cta-band rv" style="background:radial-gradient(120% 140% at 0 0,#24346e,#0b1530 60%)"><h2>Patients send voice notes. <b>Noor listens.</b> Try it on the demo: tap the mic in the chat.</h2><a class="bx gold" href="#" data-chat>{ic("mic")}Send Noor a voice note</a></div></div></section><section class="sx tight" id="safety"><div class="wrap" style="max-width:900px"><div class="hd2 rv"><span class="k">Safety</span><h2>Guardrails <b>built in.</b></h2><p>Noor never gives medical advice, never asks for Emirates ID, cards or medical history, never invents a booking, and alerts your team the moment a patient is upset or urgent.</p></div></div></section>')
 
-subpage('/product/phone/','Product / Phone receptionist','Phone receptionist · Halora','Your phone line, answered <span class="glow">on the first ring.</span>',
+subpage('/product/phone/','Product / Phone receptionist','AI phone receptionist for clinics · Halora','Your phone line, answered <span class="glow">on the first ring.</span>',
  'Noor answers calls in a natural voice in Arabic and English, books and reschedules, and turns every missed call into a WhatsApp conversation within seconds.',
  'phone','#c98f22',[['c','Incoming call · 13:05'],['n','Good afternoon, this is Noor at Pearl Dental. How can I help?'],['p','I need a cleaning this week'],['n','Of course. I have Wednesday 4 pm or Thursday 11 am. Which suits you?'],['p','Thursday'],['n','Booked for Thursday at 11. You\'ll get a WhatsApp confirmation now.'],['c','Call summary sent to the team']],'Pearl Dental (demo)',
  [('phone','#c98f22','Every call answered','No more busy tones or voicemail during the rush hour or after closing.'),
@@ -278,9 +357,9 @@ subpage('/product/phone/','Product / Phone receptionist','Phone receptionist · 
   ('lang','#7c6cf2','Natural voice, two languages','Warm, clear Arabic and English. Patients can switch any time.'),
   ('users','#d4669a','Transfers to your team','Urgent or complex calls go straight to a person.'),
   ('doc','#61706c','Call summaries','Every call is summarised in the portal and the daily report.')],
- STEPS,[('Which plan includes calls?','Phone answering is part of the Front Desk + Phone plan and the Group plan.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1])
+ STEPS,[('Which plan includes calls?','Phone answering is part of the Front Desk + Phone plan and the Group plan.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
 
-subpage('/product/growth/','Product / Reminders & reviews','Reminders, reviews & recalls · Halora','Fewer no-shows. <span class="glow">More five-star reviews.</span>',
+subpage('/product/growth/','Product / Reminders & reviews','Appointment reminders & Google reviews for clinics · Halora','Fewer no-shows. <span class="glow">More five-star reviews.</span>',
  'Noor reminds every patient before their visit, refills cancelled slots from your waitlist, asks happy patients for a Google review and brings old patients back with approved recall messages.',
  'star','#7c6cf2',[['n','Hi Sara, a reminder of your visit tomorrow at 10:00 with Dr. Omar. Reply 1 to confirm or 2 to reschedule.'],['p','1'],['n','Confirmed ✅ See you tomorrow!'],['c','Next day · after the visit'],['n','How was your visit today? If you were happy, a short Google review would mean a lot to us ⭐'],['p','Loved it, done!']],'Pearl Dental (demo)',
  [('bell','#d4669a','Smart reminders','24 hours and 2 hours before each visit, with one-tap confirm or reschedule.'),
@@ -289,9 +368,9 @@ subpage('/product/growth/','Product / Reminders & reviews','Reminders, reviews &
   ('users','#7c6cf2','Recall campaigns','Approved messages to the right patients, such as 6-month cleanings.'),
   ('chart','#0e5c57','Results you can see','Weekly and monthly reports of bookings, no-shows and reviews.'),
   ('shield','#0f2523','Opt-out respected','Patients can stop messages any time; Noor never spams.')],
- STEPS,FQ_COMMON[:2])
+ STEPS,FQ_COMMON[:2],stype='Appointment reminders and review requests')
 
-subpage('/product/portal/','Product / Owner portal','Owner portal · Halora','See every patient Noor <span class="glow">brought in.</span>',
+subpage('/product/portal/','Product / Owner portal','Clinic owner portal & daily reports · Halora','See every patient Noor <span class="glow">brought in.</span>',
  'One place for the owner and the team: every conversation, every booking, every request. Take over any chat in one click and get a summary on WhatsApp each morning.',
  'grid','#0e5c57',[['c','Morning summary · 08:55'],['n','Good morning Dr. Omar ☀️ Yesterday Noor handled 37 conversations and booked 9 visits (3 after hours). 2 requests need your team. Full PDF attached.'],['p','Who needs a callback?'],['n','Ahmed K. (insurance question) and Layla S. (wants Dr. Sara only). Both are in the Requests tab.']],'Halora for owners',
  [('grid','#0e5c57','Live dashboard','Conversations, bookings and revenue Noor brought in, by day, week and month.'),
@@ -300,7 +379,7 @@ subpage('/product/portal/','Product / Owner portal','Owner portal · Halora','Se
   ('users','#d4669a','Team access','Give each receptionist or manager their own login.'),
   ('bell','#c98f22','Daily PDF report','A short summary on WhatsApp every morning.'),
   ('star','#7c6cf2','Campaigns','Send approved recall and offer messages to the right patients.')],
- STEPS,[('Which plan includes the portal?','The portal comes with Front Desk + Phone and Group plans. The Front Desk plan includes the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2])
+ STEPS,[('Which plan includes the portal?','The portal comes with Front Desk + Phone and Group plans. The Front Desk plan includes the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
 
 SPEC_PAGES={
 'dental':('Dental clinics','The AI receptionist for <span class="glow">dental clinics.</span>','tooth','#14a3b8',
@@ -312,11 +391,28 @@ SPEC_PAGES={
 'ivf':('Fertility & IVF','The AI receptionist for <span class="glow">fertility clinics.</span>','seed','#b9811f',
  [('heart','#d4669a','Kind first replies','A warm, respectful tone for one of the hardest messages to send.'),('users','#7c6cf2','Coordinator handover','Patients are connected to your coordinator quickly.'),('shield','#0f2523','Private by design','Never discusses results or medical details, never asks for ID.'),('lang','#5b7fd6','Arabic & English','Patients choose the language they feel comfortable in.'),('cal','#0e5c57','First consultations','Books couples\' consultations with the right doctor.'),('bolt','#c98f22','Any hour','Many people reach out late at night. Noor is there.')]),
 }
+SPEC_TITLE={'dental':'AI receptionist for dental clinics in Dubai & the Gulf · Halora','aesthetics':'AI receptionist for aesthetic & skin clinics · Halora','physio':'AI receptionist for physiotherapy clinics · Halora','ivf':'AI receptionist for fertility & IVF clinics · Halora'}
 for k,(crumb,h1,ik,col,feats) in SPEC_PAGES.items():
     s=SPD[k]
-    subpage(f'/specialties/{k}/',f'Specialties / {crumb}',f'{crumb} · AI receptionist · Halora',h1,s['text']+' In Arabic and English, 24/7.',ik,col,s['chat'],s['clinic'],feats,STEPS,FQ_COMMON)
+    subpage(f'/specialties/{k}/',f'Specialties / {crumb}',SPEC_TITLE[k],h1,s['text']+' In Arabic and English, 24/7.',ik,col,s['chat'],s['clinic'],feats,STEPS,FQ_COMMON,stype=f'AI receptionist for {crumb.lower()}')
 
-# sitemap
-urls=['/','/ar/','/call/','/book/','/sample/','/glow/']+[f'/product/{k}/' for k,*_ in PRODUCTS]+[f'/specialties/{k}/' for k,*_ in SPECS]
-open(f'{ROOT}/sitemap.xml','w').write('<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">\n'+''.join(f'<url><loc>https://askhalora.com{u}</loc></url>\n' for u in urls)+'</urlset>\n')
+def write_sitemap():
+    """English and Arabic pages, each with hreflang alternates. Demo pages (noindex) are left out."""
+    pairs=[('/','/ar/')]+[(p,'/ar'+p) for p in SUBPAGES]
+    x='<?xml version="1.0" encoding="UTF-8"?>\n<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">\n'
+    for en,ar in pairs:
+        alts=f'<xhtml:link rel="alternate" hreflang="en" href="{SITE+en}"/><xhtml:link rel="alternate" hreflang="ar" href="{SITE+ar}"/><xhtml:link rel="alternate" hreflang="x-default" href="{SITE+en}"/>'
+        for u in (en,ar): x+=f'<url><loc>{SITE+u}</loc>{alts}</url>\n'
+    x+=f'<url><loc>{SITE}/call/</loc></url>\n</urlset>\n'
+    open(f'{ROOT}/sitemap.xml','w').write(x)
+write_sitemap()
+
+# ---------- hand-made pages: same clean SEO block ----------
+STATIC=[('/call/','Book a 20-minute call with Halora','Book a free 20-minute call to see how Noor, the AI receptionist, would answer your clinic\'s WhatsApp, website chat and phone calls.','/call/?lang=ar'),
+ ('/book/','Patient booking page demo · BrightSmile Dental (fictional) · Halora','Demo of the patient booking page Halora builds for clinics: pick a service, a doctor and a free slot. BrightSmile Dental is a fictional clinic.',None),
+ ('/glow/','Skin clinic demo · Glow Skin Clinic (fictional) · Halora','Try Noor, the AI receptionist, on Glow Skin Clinic, a fictional skin and aesthetics clinic built to demo Halora.',None),
+ ('/sample/','Sample clinic website by Halora · Lumina Dental (fictional)','A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in.',None)]
+for path,t,dsc,ar in STATIC:
+    f=f'{ROOT}{path}index.html'; h=open(f,encoding='utf-8').read(); i=h.index('</head>')
+    open(f,'w',encoding='utf-8').write(seo(h[:i],'en',t,dsc,path,path,ar)+h[i:])
 print('ok')

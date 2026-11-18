@@ -1,17 +1,22 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
-<url><loc>https://askhalora.com/</loc></url>
-<url><loc>https://askhalora.com/ar/</loc></url>
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9" xmlns:xhtml="http://www.w3.org/1999/xhtml">
+<url><loc>https://askhalora.com/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/"/></url>
+<url><loc>https://askhalora.com/ar/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/"/></url>
+<url><loc>https://askhalora.com/product/whatsapp/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/whatsapp/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/whatsapp/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/whatsapp/"/></url>
+<url><loc>https://askhalora.com/ar/product/whatsapp/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/whatsapp/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/whatsapp/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/whatsapp/"/></url>
+<url><loc>https://askhalora.com/product/phone/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/phone/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/phone/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/phone/"/></url>
+<url><loc>https://askhalora.com/ar/product/phone/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/phone/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/phone/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/phone/"/></url>
+<url><loc>https://askhalora.com/product/growth/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/growth/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/growth/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/growth/"/></url>
+<url><loc>https://askhalora.com/ar/product/growth/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/growth/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/growth/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/growth/"/></url>
+<url><loc>https://askhalora.com/product/portal/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/portal/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/portal/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/portal/"/></url>
+<url><loc>https://askhalora.com/ar/product/portal/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/product/portal/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/product/portal/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/product/portal/"/></url>
+<url><loc>https://askhalora.com/specialties/dental/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/dental/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/dental/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/dental/"/></url>
+<url><loc>https://askhalora.com/ar/specialties/dental/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/dental/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/dental/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/dental/"/></url>
+<url><loc>https://askhalora.com/specialties/aesthetics/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/aesthetics/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/aesthetics/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/aesthetics/"/></url>
+<url><loc>https://askhalora.com/ar/specialties/aesthetics/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/aesthetics/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/aesthetics/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/aesthetics/"/></url>
+<url><loc>https://askhalora.com/specialties/physio/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/physio/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/physio/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/physio/"/></url>
+<url><loc>https://askhalora.com/ar/specialties/physio/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/physio/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/physio/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/physio/"/></url>
+<url><loc>https://askhalora.com/specialties/ivf/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/ivf/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/ivf/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/ivf/"/></url>
+<url><loc>https://askhalora.com/ar/specialties/ivf/</loc><xhtml:link rel="alternate" hreflang="en" href="https://askhalora.com/specialties/ivf/"/><xhtml:link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/specialties/ivf/"/><xhtml:link rel="alternate" hreflang="x-default" href="https://askhalora.com/specialties/ivf/"/></url>
 <url><loc>https://askhalora.com/call/</loc></url>
-<url><loc>https://askhalora.com/book/</loc></url>
-<url><loc>https://askhalora.com/sample/</loc></url>
-<url><loc>https://askhalora.com/glow/</loc></url>
-<url><loc>https://askhalora.com/product/whatsapp/</loc></url>
-<url><loc>https://askhalora.com/product/phone/</loc></url>
-<url><loc>https://askhalora.com/product/growth/</loc></url>
-<url><loc>https://askhalora.com/product/portal/</loc></url>
-<url><loc>https://askhalora.com/specialties/dental/</loc></url>
-<url><loc>https://askhalora.com/specialties/aesthetics/</loc></url>
-<url><loc>https://askhalora.com/specialties/physio/</loc></url>
-<url><loc>https://askhalora.com/specialties/ivf/</loc></url>
 </urlset>
