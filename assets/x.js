@@ -2,6 +2,31 @@
 (function(){
 var d=document,w=window,rm=matchMedia('(prefers-reduced-motion: reduce)').matches;
 function $(s,r){return (r||d).querySelector(s)}function $$(s,r){return [].slice.call((r||d).querySelectorAll(s))}
+/* ===== opening intro (once per session, home pages only) ===== */
+(function(){var tg=d.body.getAttribute('data-intro');var hp=function(){d.documentElement.classList.remove('intro-pending')};if(tg===null){hp();return}var seen=false;try{seen=sessionStorage.getItem('hlIntro')==='1'}catch(e){}
+ if(seen||rm){hp();return}
+ var L='Halora'.split('').map(function(ch,i){return '<span style="animation-delay:'+(1.75+i*.07)+'s">'+ch+'</span>'}).join('')+'<span style="animation-delay:2.2s"><i>.</i></span>';
+ var it=d.createElement('div');it.id='intro';it.setAttribute('aria-hidden','true');
+ it.innerHTML='<div class="au"></div><canvas></canvas><div class="c"><div class="mk"><svg viewBox="0 0 64 64"><rect class="sq" x="1" y="1" width="62" height="62" rx="15"/><path class="ar" d="M19.5 23.5Q32 12.5 44.5 23.5" fill="none" stroke="#D9A441" stroke-width="5.2" stroke-linecap="round"/><path class="hh" d="M22.5 29v21M41.5 29v21M22.5 39.5h19" fill="none" stroke="#F3F5F2" stroke-width="6.2" stroke-linecap="round"/></svg></div><div class="wd" dir="ltr">'+L+'</div><div class="tg">'+tg+'</div></div><div class="sk">'+(d.documentElement.lang==='ar'?'اضغط للتخطي':'Tap to skip')+'</div>';
+ d.body.appendChild(it);hp();try{sessionStorage.setItem('hlIntro','1')}catch(e){}
+ d.documentElement.classList.add('intro-on');
+ var done=false;function end(){if(done)return;done=true;it.classList.add('out');d.documentElement.classList.remove('intro-on');setTimeout(function(){it.remove()},1100)}
+ it.addEventListener('click',end);addEventListener('keydown',end,{once:true});
+ /* particles converge into the mark */
+ var c=it.querySelector('canvas'),x=c.getContext('2d'),dpr=Math.min(2,w.devicePixelRatio||1),W,H,P=[];
+ function sz(){W=c.width=innerWidth*dpr;H=c.height=innerHeight*dpr}sz();
+ var cols=['#7ff0df','#e0b34f','#c9b8ff','#3ddc84','#f59ac0'];
+ for(var i=0;i<160;i++){var a=Math.random()*6.283,r=Math.max(W,H)*(.45+Math.random()*.5);P.push({a:a,r:r,r0:r,s:.012+Math.random()*.02,c:cols[i%5],z:(Math.random()*1.6+.6)*dpr,dl:Math.random()*.5})}
+ var t0=performance.now();
+ function f(t){var e=(t-t0)/1000;x.clearRect(0,0,W,H);var cx=W/2,cy=H/2-30*dpr;
+  for(var i=0;i<P.length;i++){var p=P[i],k=Math.max(0,Math.min(1,(e-p.dl)/1.25));k=k*k*(3-2*k);var rr=p.r0*(1-k)+(k>=1?0:0);p.a+=p.s*(1-k*.6);
+   var px=cx+Math.cos(p.a)*rr,py=cy+Math.sin(p.a)*rr*.82;x.globalAlpha=k<1?.9:Math.max(0,1-(e-p.dl-1.25)*3);x.fillStyle=p.c;x.beginPath();x.arc(px,py,p.z*(1-k*.4),0,6.283);x.fill();
+   if(k>.05&&k<1){x.globalAlpha=.18;x.strokeStyle=p.c;x.lineWidth=p.z*.6;x.beginPath();x.moveTo(px,py);var b=p.a-p.s*6;x.lineTo(cx+Math.cos(b)*rr*1.04,cy+Math.sin(b)*rr*.82*1.04);x.stroke()}}
+  if(!done&&e<3.4)requestAnimationFrame(f)}
+ requestAnimationFrame(f);
+ setTimeout(end,3300);
+})();
+
 
 /* header over dark hero */
 if($('.hx,.ph')){d.body.classList.add('dark-top');var onS=function(){d.body.classList.toggle('scrolled',scrollY>($('.hx,.ph').offsetHeight-90))};addEventListener('scroll',onS,{passive:true});onS();}
@@ -18,7 +43,7 @@ $$('.rot').forEach(function(r){var s=$$('span',r),i=0;if(s.length<2||rm)return;s
 
 /* live Dubai clock + ticker */
 var clk=$('[data-dxb]'),tk=$('[data-tick]');
-if(clk){var T=function(){var n=new Date(Date.now()+(new Date().getTimezoneOffset()+240)*6e4);clk.textContent=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2)+' Dubai'};T();setInterval(T,15e3)}
+if(clk){var T=function(){var n=new Date(Date.now()+(new Date().getTimezoneOffset()+240)*6e4);clk.textContent=('0'+n.getHours()).slice(-2)+':'+('0'+n.getMinutes()).slice(-2)+' '+(clk.getAttribute('data-dxb')||'Dubai')};T();setInterval(T,15e3)}
 if(tk){var L=tk.getAttribute('data-tick').split('|'),k=0;setInterval(function(){k=(k+1)%L.length;tk.style.opacity=0;setTimeout(function(){tk.textContent=L[k];tk.style.opacity=1},300)},3200);tk.style.transition='opacity .3s'}
 
 /* hero story: bubble -> booking card */
