@@ -111,8 +111,8 @@
 /* Chat feel: a warm, human-style receptionist look for the demo chat (avatar, online status, typing, timestamps). */
 (function () {
   var d = document, ar = d.documentElement.lang === 'ar';
-  var L = ar ? { st: 'متصلة الآن', hi: 'أهلاً وسهلاً! معك نور من استقبال العيادة 😊 كيف أقدر أساعدك اليوم؟ تقدر تسألني عن الأسعار أو المواعيد أو تحجز زيارة.', demo: 'عيادة تجريبية' }
-               : { st: 'Online now', hi: "Hi there! I'm Noor from the front desk 😊 How can I help you today? Ask me about prices, opening hours, or book a visit.", demo: 'Demo clinic' };
+  var L = ar ? { st: 'متصلة الآن', hi: ['صباح الخير','مساء الخير','مساء الخير'][(function(){var x=+new Date().toLocaleString('en-US',{timeZone:'Asia/Dubai',hour:'numeric',hour12:false});return x<12?0:x<17?1:2;})()] + '، معك نور من عيادة برايت سمايل. كيف أقدر أساعدك؟', demo: 'عيادة تجريبية' }
+               : { st: 'Online now', hi: ['Good morning','Good afternoon','Good evening'][(function(){var x=+new Date().toLocaleString('en-US',{timeZone:'Asia/Dubai',hour:'numeric',hour12:false});return x<12?0:x<17?1:2;})()] + ', this is Noor at BrightSmile Dental. How can I help you?', demo: 'Demo clinic' };
   var css = '#nw-h{display:flex;align-items:center;gap:12px}#nw-h .nw-av{width:40px;height:40px;border-radius:50%;flex:none;position:relative;display:grid;place-items:center;font-weight:600;font-size:17px;color:#0E5C57;background:linear-gradient(145deg,#f6ecd6,#e7d3a8)}' +
     '#nw-h .nw-av:after{content:"";position:absolute;right:0;bottom:1px;width:11px;height:11px;border-radius:50%;background:#25D366;border:2px solid #0E5C57}' +
     '#nw-h small .nw-dot{display:inline-block;width:7px;height:7px;border-radius:50%;background:#25D366;margin-inline-end:6px;vertical-align:1px}' +
@@ -218,4 +218,77 @@
     }
   }
   d.querySelectorAll('[data-voice]').forEach(function (a) { a.addEventListener('click', function (e) { e.preventDefault(); open(); }); });
+})();
+
+/* Voice notes in the website chat: tap the mic to record (up to 60 s), tap again to send. Noor transcribes it and replies. */
+(function () {
+  var d = document, ar = d.documentElement.lang === 'ar';
+  var URL_V = 'https://autova.app.n8n.cloud/webhook/noor-webchat-b218e111470c-voice';
+  if (!window.MediaRecorder || !navigator.mediaDevices || !navigator.mediaDevices.getUserMedia) return;
+  var L = ar ? { rec: 'تسجيل… اضغط للإرسال', vn: 'رسالة صوتية', ty: 'نور تكتب...', no: 'اسمح للموقع باستخدام الميكروفون لإرسال رسالة صوتية.', er: 'مشكلة في الاتصال، حاول مرة أخرى.', mic: 'تسجيل رسالة صوتية' }
+             : { rec: 'Recording · tap ■ to send', vn: 'Voice note', ty: 'Noor is typing...', no: 'Please allow microphone access to send a voice note.', er: 'Connection problem. Please try again.', mic: 'Record a voice note' };
+  var css = '#nw-mic{flex:none;width:40px;height:40px;border-radius:50%;border:0;background:#E7EFED;color:#0E5C57;display:grid;place-items:center;cursor:pointer;margin-inline-end:6px;transition:background .2s,color .2s}' +
+    '#nw-mic svg{width:19px;height:19px}#nw-mic.rec{background:#E5484D;color:#fff;animation:nwp 1.2s infinite}' +
+    '@keyframes nwp{0%{box-shadow:0 0 0 0 rgba(229,72,77,.45)}100%{box-shadow:0 0 0 10px rgba(229,72,77,0)}}' +
+    '.nw-vn{display:flex;align-items:center;gap:8px}.nw-vn i{font-style:normal;opacity:.75;font-size:12px}.nw-tr{display:block;font-size:12.5px;opacity:.8;margin-top:5px;font-style:italic}';
+  var MIC = '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2" stroke-linecap="round" stroke-linejoin="round"><rect x="9" y="3" width="6" height="11" rx="3"/><path d="M5 11a7 7 0 0 0 14 0M12 18v3"/></svg>';
+  var STOP = '<svg viewBox="0 0 24 24" fill="currentColor"><rect x="7" y="7" width="10" height="10" rx="2"/></svg>';
+  var rec = null, chunks = [], started = 0, timer = null, ph = '';
+
+  function st() { try { return JSON.parse(localStorage.getItem('noor_web_chat') || '{}'); } catch (e) { return {}; } }
+  function bubble(cls, html) { var M = d.getElementById('nw-m'); var x = d.createElement('div'); x.className = 'nw-q ' + cls; x.innerHTML = html; M.appendChild(x); M.scrollTop = M.scrollHeight; return x; }
+  function esc(s) { return String(s).replace(/&/g, '&amp;').replace(/</g, '&lt;'); }
+  function fmt(s) { return Math.floor(s / 60) + ':' + String(s % 60).padStart(2, '0'); }
+
+  function send(blob, secs) {
+    var s = st();
+    var me = bubble('nw-u', '<span class="nw-vn">🎙️ ' + L.vn + ' <i>' + fmt(secs) + '</i></span>');
+    var fd = new FormData();
+    fd.append('phone', s.phone || ''); fd.append('name', s.name || ''); fd.append('lang', ar ? 'ar' : 'en'); fd.append('page', location.href.slice(0, 200));
+    fd.append('file', blob, 'voice.' + (/mp4|aac/.test(blob.type) ? 'm4a' : 'webm'));
+    var t0 = Date.now(), later = function (f) { setTimeout(f, Math.max(0, 600 - (Date.now() - t0))); };
+    fetch(URL_V, { method: 'POST', body: fd }).then(function (r) { return r.json(); }).then(function (j) { later(function () {
+      if (j.transcript) me.insertAdjacentHTML('beforeend', '<span class="nw-tr">“' + esc(j.transcript) + '”</span>');
+      bubble('nw-a', esc(j.reply || L.er));
+    }); }).catch(function () { later(function () { bubble('nw-a', esc(L.er)); }); });
+  }
+
+  function stop(cancel) {
+    clearInterval(timer);
+    var b = d.getElementById('nw-mic'), i = d.getElementById('nw-i');
+    if (b) { b.classList.remove('rec'); b.innerHTML = MIC; }
+    if (i) { i.placeholder = ph; i.disabled = false; }
+    if (rec && rec.state !== 'inactive') { rec._cancel = !!cancel; rec.stop(); }
+  }
+
+  function start() {
+    navigator.mediaDevices.getUserMedia({ audio: true }).then(function (stream) {
+      chunks = []; started = Date.now();
+      var type = ['audio/webm;codecs=opus', 'audio/webm', 'audio/mp4'].filter(function (t) { return MediaRecorder.isTypeSupported && MediaRecorder.isTypeSupported(t); })[0];
+      rec = type ? new MediaRecorder(stream, { mimeType: type }) : new MediaRecorder(stream);
+      rec.ondataavailable = function (e) { if (e.data && e.data.size) chunks.push(e.data); };
+      rec.onstop = function () {
+        stream.getTracks().forEach(function (t) { t.stop(); });
+        var secs = Math.max(1, Math.round((Date.now() - started) / 1000));
+        if (!rec._cancel && chunks.length && secs >= 1) send(new Blob(chunks, { type: rec.mimeType || 'audio/webm' }), secs);
+      };
+      rec.start();
+      var b = d.getElementById('nw-mic'), i = d.getElementById('nw-i');
+      b.classList.add('rec'); b.innerHTML = STOP;
+      ph = i.placeholder; i.value = ''; i.disabled = true;
+      var tick = function () { var s = Math.round((Date.now() - started) / 1000); i.placeholder = fmt(s) + '  ' + L.rec; if (s >= 60) stop(false); };
+      tick(); timer = setInterval(tick, 500);
+    }).catch(function () { bubble('nw-a', esc(L.no)); });
+  }
+
+  function mount() {
+    var f = d.getElementById('nw-f');
+    if (!f || d.getElementById('nw-mic')) return !!f;
+    var s = d.createElement('style'); s.textContent = css; d.head.appendChild(s);
+    var b = d.createElement('button'); b.type = 'button'; b.id = 'nw-mic'; b.setAttribute('aria-label', L.mic); b.title = L.mic; b.innerHTML = MIC;
+    b.onclick = function () { if (rec && rec.state === 'recording') stop(false); else start(); };
+    var i = d.getElementById('nw-i'); f.insertBefore(b, i ? i.nextSibling : f.firstChild);
+    return true;
+  }
+  if (!mount()) { var mo = new MutationObserver(function () { if (mount()) mo.disconnect(); }); mo.observe(d.body, { childList: true, subtree: true }); }
 })();
