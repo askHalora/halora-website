@@ -1,0 +1,234 @@
+<!doctype html>
+<html lang="en" dir="ltr">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<title>Halora · The front desk that never misses a patient</title>
+<meta name="description" content="Halora gives clinics in the Gulf Noor, an AI receptionist that answers WhatsApp, website chat and phone calls in Arabic and English, books into your calendar and shows you what it brought in.">
+<link rel="alternate" hreflang="en" href="https://askhalora.com/">
+<link rel="alternate" hreflang="ar" href="https://askhalora.com/ar/">
+
+<meta property="og:title" content="Halora · The front desk that never misses a patient">
+<meta property="og:description" content="An AI receptionist for Gulf clinics. WhatsApp, web chat and phone, in Arabic and English.">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap">
+<link rel="stylesheet" href="/assets/site.css">
+<script>document.documentElement.classList.add('js')</script>
+<!-- page-transitions:v1 -->
+<style>
+@view-transition{navigation:auto}
+::view-transition-old(root){animation:hlOut .22s cubic-bezier(.4,0,1,1) both}
+::view-transition-new(root){animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
+@keyframes hlOut{to{opacity:0;transform:translateY(-6px)}}
+@keyframes hlIn{from{opacity:0;transform:translateY(10px)}}
+html.pt-leave body{opacity:0;transform:translateY(-6px);transition:opacity .2s ease,transform .2s ease}
+html.pt-enter body{animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
+.pt-ripple{position:absolute;border-radius:50%;pointer-events:none;background:currentColor;opacity:.22;transform:scale(0);animation:ptRip .55s ease-out forwards}
+@keyframes ptRip{to{transform:scale(1);opacity:0}}
+.pt-flash{animation:ptFlash 1.2s ease}
+@keyframes ptFlash{0%{box-shadow:inset 0 0 0 9999px rgba(185,129,31,.10)}100%{box-shadow:inset 0 0 0 9999px rgba(185,129,31,0)}}
+@media (prefers-reduced-motion:reduce){@view-transition{navigation:none}html.pt-leave body,html.pt-enter body{animation:none;transition:none;opacity:1;transform:none}.pt-ripple,.pt-flash{animation:none;display:none}}
+</style>
+<script>
+(function(){var d=document,h=d.documentElement,rm=matchMedia('(prefers-reduced-motion: reduce)').matches,vt='onpagereveal' in window;
+if(!vt&&!rm){h.classList.add('pt-enter');setTimeout(function(){h.classList.remove('pt-enter')},500);}
+addEventListener('pageshow',function(e){if(e.persisted)h.classList.remove('pt-leave')});
+d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');if(!el)return;
+ if(!rm&&(el.matches('.btn,button,.way,.slot,.day,.go'))){var r=el.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,c=d.createElement('span');c.className='pt-ripple';c.style.width=c.style.height=s+'px';c.style.left=(e.clientX-r.left-s/2)+'px';c.style.top=(e.clientY-r.top-s/2)+'px';if(getComputedStyle(el).position==='static')el.style.position='relative';el.style.overflow='hidden';el.appendChild(c);setTimeout(function(){c.remove()},600);}
+ if(el.tagName!=='A'||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||el.target==='_blank'||el.hasAttribute('data-chat')||el.hasAttribute('download'))return;
+ var u=new URL(el.href,location.href);if(u.origin!==location.origin)return;
+ if(u.pathname===location.pathname&&u.hash){var t=d.getElementById(u.hash.slice(1));if(t){setTimeout(function(){t.classList.remove('pt-flash');void t.offsetWidth;t.classList.add('pt-flash')},450)}return;}
+ if(vt||rm||u.href===location.href)return;
+ e.preventDefault();h.classList.add('pt-leave');setTimeout(function(){location.href=u.href},190);
+},true);})();
+</script>
+<link rel="icon" href="/assets/halora-mark.svg" type="image/svg+xml">
+<link rel="icon" href="/assets/halora-32.png" sizes="32x32" type="image/png">
+<link rel="apple-touch-icon" href="/assets/halora-180.png">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Halora"><meta property="og:title" content="Halora · AI receptionist for clinics"><meta property="og:description" content="Noor answers your clinic’s WhatsApp, website chat and phone calls 24/7 in English and Arabic, and books appointments straight into your calendar. Free 14-day pilot."><meta property="og:url" content="https://askhalora.com/"><meta property="og:image" content="https://askhalora.com/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta name="twitter:card" content="summary_large_image">
+<link rel="canonical" href="https://askhalora.com/">
+<script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "name": "Halora", "url": "https://askhalora.com", "logo": "https://askhalora.com/assets/halora-512.png", "email": "ziad.elhoseiny@askhalora.com", "description": "AI receptionist for clinics in Dubai and the Gulf: answers WhatsApp, website chat and phone calls in English and Arabic, 24/7, and books appointments.", "areaServed": ["AE", "QA", "SA"], "sameAs": []}</script>
+</head>
+<body data-chat-clinic="BrightSmile Dental (demo)" data-chat-hello="Hi, I'm Noor at BrightSmile Dental, a demo clinic. Ask me about prices, opening hours, or book a visit.">
+
+<a class="offer-bar" id="offerbar" href="#plans" data-end="2026-12-31T23:59:00+04:00"><b>Founding clinic offer</b> · 25% off for 12 months + 25% off setup · <span class="cd" data-cd>Ends 31 December</span> →</a>
+<header class="top"><div class="wrap">
+  <a class="wm" href="/">Halora<span>.</span></a>
+  <nav><a href="#problem">Why clinics use it</a><a href="#what">What Noor does</a><a href="#extras">Extras</a><a href="#portal">For owners</a><a href="#plans">Plans</a><a href="#faq">Questions</a></nav>
+  <a class="lang" href="/ar/" hreflang="ar" lang="ar">العربية</a>
+  <a class="btn line" href="/call/" data-call>Book a call</a>
+  <a class="btn" href="#pilot">Free pilot</a>
+</div></header>
+
+<main>
+<div class="wrap hero"><div class="grid">
+  <div>
+    <div class="label">AI receptionist for clinics · Dubai and the Gulf</div>
+    <h1 class="serif">The front desk that <em>never</em> misses a patient.</h1>
+    <p class="lead">Halora gives your clinic Noor, a receptionist that answers WhatsApp, Instagram, Facebook, your website chat and your phone line in Arabic and English. She books straight into your calendar, follows up, and shows you every appointment she brought in.</p>
+    <div class="try"><div class="try-h"><span class="dot"></span>Try Noor now · free, no sign-up</div><div class="try-b"><a class="btn voice" href="#" data-voice><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="flex:none"><path fill="currentColor" d="M6.6 10.8a15.1 15.1 0 0 0 6.6 6.6l2.2-2.2a1 1 0 0 1 1-.25 11.4 11.4 0 0 0 3.6.57 1 1 0 0 1 1 1V20a1 1 0 0 1-1 1A17 17 0 0 1 3 4a1 1 0 0 1 1-1h3.5a1 1 0 0 1 1 1c0 1.25.2 2.45.57 3.57a1 1 0 0 1-.25 1z"/></svg>Call Noor · 1 min</a><a class="btn chatb" href="#" data-chat><svg viewBox="0 0 24 24" width="18" height="18" aria-hidden="true" style="flex:none"><path fill="currentColor" d="M4 4h16a2 2 0 0 1 2 2v10a2 2 0 0 1-2 2H8l-4 4V6a2 2 0 0 1 2-2z"/></svg>Chat with Noor</a></div></div><div class="next"><a class="btn" href="/call/" data-call>Book a call</a><a class="nl" href="#pilot">or start a free 14-day pilot →</a></div>
+    <p class="note">The chat opens a demo dental clinic. No sign-up, nothing is really booked. Skin clinic? <a href="/glow/">Try the skin clinic demo</a>. See the <a href="/book/">patient booking page</a>.</p>
+  </div>
+  <div class="log" aria-label="Example WhatsApp conversation">
+    <div class="hd"><span class="label">WhatsApp · Thursday night</span><span class="label">Example</span></div>
+    <div class="ln"><span class="t">23:48</span><div><span class="who">Patient</span>Hi, how much is teeth whitening? Anything this Saturday?</div></div>
+    <div class="ln n"><span class="t">23:48</span><div><span class="who">Noor</span>Hi there 😊 In-clinic whitening is AED 1,200 and takes about 90 minutes. This Saturday Dr. Sara has 10:00, 11:30 or 16:00. Which suits you best?</div></div>
+    <div class="ln"><span class="t">23:49</span><div><span class="who">Patient</span>11:30 please. Mariam Al Hashimi. Do you take Daman?</div></div>
+    <div class="ln n"><span class="t">23:49</span><div><span class="who">Noor</span>All set, Mariam ✅ Whitening on Saturday at 11:30 with Dr. Sara. We work with Daman, and our team will confirm your coverage before the visit. I'll remind you the day before.</div></div>
+    <div class="ln"><span class="t">23:50</span><div><span class="who">Patient</span>Perfect, thank you!</div></div>
+    <div class="ln n"><span class="t">23:50</span><div><span class="who">Noor</span>My pleasure. See you on Saturday, have a lovely night 🌙</div></div>
+    <div class="sys">Booked in 2 minutes · added to calendar · reminder scheduled · owner notified</div>
+    <div class="cap">An illustration of a typical late-night booking, while the clinic is closed. Names are invented.</div>
+  </div>
+</div></div>
+
+<section id="problem"><div class="wrap">
+  <div class="sec-h"><div class="label">01 · The problem</div><div><h2 class="serif">Patients message when your team can't answer.</h2><p>Evenings, weekends, the busy hour at reception. Every unanswered message is a patient who books somewhere else.</p></div></div>
+  <div class="cols">
+    <div><div class="num">i.</div><h3>Messages after hours</h3><p>Many enquiries arrive in the evening and at weekends, when the front desk is closed.</p></div>
+    <div><div class="num">ii.</div><h3>Slow replies lose bookings</h3><p>People ask three clinics at once. The first clear answer with a time usually wins.</p></div>
+    <div><div class="num">iii.</div><h3>A busy front desk</h3><p>The same questions about price, location and insurance, all day, while patients wait at the counter.</p></div>
+    <div><div class="num">iv.</div><h3>No idea what works</h3><p>Instagram, Google or referrals? Most clinics cannot say where their patients really come from.</p></div>
+  </div>
+</div></section>
+
+<section id="what"><div class="wrap">
+  <div class="sec-h"><div class="label">02 · What Noor does</div><div><h2 class="serif">One receptionist, on every channel your patients use.</h2><p>Noor learns your services, prices, doctors, hours and policies. She answers only from what you approve, and hands anything clinical to your team.</p></div></div>
+  <table class="ledger">
+    <thead><tr><th>Channel</th><th>What happens</th><th>Where it lands</th></tr></thead>
+    <tbody>
+      <tr><td>WhatsApp</td><td>Answers in seconds, by text or voice note, in the patient's own dialect. Books, moves and cancels appointments.</td><td>Your calendar and patient list</td></tr>
+      <tr><td>Website chat</td><td>The same Noor on your website, so visitors book instead of leaving.</td><td>WhatsApp follow-up</td></tr>
+      <tr><td>Instagram & Facebook <span class="new">New</span></td><td>Answers direct messages on your Instagram and Facebook pages, and replies to comments on your posts and ads, then moves interested people to a booking. Questions about prices or details get a friendly public reply and a private message.</td><td>Bookings from social media</td></tr>
+      <tr><td>Phone calls</td><td>Picks up your line in Arabic or English, books from your calendar, and takes a message when needed. Optional.</td><td>Calendar and owner alert</td></tr>
+      <tr><td>Reminders</td><td>Reminds patients before visits, asks for confirmation, and offers cancelled slots to the waitlist.</td><td>Fewer no-shows</td></tr>
+      <tr><td>Follow-up</td><td>Checks in after treatment, asks every patient for a Google review, and alerts you straight away if anyone is unhappy.</td><td>More reviews, more returns</td></tr>
+    </tbody>
+  </table>
+</div></section>
+
+<section id="extras"><div class="wrap"><div class="sec-h"><div class="label">03 · Extra features</div><div><h2 class="serif">The extras that quietly bring in more patients.</h2><p>Beyond answering and booking, Noor fixes the small leaks that cost clinics bookings and revenue every week.</p></div></div><div class="xgrid"><div class="xf"><span class="xi" aria-hidden="true">📞</span><h3>Missed calls never lost</h3><p>If nobody picks up, the patient instantly gets a WhatsApp message and the conversation continues.</p></div><div class="xf"><span class="xi" aria-hidden="true">⏰</span><h3>Fewer no-shows</h3><p>Reminders 24 hours and 2 hours before every visit, with one-tap confirm or reschedule.</p></div><div class="xf"><span class="xi" aria-hidden="true">🔁</span><h3>Cancelled slots refilled</h3><p>When someone cancels, the slot is offered to patients on the waitlist automatically.</p></div><div class="xf"><span class="xi" aria-hidden="true">⭐</span><h3>More Google reviews</h3><p>Every patient is asked for a review after their visit. You are alerted at once if anyone is unhappy.</p></div><div class="xf"><span class="xi" aria-hidden="true">🎙️</span><h3>Understands voice notes</h3><p>Patients can send WhatsApp voice messages in English or Arabic, and Noor replies.</p></div><div class="xf"><span class="xi" aria-hidden="true">📣</span><h3>Campaigns that bring patients back</h3><p>Send approved recall and offer messages to the right patients, in a few clicks.</p></div><div class="xf"><span class="xi" aria-hidden="true">📊</span><h3>Results on your phone</h3><p>A morning summary on WhatsApp, plus weekly and monthly reports of the bookings Noor brought in.</p></div><div class="xf"><span class="xi" aria-hidden="true">🛠️</span><h3>We handle all the tech</h3><p>WhatsApp setup, phone line, calendar and website chat. You never touch a setting.</p></div></div><div class="xbig"><div class="xb"><span class="xtag">Built for your clinic</span><h3>Your own clinic website</h3><p>A fast, modern website in your brand, with online booking, WhatsApp and Noor built in.</p><a class="btn line" href="/sample/">See a sample website</a></div><div class="xb"><span class="xtag">On request</span><h3>Your own patient app</h3><p>Patients create a profile, see their visit history, book or reschedule in a few taps, get reminders and message the clinic.</p><a class="btn line" href="/call/" data-call>Ask about it on a call</a></div></div><p class="xmore">And more we will show you in a short demo.</p></div></section>
+
+<section><div class="wrap day">
+  <div>
+    <div class="label">04 · A day with Noor</div>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,52px);line-height:1.04;margin:18px 0 0">What your clinic's WhatsApp looks like when someone is always there.</h2>
+  </div>
+  <div>
+    <div class="tl">
+      <div><b>08:00</b><span>Reminders go out for today's appointments. Two patients confirm, one asks to move.</span></div>
+      <div><b>08:06</b><span>Noor moves that visit to Thursday and offers the free slot to the waitlist.</span></div>
+      <div><b>13:20</b><span>A patient sends a voice note in Gulf Arabic about braces. Noor replies with prices and books a consultation.</span></div>
+      <div><b>17:45</b><span>An upset patient complains about waiting. Noor apologises and alerts the manager at once.</span></div>
+      <div><b>23:48</b><span>A new patient books whitening for Saturday. The owner sees it in the morning summary.</span></div>
+    </div>
+    <p style="color:var(--mute);font-size:13.5px;margin:0">An example day, to show how the features work together.</p>
+  </div>
+</div></section>
+
+<section id="portal"><div class="wrap portal">
+  <div>
+    <div class="label">05 · For owners</div>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,52px);line-height:1.04;margin:18px 0 18px">See exactly what Noor brought in.</h2>
+    <p style="color:var(--ink-2);font-size:17.5px;margin:0 0 28px">A private portal with its own sign-in for you and your team. Owners see everything. Reception sees the inbox and requests.</p>
+    <ul class="list">
+      <li><b>Overview</b><span>Bookings made by Noor and their value, after-hours replies, phone calls, where patients came from.</span></li>
+      <li><b>Inbox</b><span>Every conversation in one place. Take over any chat with one click, then hand it back.</span></li>
+      <li><b>Requests</b><span>Waitlist, invoices, callbacks and messages, each with a status your team can update.</span></li>
+      <li><b>Campaigns</b><span>Send an approved WhatsApp message to the right patients, such as a recall for cleaning.</span></li>
+      <li><b>Morning summary</b><span>A short report on WhatsApp every day, and a weekly and monthly summary.</span></li>
+    </ul>
+  </div>
+  <div class="mock" aria-hidden="true">
+    <div class="mb"><i>Halora<span>.</span></i><em class="on">Overview</em><em>Inbox</em><em>Requests</em><em>Campaigns</em></div>
+    <div class="kp"><div><b>38</b><small>Bookings by Noor</small></div><div><b>61%</b><small>Replies after hours</small></div><div><b>1m</b><small>Typical reply time</small></div></div>
+    <table>
+      <tr><td>09:30</td><td>Cleaning · Dr. Sara</td><td class="st">Confirmed</td></tr>
+      <tr><td>11:00</td><td>Implant consultation · Dr. Omar</td><td class="st">Booked by Noor</td></tr>
+      <tr><td>16:30</td><td>Aligners review · Dr. Lina</td><td class="st">Reminder sent</td></tr>
+    </table>
+    <div class="cap">Illustration with sample numbers.</div>
+  </div>
+</div></section>
+
+<section><div class="wrap">
+  <div class="sec-h"><div class="label">06 · You stay in control</div><div><h2 class="serif">Built for a clinic, not a call centre.</h2></div></div>
+  <div class="ctrl">
+    <div><h3>No medical advice</h3><p>Noor answers from your approved information only. Clinical questions go to your doctors.</p></div>
+    <div><h3>Emergencies first</h3><p>Severe pain with swelling, bleeding or injury: she tells the patient to get urgent care and alerts your team.</p></div>
+    <div><h3>A human when it matters</h3><p>Complaints, bills and anything sensitive are handed to your staff straight away.</p></div>
+    <div><h3>Approval mode</h3><p>For the first weeks, you can approve Noor's replies before they are sent.</p></div>
+    <div><h3>Your number, your brand</h3><p>Noor works on your clinic's own WhatsApp Business number and speaks in your clinic's name.</p></div>
+    <div><h3>Patient data kept to a minimum</h3><p>Noor never asks for ID, card numbers or medical history in chat.</p></div>
+  </div>
+</div></section>
+
+<section id="plans"><div class="wrap">
+  <div class="sec-h"><div class="label">07 · Plans</div><div><h2 class="serif">Less than one missed booking a month.</h2><p>Every plan starts with a free 14-day pilot on your real WhatsApp number. Monthly, no long contract.</p></div></div>
+  <div class="offer" data-end="2026-12-31T23:59:00+04:00"><div><span class="tag">Limited time</span><h3>Founding clinic offer</h3><p>For the first 10 clinics that join before 31 December. You get 25% off for 12 months, and 25% off setup.</p></div><div class="timer" data-timer><div><b data-d>--</b><span>days</span></div><div><b data-h>--</b><span>hours</span></div><div><b data-m>--</b><span>min</span></div></div></div>
+  <div class="plans">
+    <div class="plan"><div class="label">For one clinic</div><h3>Front Desk</h3><div class="price"><s>$399</s> <b>$299</b> / month</div><div class="setup">+ <s>$499</s> $375 one-time setup</div><div class="save">You save $1,200 in year one</div><ul><li>WhatsApp and website chat, 24/7</li><li>Understands voice notes, Arabic and English</li><li>Books, reschedules and sends reminders</li><li>Asks happy patients for Google reviews</li><li>Daily summary report on WhatsApp (PDF)</li></ul><a class="btn line" href="#pilot">Claim the founding price</a></div>
+    <div class="plan mark"><div class="label">Most clinics · best value</div><h3>Front Desk + Phone</h3><div class="price"><s>$649</s> <b>$489</b> / month</div><div class="setup">+ <s>$799</s> $599 one-time setup</div><div class="save">You save $1,920 in year one</div><ul><li>Everything in Front Desk</li><li>Owner portal: dashboard, inbox and team take-over</li><li>Noor answers your phone line</li><li>Every missed call gets a WhatsApp message</li><li>Call summaries in the portal</li><li>Campaigns and waitlist to fill empty slots</li></ul><a class="btn" href="#pilot">Claim the founding price</a></div>
+    <div class="plan"><div class="label">Several branches</div><h3>Group</h3><div class="price">from <s>$1,190</s> <b>$890</b> / month</div><div class="setup">+ setup from <s>$1,500</s> $1,125</div><div class="save">Founding price for every branch</div><ul><li>Everything in Front Desk + Phone</li><li>One portal for all branches</li><li>Routing per branch and doctor</li><li>Team accounts and roles</li><li>Priority support</li></ul><a class="btn line" href="#pilot">Talk to us</a></div>
+  </div>
+  <p class="plans-note">Start with a free 14-day pilot. If you continue, you pay the one-time setup and your first month. Setup covers building Noor with your services, prices, doctors and hours, connecting your WhatsApp number and calendar, and training your team. Prices in US dollars, or the same amount in AED at the fixed rate. Founding prices are locked for 12 months, then regular prices apply. WhatsApp message fees from Meta are billed to your own WhatsApp account.</p>
+</div></section>
+
+<section id="pilot"><div class="wrap pilot">
+  <div>
+    <div class="label">08 · Free pilot</div>
+    <h2 class="serif" style="font-size:clamp(32px,4vw,52px);line-height:1.04;margin:18px 0 16px">Try Noor on your own patients for 14 days.</h2>
+    <p style="color:var(--ink-2);font-size:17.5px;margin:0">We set everything up with your real prices, doctors and hours. If it does not bring you bookings, you walk away and pay nothing.</p>
+    <ol class="steps">
+      <li><span>A 20-minute call to understand your clinic.</span></li>
+      <li><span>We prepare Noor with your information and connect your WhatsApp.</span></li>
+      <li><span>You test her yourself, then she starts answering patients.</span></li>
+      <li><span>After 14 days we review the numbers together.</span></li>
+    </ol>
+  </div>
+  <form class="fm" id="lf">
+    <div class="r"><div><label for="f1">Your name</label><input id="f1" name="name" required autocomplete="name"></div><div><label for="f2">Clinic name</label><input id="f2" name="clinic" required></div></div>
+    <div class="r"><div><label for="f3">Type of clinic</label><select id="f3" name="clinic_type"><option>Dental</option><option>Dermatology / aesthetics</option><option>Hair transplant</option><option>Cosmetic surgery</option><option>Physiotherapy</option><option>IVF / fertility</option><option>Medical centre</option><option>Other</option></select></div><div><label for="f4">City</label><input id="f4" name="country" placeholder="Dubai, UAE"></div></div>
+    <div class="r"><div><label for="f5">WhatsApp number</label><input id="f5" name="whatsapp" inputmode="tel" required placeholder="+971 5…" dir="ltr"></div><div><label for="f6">Email (optional)</label><input id="f6" name="email" type="email" dir="ltr"></div></div>
+    <label for="f7">Anything we should know? (optional)</label><textarea id="f7" name="message"></textarea>
+    <input class="hp" name="website" tabindex="-1" autocomplete="off" aria-hidden="true">
+    <button class="btn" type="submit">Request my free pilot</button>
+    <p class="small" style="color:var(--mute)">Prefer to talk first? <a href="/call/" data-call>Book a 20-minute call</a>.</p>
+    <div class="small" id="fmsg" role="status"></div>
+  </form>
+</div></section>
+
+<section><div class="wrap founder">
+  <div class="label">09 · A note from the founder</div>
+  <div>
+    <p class="letter">I started Halora after seeing how many patient messages clinics never answer, simply because nobody is free at the right moment. Noor is not here to replace your receptionist. She is the colleague who covers the night shift, the weekend and the rush hour, and who never forgets to follow up. If you try her, I will set up your pilot personally and stay on WhatsApp with you until it works the way your clinic needs.</p>
+    <p><a class="btn" href="/call/" data-call>Book a 20-minute call with me</a></p>
+    <p class="sig">Ziad Elhoseiny, founder · <a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a></p>
+  </div>
+</div></section>
+
+<section id="faq"><div class="wrap">
+  <div class="sec-h"><div class="label">10 · Questions</div><div><h2 class="serif">What clinic owners ask us.</h2></div></div>
+  <div class="faq">
+    <details><summary>Does Noor replace my receptionist?</summary><p>No. She covers nights, weekends and busy hours and handles the repeated questions. Your team can take over any conversation at any time.</p></details>
+    <details><summary>Does she really speak Arabic?</summary><p>Yes. She replies in the patient's language and dialect, Gulf, Egyptian or standard Arabic, and in English, by text or voice note. Try it in the demo.</p></details>
+    <details><summary>Will she give medical advice?</summary><p>No. She answers only from information your clinic approves, books appointments, and passes clinical questions to your doctors.</p></details>
+    <details><summary>What if she doesn't know the answer?</summary><p>She tells the patient a team member will reply, alerts your staff, and logs the question so you can add the answer for next time.</p></details>
+    <details><summary>Do I need a new phone number?</summary><p>No. Noor runs on your clinic's WhatsApp Business number. We guide you through connecting it. The phone receptionist can use your existing line or a new one.</p></details>
+    <details><summary>Which calendar does it use?</summary><p>Noor books into a shared Google Calendar. If your clinic uses a practice management system, tell us which one and we will check the options during the call.</p></details>
+    <details><summary>What does WhatsApp charge?</summary><p>Replies to patients who message you are free. Meta charges a small fee for some messages you start, such as reminders and campaigns, billed to your own WhatsApp account.</p></details>
+    <details><summary>How long does setup take?</summary><p>Usually 48 hours after we receive your prices, doctors and hours.</p></details>
+  </div>
+</div></section>
+</main>
+
+<footer><div class="wrap">
+  <div><a class="wm" href="/">Halora<span>.</span></a><p>AI receptionist for clinics in Dubai and the Gulf.</p></div>
+  <div><p><a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a><br><a href="/ar/" lang="ar">النسخة العربية</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">Client sign-in</a></p></div>
+  <div><p>© 2026 Halora. The demo clinics BrightSmile Dental and Glow Skin Clinic are fictional.</p></div>
+</div></footer>
+
+<button class="trybar" id="trybar" data-chat>Talk to Noor</button>
+<script src="/assets/site.js" defer></script>
+</body>
+</html>
