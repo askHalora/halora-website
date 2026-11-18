@@ -302,3 +302,16 @@ html[dir=rtl] .xtag{letter-spacing:0}
 @media (prefers-reduced-motion:reduce){.try-h .dot{animation:none}.js .hero .try,.js .hero .next{opacity:1;animation:none}}
 
 .new{display:inline-block;margin-inline-start:6px;font-size:10.5px;font-weight:600;letter-spacing:.06em;text-transform:uppercase;background:var(--clay);color:#fff;padding:2px 7px;border-radius:20px;vertical-align:2px}html[dir=rtl] .new{letter-spacing:0}
+
+/* Founding clinic offer (limited time) */
+.offer-bar{display:block;background:var(--ink);color:#f3f5f2;text-align:center;font-size:13.5px;padding:9px 16px;text-decoration:none;line-height:1.4}
+.offer-bar b{color:#e0b34f;font-weight:600}.offer-bar .cd{opacity:.85}.offer-bar:hover{background:#163330}
+.offer{display:flex;align-items:center;justify-content:space-between;gap:24px;background:var(--ink);color:#f3f5f2;padding:24px 28px;margin-bottom:18px}
+.offer h3{font-family:var(--serif);font-weight:500;font-size:24px;margin:6px 0 4px}.offer p{margin:0;opacity:.85;font-size:15px;max-width:520px}
+.offer .tag{display:inline-block;background:#e0b34f;color:var(--ink);font-size:11.5px;font-weight:600;letter-spacing:.08em;text-transform:uppercase;padding:3px 9px}
+.timer{display:flex;gap:10px;flex:none}.timer div{background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.15);min-width:66px;padding:8px 6px;text-align:center}
+.timer b{display:block;font-size:26px;font-weight:500;color:#e0b34f;font-variant-numeric:tabular-nums}.timer span{font-size:11.5px;opacity:.75}
+@media(max-width:700px){.offer{flex-direction:column;align-items:flex-start;padding:20px}.offer-bar{font-size:12.5px}}
+.plan .price s,.plan .setup s{color:var(--mute);font-size:.75em;margin-inline-end:4px}
+.plan .price s{font-family:var(--serif);font-size:20px}
+.plan .save{display:inline-block;align-self:flex-start;background:#f6ecd6;color:#7a5414;font-size:12.5px;font-weight:500;padding:3px 9px;margin:-8px 0 18px}

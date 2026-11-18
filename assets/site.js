@@ -292,3 +292,23 @@
   }
   if (!mount()) { var mo = new MutationObserver(function () { if (mount()) mo.disconnect(); }); mo.observe(d.body, { childList: true, subtree: true }); }
 })();
+
+
+/* Founding offer countdown: fills the timer and the top bar, hides everything after the end date. */
+(function () {
+  var d = document, ar = d.documentElement.lang === 'ar';
+  var bar = d.getElementById('offerbar'), box = d.querySelector('.offer[data-end]');
+  var src = bar || box; if (!src) return;
+  var end = new Date(src.getAttribute('data-end')).getTime();
+  function pad(n) { return String(n).padStart(2, '0'); }
+  function tick() {
+    var ms = end - Date.now();
+    if (ms <= 0) { if (bar) bar.style.display = 'none'; if (box) box.style.display = 'none'; return false; }
+    var dd = Math.floor(ms / 864e5), hh = Math.floor(ms / 36e5) % 24, mm = Math.floor(ms / 6e4) % 60;
+    if (box) { var q = function (s) { return box.querySelector(s); }; q('[data-d]').textContent = dd; q('[data-h]').textContent = pad(hh); q('[data-m]').textContent = pad(mm); }
+    var cd = bar && bar.querySelector('[data-cd]');
+    if (cd) cd.textContent = ar ? ('ينتهي خلال ' + dd + ' يوم') : ('Ends in ' + dd + ' days ' + hh + ' h');
+    return true;
+  }
+  if (tick()) setInterval(tick, 30000);
+})();
