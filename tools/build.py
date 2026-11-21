@@ -1,5 +1,6 @@
-import json, os, re, html
-import os
+import json, os, re, html, sys
+sys.path.insert(0,os.path.dirname(os.path.abspath(__file__)))
+import v5 as V
 ROOT=os.path.abspath(os.path.join(os.path.dirname(__file__),'..'))
 ORIG=os.path.join(os.path.dirname(__file__),'index.before-v4.html')
 
@@ -28,6 +29,11 @@ P={
 'mega':'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1zM17 9a4 4 0 0 1 0 6M8 15l1 5"/>',
 'tool':'<path d="M14.5 6.5a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.5-6.5a4 4 0 0 1-5-5L13 5zM3 21l6-6"/>',
 'play':'<path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/>',
+'route':'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3.5 3.5 0 0 1 0 7H9a3.5 3.5 0 0 0 0 7h6.5"/>',
+'scale':'<path d="M12 4v16M8 20h8M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
+'plug':'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>',
+'tag':'<path d="M3 4v7l9 9 8-8-9-9H4a1 1 0 0 0-1 1z"/><circle cx="7.5" cy="8.5" r="1.5"/>',
+'flag':'<path d="M5 21V4M5 4h12l-3 4 3 4H5"/>',
 }
 def ic(k): return '<svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true">'+P[k]+'</svg>'
 def gi(k,c): return f'<span class="gi" style="--c:{c}">{ic(k)}</span>'
@@ -107,13 +113,35 @@ def mm(label,items,base):
     a=''.join(f'<a href="/{base}/{k}/">{gi(i,c)}<span><b>{t}</b><small>{s}</small></span></a>' for k,t,s,i,c in items)
     return f'<div class="mm"><button type="button" aria-haspopup="true">{label}</button><div class="panel">{a}</div></div>'
 
-def header(home=False,alt='/ar/'):
-    h='' if home else '/'
-    return ('<header class="top"><div class="wrap">\n  <a class="wm" href="/">Halora<span>.</span></a>\n  <nav>'
-      + mm('Product',PRODUCTS,'product') + mm('Specialties',SPECS,'specialties')
-      + f'<a href="{h}#roi">ROI</a><a href="{h}#plans">Pricing</a><a href="{h}#faq">Questions</a></nav>\n'
-      + f'  <a class="lang" href="{alt}" hreflang="ar" lang="ar">العربية</a>\n  <a class="btn line" href="/call/" data-call>Book a call</a>\n'
-      + f'  <a class="btn" href="{h}#pilot">Free pilot</a>\n  <button class="mbtn" type="button" aria-label="Menu"><i></i><i></i><i></i></button>\n</div></header>')
+WHY={'en':[('how-it-works','How it works','From first call to live in about a week','route','#0e5c57'),('pricing','Pricing','Plans, founding offer and free pilot','tag','#c98f22'),('for-owners','For owners','Dashboard, inbox take-over, daily report','grid','#7c6cf2'),('compare','Compare','Front desk, call centre or Noor','scale','#d4669a'),('security','Safety & guardrails','What Noor will never do','shield','#0f2523'),('integrations','Integrations','WhatsApp, Google Calendar and more','plug','#14a3b8'),('about','About Halora','Why we built Noor','heart','#b9811f'),('pilot','Free 14-day pilot','Try Noor on your own patients','flag','#3b8f5a')],
+'ar':[('how-it-works','كيف تعمل','من أول مكالمة إلى الإطلاق خلال أسبوع تقريبًا','route','#0e5c57'),('pricing','الأسعار','الباقات وعرض المؤسسين والتجربة المجانية','tag','#c98f22'),('for-owners','لأصحاب العيادات','لوحة التحكم والتدخل في المحادثات والتقرير اليومي','grid','#7c6cf2'),('compare','المقارنة','الاستقبال وحده أو مركز اتصال أو نور','scale','#d4669a'),('security','الأمان والضوابط','ما لن تفعله نور أبدًا','shield','#0f2523'),('integrations','التكاملات','واتساب وتقويم Google والمزيد','plug','#14a3b8'),('about','عن هالورا','لماذا بنينا نور','heart','#b9811f'),('pilot','تجربة مجانية 14 يومًا','جرّب نور مع مرضاك الحقيقيين','flag','#3b8f5a')]}
+NAVL={'en':dict(product='Product',spec='Specialties',why='Why Halora',pricing='Pricing',call='Book a call',pilot='Free pilot',menu='Menu',other='العربية',otherlang='ar',company='Company',tag='AI receptionist for clinics in Dubai and the Gulf.',signin='Client sign-in',otherfull='النسخة العربية',copy='© 2026 Halora. Demo clinics shown are fictional.',callurl='/call/',contact='Contact'),
+'ar':dict(product='المنتج',spec='التخصصات',why='لماذا هالورا',pricing='الأسعار',call='احجز مكالمة',pilot='تجربة مجانية',menu='القائمة',other='English',otherlang='en',company='الشركة',tag='موظفة استقبال ذكية للعيادات في دبي والخليج.',signin='دخول العملاء',otherfull='English version',copy='© 2026 هالورا. العيادات التجريبية المعروضة غير حقيقية.',callurl='/call/?lang=ar',contact='تواصل')}
+def site_header(lang,home,alt,prods,specs):
+    N=NAVL[lang]; p='' if lang=='en' else '/ar'; b='' if lang=='en' else 'ar/'
+    pilot='#pilot' if home else p+'/pilot/'
+    wm=f'<a class="wm" href="{p}/"'+(' lang="en" dir="ltr"' if lang=='ar' else '')+'>Halora<span>.</span></a>'
+    why=''.join(f'<a href="{p}/{k}/">{gi(i,c)}<span><b>{t}</b><small>{s_}</small></span></a>' for k,t,s_,i,c in WHY[lang] if k not in ('pricing','pilot'))
+    return ('<header class="top"><div class="wrap">\n  '+wm+'\n  <nav>'
+      + mm(N['product'],prods,b+'product') + mm(N['spec'],specs,b+'specialties')
+      + f'<div class="mm"><button type="button" aria-haspopup="true">{N["why"]}</button><div class="panel">{why}</div></div>'
+      + f'<a href="{p}/pricing/">{N["pricing"]}</a><a href="{p}/pilot/" class="nav-pilot">{N["pilot"]}</a></nav>\n'
+      + f'  <a class="lang" href="{alt}" hreflang="{N["otherlang"]}" lang="{N["otherlang"]}">{N["other"]}</a>\n  <a class="btn line" href="{N["callurl"]}" data-call>{N["call"]}</a>\n'
+      + f'  <a class="btn" href="{pilot}">{N["pilot"]}</a>\n  <button class="mbtn" type="button" aria-label="{N["menu"]}" aria-expanded="false"><i></i><i></i><i></i></button>\n</div></header>')
+def site_footer(lang,alt,prods,specs):
+    N=NAVL[lang]; p='' if lang=='en' else '/ar'
+    pl=''.join(f'<a href="{p}/product/{k}/">{t}</a><br>' for k,t,*_ in prods)
+    sl=''.join(f'<a href="{p}/specialties/{k}/">{t}</a><br>' for k,t,*_ in specs)
+    cl=''.join(f'<a href="{p}/{k}/">{t}</a><br>' for k,t,*_ in WHY[lang])
+    wm=f'<a class="wm" href="{p}/"'+(' lang="en" dir="ltr"' if lang=='ar' else '')+'>Halora<span>.</span></a>'
+    return f'''<footer><div class="wrap">
+  <div>{wm}<p>{N['tag']}</p></div>
+  <div><p><b>{N['product']}</b><br>{pl}</p></div>
+  <div><p><b>{N['spec']}</b><br>{sl}</p></div>
+  <div><p><b>{N['company']}</b><br>{cl}</p></div>
+  <div><p><b>{N['contact']}</b><br><a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a><br><a href="{N['callurl']}">{N['call']}</a><br><a href="{alt}" lang="{N['otherlang']}">{N['otherfull']}</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">{N['signin']}</a></p><p>{N['copy']}</p></div>
+</div></footer>'''
+def header(home=False,alt='/ar/'): return site_header('en',home,alt,PRODUCTS,SPECS)
 
 STORY=[
  {"q":"Hi, how much is teeth whitening? Anything Saturday?","ch":"WhatsApp","t":"23:48","b":"Whitening · Sat 11:30","s":"Booked with Dr. Sara · reminder set","y":1},
@@ -219,9 +247,9 @@ def roi():
     return f'''<section class="sx" id="roi"><div class="wrap">
 <div class="hd2 rv"><span class="k">ROI calculator</span><h2>What are unanswered messages <b>costing you?</b></h2><p>Move the sliders. Most clinics are surprised.</p></div>
 <div class="roi rv"><div class="ctl">
-<label>Patient messages and calls per week <b data-o="msg">120</b></label><input type="range" name="msg" min="20" max="500" step="10" value="120">
-<label>Share that get no quick reply (after hours, busy desk) <b data-o="miss">30%</b></label><input type="range" name="miss" min="5" max="60" step="1" value="30">
-<label>Average first-visit value <b data-o="val">$180</b></label><input type="range" name="val" min="40" max="1500" step="10" value="180">
+<label>Patient messages and calls per week <b data-o="msg">120</b></label><input type="range" aria-label="Patient messages and calls per week" name="msg" min="20" max="500" step="10" value="120">
+<label>Share that get no quick reply (after hours, busy desk) <b data-o="miss">30%</b></label><input type="range" aria-label="Share that get no quick reply" name="miss" min="5" max="60" step="1" value="30">
+<label>Average first-visit value <b data-o="val">$180</b></label><input type="range" aria-label="Average first-visit value" name="val" min="40" max="1500" step="10" value="180">
 <p class="fine">Assumes about 30% of slow-reply enquiries would have booked if answered at once. Your numbers will differ; the free pilot measures them for real.</p>
 </div><div class="out"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fb8b2">Revenue Noor could win back / month</span>
 <div class="big" data-r="rev">$0</div>
@@ -235,7 +263,7 @@ def compare():
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
     return f'''<section class="sx tight"><div class="wrap" style="max-width:920px">
 <div class="hd2 rv"><span class="k">Why both</span><h2>Your team + Noor <b>beats either alone.</b></h2><p>Noor doesn't replace your receptionist. She takes the repetitive and after-hours work so your team can look after the patients in front of them.</p></div>
-<div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th></th><th>Front desk alone</th><th>Front desk + Noor</th></tr></thead><tbody>{tr}</tbody></table></div>
+<div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th><span class="vh">What matters</span></th><th>Front desk alone</th><th>Front desk + Noor</th></tr></thead><tbody>{tr}</tbody></table></div>
 </div></section>'''
 
 def askbar():
@@ -243,41 +271,34 @@ def askbar():
 <div class="row1"><span class="av">{MARKSQ.replace('<svg','<svg width="38" height="38"')}</span><div><b>Ask Noor anything</b><small>She's the receptionist. Try her like a patient would.</small></div><span class="go">{ic('chat')}</span></div>
 <div class="chips"><button type="button">How much is whitening?</button><button type="button">Book me for Saturday</button><button type="button">هل تتكلمين عربي؟</button></div></div>'''
 
-def footer(alt='/ar/'):
-    pl=''.join(f'<a href="/product/{k}/">{t}</a><br>' for k,t,*_ in PRODUCTS)
-    sl=''.join(f'<a href="/specialties/{k}/">{t}</a><br>' for k,t,*_ in SPECS)
-    return f'''<footer><div class="wrap">
-  <div><a class="wm" href="/">Halora<span>.</span></a><p>AI receptionist for clinics in Dubai and the Gulf.</p></div>
-  <div><p><b>Product</b><br>{pl}</p></div>
-  <div><p><b>Specialties</b><br>{sl}</p></div>
-  <div><p><a href="mailto:ziad.elhoseiny@askhalora.com">ziad.elhoseiny@askhalora.com</a><br><a href="/call/">Book a call</a><br><a href="{alt}" lang="ar">النسخة العربية</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">Client sign-in</a></p><p>© 2026 Halora. Demo clinics shown are fictional.</p></div>
-</div></footer>'''
+def footer(alt='/ar/'): return site_footer('en',alt,PRODUCTS,SPECS)
 
 # ---------- homepage ----------
-def home_common(src,hdr,hero_,mq,bn,nt,sp,ro,cp,ftr,ab):
+def home_common(src,hdr,hero_,mods_,mq,nt,sp,ro,cp,ftr,ab):
     src=fonts_nonblocking(src)
-    src=src.replace('<link rel="stylesheet" href="/assets/site.css">','<link rel="stylesheet" href="/assets/site.css">\n<link rel="stylesheet" href="/assets/x.css">',1)
+    src=src.replace('<link rel="stylesheet" href="/assets/site.css">','<link rel="stylesheet" href="/assets/site.css">\n<link rel="stylesheet" href="/assets/x.css">\n<link rel="stylesheet" href="/assets/v5.css">',1)
     src=re.sub(r'<header class="top">.*?</header>',lambda m:hdr,src,count=1,flags=re.S)
     a=src.index('<div class="wrap hero">'); b=src.index('<section id="problem">')
-    src=src[:a]+hero_+'\n'+mq+'\n'+bn+'\n'+nt+'\n'+sp+'\n'+ro+'\n'+cp+'\n'+src[b:]
+    src=src[:a]+hero_+'\n'+mods_+'\n'+mq+'\n'+nt+'\n'+sp+'\n'+ro+'\n'+cp+'\n'+src[b:]
     src=tidy_base(src)
     src=re.sub(r'<footer>.*?</footer>',lambda m:ftr,src,count=1,flags=re.S)
     src=src.replace('<button class="trybar"',ab+'\n<button class="trybar"',1)
-    src=src.replace('<script src="/assets/site.js" defer></script>','<script src="/assets/site.js" defer></script>\n<script src="/assets/x.js" defer></script>',1)
+    src=src.replace('<script src="/assets/site.js" defer></script>','<script src="/assets/site.js" defer></script>\n<script src="/assets/x.js" defer></script>\n<script src="/assets/v5.js" defer></script>',1)
     return src
 INTRO_HEAD='<script>try{if(sessionStorage.getItem("hlIntro")!=="1"&&!matchMedia("(prefers-reduced-motion: reduce)").matches){document.documentElement.classList.add("intro-pending");setTimeout(function(){document.documentElement.classList.remove("intro-pending")},4000)}}catch(e){}</script>\n'
-def with_intro(h,tag): return h.replace('</head>',INTRO_HEAD+'</head>',1).replace('<body ','<body data-intro="'+tag+'" ',1)
+def with_intro(h,lang): return h.replace('</head>',V.PULSE_HEAD+'</head>',1).replace('<body ','<body data-pulse="'+V.pulse_data(V.T[lang])+'" ',1)
 def set_head(src,newhead):
     i=src.index('</head>'); return newhead+src[i:]
 WEBSITE_LD=lambda lang,path:{"@context":"https://schema.org","@type":"WebSite","name":"Halora","url":SITE+path,"inLanguage":lang,"publisher":{"@id":SITE+"/#org"}}
 VIDEO_LD=lambda lang,name,desc:{"@context":"https://schema.org","@type":"VideoObject","name":name,"description":desc,"contentUrl":SITE+VIDEO,"thumbnailUrl":SITE+"/assets/halora-explainer-poster.jpg","uploadDate":"2026-11-18","duration":"PT1M14S","inLanguage":lang}
 
-src=home_common(open(ORIG,encoding='utf-8').read(),header(True),hero(),marquee(),bento(),night(),specialties(),roi(),compare(),footer(),askbar())
+VCARD={'en':lambda:video_card(V.T['en']['vk'],V.T['en']['vt'],V.T['en']['vs']),'ar':lambda:video_card(V.T['ar']['vk'],V.T['ar']['vt'],V.T['ar']['vs'])}
+src=home_common(open(ORIG,encoding='utf-8').read(),header(True),V.hero(V.T['en'],VCARD['en']()),V.modules(V.T['en']),marquee(),night(),specialties(),roi(),compare(),footer(),askbar())
 HOME_T='AI receptionist for clinics in Dubai & the Gulf · Halora'
 HOME_D='Noor, the AI receptionist for Gulf clinics, answers WhatsApp, website chat and phone calls 24/7 in Arabic and English and books appointments into your calendar. Free 14-day pilot.'
 src=set_head(src,seo(src[:src.index('</head>')],'en',HOME_T,HOME_D,'/','/','/ar/',
    [WEBSITE_LD('en','/'),VIDEO_LD('en','Halora demo video','How Noor answers clinic patients on WhatsApp, web chat and phone, books them in, and what owners see in the dashboard, plus the clinic website and patient app.'),faq_ld(faq_from_html(src))]))
-open(f'{ROOT}/index.html','w',encoding='utf-8').write(with_intro(src,'Every patient · Answered'))
+open(f'{ROOT}/index.html','w',encoding='utf-8').write(with_intro(src,'en'))
 
 # ---------- sub-pages (shared by English and Arabic) ----------
 HEAD_EN=src[:src.index('</head>')]
@@ -286,7 +307,7 @@ EN=dict(lang='en',pre='',home='/',crumb_home='Halora',try_='Try Noor now',watch=
  q_k='Questions',q_h='Good to know',band='Try it free for 14 days. <b>Pay only if it brings in patients.</b>',band1='Start the free pilot',band2='See pricing',
  replies='Noor · replies instantly',trybar='Talk to Noor',voice='0:07',
  body='<body data-chat-clinic="BrightSmile Dental (demo)" data-chat-hello="Hi, I\'m Noor at BrightSmile Dental, a demo clinic. Ask me about prices, opening hours, or book a visit.">',
- offer='<a class="offer-bar" id="offerbar" href="/#plans" data-end="2026-12-31T23:59:00+04:00"><b>Founding clinic offer</b> · 25% off for 12 months + 25% off setup · <span class="cd" data-cd>Ends 31 December</span> →</a>',
+ offer='<a class="offer-bar" id="offerbar" href="/pricing/" data-end="2026-12-31T23:59:00+04:00"><b>Founding clinic offer</b> · 25% off for 12 months + 25% off setup · <span class="cd" data-cd>Ends 31 December</span> →</a>',
  header=lambda alt:header(False,alt),footer=lambda alt:footer(alt),askbar=lambda:askbar())
 
 AV26=MARKSQ.replace('<svg','<svg width="26" height="26"')
@@ -301,7 +322,8 @@ def chatmock(chat,clinic,L=EN):
 
 SUBPAGES=[]  # (en_path) for sitemap
 def plain(s): return re.sub(r'<[^>]+>','',s).replace('"','').strip()
-def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,extra='',L=EN,desc=None,stype='AI receptionist',crumbs=None):
+CLAYMAP={'chat':'chat','phone':'phone','star':'star','grid':'dash','tooth':'tooth','spark':'spark','move':'move','seed':'heart'}
+def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,extra='',L=EN,desc=None,stype='AI receptionist',crumbs=None,visual=None):
     """path is the language-neutral path (/product/x/); Arabic pages live under /ar."""
     url=L['pre']+path; en,ar=path,'/ar'+path
     fe=''.join(f'<div class="f rv">{ico3(k,c)}<h3>{t}</h3><p>{p}</p></div>' for k,c,t,p in feats)
@@ -312,24 +334,25 @@ def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,ex
 {L['offer']}
 {L['header'](alt)}
 <main>
-<section class="ph"><div class="sky"><i></i></div><canvas class="stars" aria-hidden="true"></canvas>
+<section class="ph">
 <div class="wrap"><div>
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {crumb}</div>
-<div style="margin-top:26px">{ico3(iconk,color)}</div>
+<div style="margin-top:26px">{V.clay(CLAYMAP.get(iconk,'heart'),color,'lg')}</div>
 <h1>{h1}</h1><p class="lead">{lead}</p>
 <div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>{L['try_']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a>{watch_btn(L['watch'])}</div>
-</div>{chatmock(chat,clinic,L)}</div></section>
+</div>{visual or V.chat_ui(V.T[L['lang']],clinic,[(w_,t_) for w_,t_ in chat if w_!='c' and t_!='~voice'],next((t_ for w_,t_ in chat if w_=='c'),''))}</div></section>
 <section class="sx"><div class="wrap"><div class="hd2 rv"><span class="k">{L['what_k']}</span><h2>{L['what_h']}</h2></div><div class="feat">{fe}</div></div></section>
 {extra}
 <section class="sx tight" style="background:var(--paper-2)"><div class="wrap"><div class="hd2 rv"><span class="k">{L['live_k']}</span><h2>{L['live_h']}</h2></div><div class="steps4">{stp}</div></div></section>
 <section class="sx tight" id="faq"><div class="wrap" style="max-width:820px"><div class="hd2 rv"><span class="k">{L['q_k']}</span><h2>{L['q_h']}</h2></div><div class="faq">{fq}</div></div></section>
-<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L['band']}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L['home']}#pilot">{L['band1']}</a><a class="bx glass" href="{L['home']}#plans">{L['band2']}</a></div></div></div></section>
+<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L['band']}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L['pre']}/pilot/">{L['band1']}</a><a class="bx glass" href="{L['pre']}/pricing/">{L['band2']}</a></div></div></div></section>
 </main>
 {L['footer'](alt)}
 {L['askbar']()}
 <button class="trybar" id="trybar" data-chat>{L['trybar']}</button>
 <script src="/assets/site.js" defer></script>
 <script src="/assets/x.js" defer></script>
+<script src="/assets/v5.js" defer></script>
 </body></html>'''
     d=desc or plain(lead)
     name=plain(h1)
@@ -363,7 +386,7 @@ subpage('/product/phone/','Product / Phone receptionist','AI phone receptionist 
   ('lang','#7c6cf2','Natural voice, two languages','Warm, clear Arabic and English. Patients can switch any time.'),
   ('users','#d4669a','Transfers to your team','Urgent or complex calls go straight to a person.'),
   ('doc','#61706c','Call summaries','Every call is summarised in the portal and the daily report.')],
- STEPS,[('Which plan includes calls?','Phone answering is part of the Front Desk + Phone plan and the Group plan.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
+ STEPS,visual=V.call_ui(V.T['en']),faqs=[('Which plan includes calls?','Phone answering is part of the Front Desk + Phone plan and the Group plan.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
 
 subpage('/product/growth/','Product / Reminders & reviews','Appointment reminders & Google reviews for clinics · Halora','Fewer no-shows. <span class="glow">More five-star reviews.</span>',
  'Noor reminds every patient before their visit, refills cancelled slots from your waitlist, asks happy patients for a Google review and brings old patients back with approved recall messages.',
@@ -385,7 +408,7 @@ subpage('/product/portal/','Product / Owner portal','Clinic owner portal & daily
   ('users','#d4669a','Team access','Give each receptionist or manager their own login.'),
   ('bell','#c98f22','Daily PDF report','A short summary on WhatsApp every morning.'),
   ('star','#7c6cf2','Campaigns','Send approved recall and offer messages to the right patients.')],
- STEPS,[('Which plan includes the portal?','The portal comes with Front Desk + Phone and Group plans. The Front Desk plan includes the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
+ STEPS,visual=V.dash_ui(V.T['en']),faqs=[('Which plan includes the portal?','The portal comes with Front Desk + Phone and Group plans. The Front Desk plan includes the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
 
 SPEC_PAGES={
 'dental':('Dental clinics','The AI receptionist for <span class="glow">dental clinics.</span>','tooth','#14a3b8',

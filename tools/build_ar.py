@@ -16,13 +16,7 @@ SP=[('dental','عيادات الأسنان','تبييض، زراعة، تقوي�
 def mm(label,items,base):
     a=''.join(f'<a href="/{base}/{k}/">{gi(i,c)}<span><b>{t}</b><small>{s}</small></span></a>' for k,t,s,i,c in items)
     return f'<div class="mm"><button type="button" aria-haspopup="true">{label}</button><div class="panel">{a}</div></div>'
-def header(home=True,alt='/'):
-    h='' if home else '/ar/'
-    return ('<header class="top"><div class="wrap">\n  <a class="wm" href="/ar/" lang="en" dir="ltr">Halora<span>.</span></a>\n  <nav>'
-      + mm('المنتج',PR,'ar/product') + mm('التخصصات',SP,'ar/specialties')
-      + f'<a href="{h}#roi">العائد</a><a href="{h}#plans">الأسعار</a><a href="{h}#faq">أسئلة</a></nav>\n'
-      + f'  <a class="lang" href="{alt}" hreflang="en" lang="en">English</a>\n  <a class="btn line" href="/call/?lang=ar" data-call>احجز مكالمة</a>\n'
-      + f'  <a class="btn" href="{h}#pilot">تجربة مجانية</a>\n  <button class="mbtn" type="button" aria-label="القائمة"><i></i><i></i><i></i></button>\n</div></header>')
+def header(home=True,alt='/'): return B.site_header('ar',home,alt,PR,SP)
 
 STORY=[
  {"q":"مرحبا، كم سعر تبييض الأسنان؟ في موعد السبت؟","ch":"واتساب","t":"23:48","b":"تبييض · السبت 11:30","s":"تم الحجز مع د. سارة · التذكير مُفعّل","y":1},
@@ -128,9 +122,9 @@ def roi():
     return '''<section class="sx" id="roi"><div class="wrap">
 <div class="hd2 rv"><span class="k">حاسبة العائد</span><h2>كم تكلّفك الرسائل <b>التي لا يُرد عليها؟</b></h2><p>حرّك المؤشرات، فأغلب العيادات تتفاجأ.</p></div>
 <div class="roi rv"><div class="ctl">
-<label>رسائل ومكالمات المرضى أسبوعيًا <b data-o="msg">120</b></label><input type="range" name="msg" min="20" max="500" step="10" value="120">
-<label>نسبة ما لا يحصل على رد سريع (بعد الدوام، ضغط الاستقبال) <b data-o="miss">30%</b></label><input type="range" name="miss" min="5" max="60" step="1" value="30">
-<label>متوسط قيمة الزيارة الأولى <b data-o="val">$180</b></label><input type="range" name="val" min="40" max="1500" step="10" value="180">
+<label>رسائل ومكالمات المرضى أسبوعيًا <b data-o="msg">120</b></label><input type="range" aria-label="رسائل ومكالمات المرضى أسبوعيًا" name="msg" min="20" max="500" step="10" value="120">
+<label>نسبة ما لا يحصل على رد سريع (بعد الدوام، ضغط الاستقبال) <b data-o="miss">30%</b></label><input type="range" aria-label="نسبة ما لا يحصل على رد سريع" name="miss" min="5" max="60" step="1" value="30">
+<label>متوسط قيمة الزيارة الأولى <b data-o="val">$180</b></label><input type="range" aria-label="متوسط قيمة الزيارة الأولى" name="val" min="40" max="1500" step="10" value="180">
 <p class="fine">نفترض أن حوالي 30% من الاستفسارات المتأخرة كانت ستتحول لحجز لو رُد عليها فورًا. أرقامك ستختلف، والتجربة المجانية تقيسها فعليًا.</p>
 </div><div class="out"><span style="font-size:14px;color:#9fb8b2">الإيراد الذي قد تستعيده نور شهريًا</span>
 <div class="big" data-r="rev" dir="ltr">$0</div>
@@ -144,7 +138,7 @@ def compare():
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
     return f'''<section class="sx tight"><div class="wrap" style="max-width:920px">
 <div class="hd2 rv"><span class="k">لماذا الاثنان معًا</span><h2>فريقك + نور <b>أفضل من أيٍّ منهما وحده.</b></h2><p>نور لا تحل محل موظفة الاستقبال، بل تتولى العمل المتكرر وما بعد الدوام ليهتم فريقك بالمرضى الموجودين أمامه.</p></div>
-<div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th></th><th>الاستقبال وحده</th><th>الاستقبال + نور</th></tr></thead><tbody>{tr}</tbody></table></div>
+<div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th><span class="vh">المعيار</span></th><th>الاستقبال وحده</th><th>الاستقبال + نور</th></tr></thead><tbody>{tr}</tbody></table></div>
 </div></section>'''
 
 def askbar():
@@ -152,22 +146,15 @@ def askbar():
 <div class="row1"><span class="av">{B.MARKSQ.replace('<svg','<svg width="38" height="38"')}</span><div><b>اسأل نور أي شيء</b><small>هي موظفة الاستقبال. جرّبها كما يفعل المريض.</small></div><span class="go">{ic('chat')}</span></div>
 <div class="chips"><button type="button">كم سعر التبييض؟</button><button type="button">احجزي لي يوم السبت</button><button type="button">Do you speak English?</button></div></div>'''
 
-def footer(alt='/'):
-    pl=''.join(f'<a href="/ar/product/{k}/">{t}</a><br>' for k,t,*_ in PR)
-    sl=''.join(f'<a href="/ar/specialties/{k}/">{t}</a><br>' for k,t,*_ in SP)
-    return f'''<footer><div class="wrap">
-  <div><a class="wm" href="/ar/" lang="en" dir="ltr">Halora<span>.</span></a><p>موظفة استقبال ذكية للعيادات في دبي والخليج.</p></div>
-  <div><p><b>المنتج</b><br>{pl}</p></div>
-  <div><p><b>التخصصات</b><br>{sl}</p></div>
-  <div><p><a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a><br><a href="/call/?lang=ar">احجز مكالمة</a><br><a href="{alt}" lang="en">English version</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">دخول العملاء</a></p><p>© 2026 هالورا. العيادات التجريبية المعروضة غير حقيقية.</p></div>
-</div></footer>'''
+def footer(alt='/'): return B.site_footer('ar',alt,PR,SP)
 
 # ---------- Arabic homepage ----------
-src=B.home_common(open(ORIG,encoding='utf-8').read(),header(),hero(),marquee(),bento(),night(),specialties(),roi(),compare(),footer(),askbar())
+V=B.V
+src=B.home_common(open(ORIG,encoding='utf-8').read(),header(),V.hero(V.T['ar'],B.VCARD['ar']()),V.modules(V.T['ar']),marquee(),night(),specialties(),roi(),compare(),footer(),askbar())
 src=B.set_head(src,B.seo(src[:src.index('</head>')],'ar','موظفة استقبال ذكية للعيادات في دبي والخليج · هالورا',
  'نور، موظفة الاستقبال الذكية لعيادات الخليج، ترد على واتساب ودردشة الموقع والمكالمات على مدار الساعة بالعربي والإنجليزي، وتحجز المواعيد مباشرة في تقويمك. تجربة مجانية 14 يومًا.',
  '/ar/','/','/ar/',[B.WEBSITE_LD('ar','/ar/'),B.VIDEO_LD('ar','فيديو تعريفي بهالورا','كيف ترد نور على مرضى العيادة عبر واتساب والموقع والهاتف وتحجز لهم المواعيد، وما يراه المالك في لوحة التحكم، مع موقع العيادة وتطبيق المرضى.'),B.faq_ld(B.faq_from_html(src))]))
-open(f'{ROOT}/ar/index.html','w',encoding='utf-8').write(B.with_intro(src,'كل مريض · يجد ردًّا'))
+open(f'{ROOT}/ar/index.html','w',encoding='utf-8').write(B.with_intro(src,'ar'))
 
 # ---------- Arabic sub-pages ----------
 AR=dict(lang='ar',pre='/ar',home='/ar/',crumb_home='هالورا',try_='جرّب نور الآن',watch='شاهد الفيديو',call='احجز مكالمة 20 دقيقة',
@@ -175,7 +162,7 @@ AR=dict(lang='ar',pre='/ar',home='/ar/',crumb_home='هالورا',try_='جرّب
  q_k='أسئلة',q_h='معلومات تهمّك',band='جرّبها مجانًا لمدة 14 يومًا. <b>وادفع فقط إذا جلبت لك مرضى.</b>',band1='ابدأ التجربة المجانية',band2='اطّلع على الباقات',
  replies='نور · ترد فورًا',trybar='تحدّث مع نور',voice='0:07',
  body='<body data-chat-clinic="عيادة برايت سمايل (تجريبية)" data-chat-hello="أهلاً، معك نور من عيادة برايت سمايل التجريبية. اسألني عن الأسعار والمواعيد أو احجز زيارتك.">',
- offer='<a class="offer-bar" id="offerbar" href="/ar/#plans" data-end="2026-12-31T23:59:00+04:00"><b>عرض العيادات المؤسِّسة</b> · خصم 25% لمدة 12 شهراً + خصم 25% على الإعداد · <span class="cd" data-cd>ينتهي 31 ديسمبر</span> ←</a>',
+ offer='<a class="offer-bar" id="offerbar" href="/ar/pricing/" data-end="2026-12-31T23:59:00+04:00"><b>عرض العيادات المؤسِّسة</b> · خصم 25% لمدة 12 شهراً + خصم 25% على الإعداد · <span class="cd" data-cd>ينتهي 31 ديسمبر</span> ←</a>',
  header=lambda alt:header(False,alt),footer=lambda alt:footer(alt),askbar=askbar,head=src[:src.index('</head>')])
 
 STEPS=[('مكالمة 20 دقيقة','نتعرّف على خدماتك وأسعارك وأطبائك ومواعيد الدوام.'),('نجهّز نور لعيادتك','بمعلوماتك وأسلوبك وتقويمك، دون أن تغيّر شيئًا.'),('فريقك يجرّبها','جرّبوها على هواتفكم وأخبرونا بما تريدون تعديله.'),('الإطلاق','ابدأ بتجربة مجانية لمدة 14 يومًا وتابع الحجوزات بنفسك.')]
@@ -205,7 +192,7 @@ B.subpage('/product/phone/','المنتج / موظفة الاستقبال اله
   ('lang','#7c6cf2','صوت طبيعي بلغتين','عربي وإنجليزي بنبرة دافئة وواضحة، ويمكن للمريض التبديل متى شاء.'),
   ('users','#d4669a','تحويل لفريقك','المكالمات العاجلة أو المعقدة تُحوَّل مباشرة لموظف.'),
   ('doc','#61706c','ملخصات المكالمات','كل مكالمة تُلخَّص في البوابة وفي التقرير اليومي.')],
- STEPS,[('أي باقة تشمل الرد على المكالمات؟','الرد على المكالمات جزء من باقة «مكتب الاستقبال + الهاتف» وباقة المجموعات.'),('هل يستطيع المريض التحدث مع موظف؟','نعم. نور تحوّل المكالمة أو ترتب اتصالًا لاحقًا كلما طلب المريض التحدث مع شخص.')]+FQ[:1],L=AR,stype='الرد الآلي على مكالمات العيادة')
+ STEPS,visual=V.call_ui(V.T['ar']),faqs=[('أي باقة تشمل الرد على المكالمات؟','الرد على المكالمات جزء من باقة «مكتب الاستقبال + الهاتف» وباقة المجموعات.'),('هل يستطيع المريض التحدث مع موظف؟','نعم. نور تحوّل المكالمة أو ترتب اتصالًا لاحقًا كلما طلب المريض التحدث مع شخص.')]+FQ[:1],L=AR,stype='الرد الآلي على مكالمات العيادة')
 
 B.subpage('/product/growth/','المنتج / التذكيرات والتقييمات','تذكير المواعيد وتقييمات Google للعيادات · هالورا','غياب أقل. <span class="glow">وتقييمات خمس نجوم أكثر.</span>',
  'نور تذكّر كل مريض قبل موعده، وتملأ المواعيد الملغاة من قائمة الانتظار، وتطلب من المرضى الراضين تقييمًا على Google، وتعيد المرضى القدامى برسائل متابعة توافق عليها.',
@@ -227,7 +214,7 @@ B.subpage('/product/portal/','المنتج / بوابة المالك','بواب�
   ('users','#d4669a','حسابات للفريق','لكل موظف استقبال أو مدير حساب دخول خاص.'),
   ('bell','#c98f22','تقرير PDF يومي','ملخص قصير على واتساب كل صباح.'),
   ('star','#7c6cf2','الحملات','أرسل رسائل متابعة وعروض توافق عليها للمرضى المناسبين.')],
- STEPS,[('أي باقة تشمل البوابة؟','البوابة متوفرة في باقة «مكتب الاستقبال + الهاتف» وباقة المجموعات. وباقة «مكتب الاستقبال» تشمل ملخص PDF يومي على واتساب.')]+FQ[1:2],L=AR,stype='لوحة تحكم وتقارير للعيادة')
+ STEPS,visual=V.dash_ui(V.T['ar']),faqs=[('أي باقة تشمل البوابة؟','البوابة متوفرة في باقة «مكتب الاستقبال + الهاتف» وباقة المجموعات. وباقة «مكتب الاستقبال» تشمل ملخص PDF يومي على واتساب.')]+FQ[1:2],L=AR,stype='لوحة تحكم وتقارير للعيادة')
 
 SPEC_AR={
 'dental':('عيادات الأسنان','موظفة الاستقبال الذكية <span class="glow">لعيادات الأسنان.</span>','tooth','#14a3b8','موظفة استقبال ذكية لعيادات الأسنان في دبي والخليج · هالورا',
@@ -242,4 +229,8 @@ SPEC_AR={
 for k,(crumb,h1,ik,col,title,feats) in SPEC_AR.items():
     s=SPD[k]
     B.subpage(f'/specialties/{k}/',f'التخصصات / {crumb}',title,h1,s['text']+' بالعربية والإنجليزية، على مدار الساعة.',ik,col,s['chat'],s['clinic'],feats,STEPS,FQ,L=AR,stype=f'موظفة استقبال ذكية لـ{crumb}')
+# ---------- the 8 'why Halora' pages (EN + AR), then the sitemap again ----------
+import pages
+pages.build(B,AR,B.src,src)
+B.write_sitemap()
 print('ar ok')

@@ -203,8 +203,8 @@ body.dark-top.scrolled .top .btn.line{background:transparent;color:var(--ink)}
 .cmp .y{color:var(--green);font-weight:700}.cmp .n{color:#b14b4b}
 
 /* reveal */
-.rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
-.rv.in{opacity:1;transform:none}
+.rv-ready .rv{opacity:0;transform:translateY(28px);transition:opacity .9s cubic-bezier(.2,.8,.2,1),transform .9s cubic-bezier(.2,.8,.2,1)}
+.rv-ready .rv.in{opacity:1;transform:none}
 html:not(.js) .rv{opacity:1;transform:none}
 
 /* ask bar */

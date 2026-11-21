@@ -29,7 +29,7 @@ function $(s,r){return (r||d).querySelector(s)}function $$(s,r){return [].slice.
 
 
 /* header over dark hero */
-if($('.hx,.ph')){d.body.classList.add('dark-top');var onS=function(){d.body.classList.toggle('scrolled',scrollY>($('.hx,.ph').offsetHeight-90))};addEventListener('scroll',onS,{passive:true});onS();}
+if($('.hx')){d.body.classList.add('dark-top');var onS=function(){d.body.classList.toggle('scrolled',scrollY>($('.hx,.ph').offsetHeight-90))};addEventListener('scroll',onS,{passive:true});onS();}
 
 /* starfield */
 $$('canvas.stars').forEach(function(c){var x=c.getContext('2d'),S=[],dpr=Math.min(2,w.devicePixelRatio||1);
@@ -67,6 +67,7 @@ function cu(el){var to=+el.getAttribute('data-to'),pre=el.getAttribute('data-pre
 
 /* reveal */
 var io='IntersectionObserver' in w?new IntersectionObserver(function(es){es.forEach(function(e){if(e.isIntersecting){e.target.classList.add('in');$$('[data-to]',e.target).forEach(cu);io.unobserve(e.target)}})},{threshold:.15}):null;
+d.documentElement.classList.add('rv-ready');
 $$('.rv').forEach(function(e,i){if(io)io.observe(e);else e.classList.add('in')});
 
 /* tilt cards */
