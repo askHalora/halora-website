@@ -139,7 +139,6 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}Call Noor · 1 min</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>Chat with Noor live</a>
-   {watch_btn('Watch the demo')}
   </div>
   {video_card('Product demo · sound on','Watch Halora in 74 seconds','WhatsApp, phone, owner dashboard and patient app')}
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb>--:-- Dubai</span><span class="tk" data-tick="{tick}">Noor is answering patients right now</span></div>

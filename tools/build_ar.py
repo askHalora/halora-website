@@ -48,7 +48,6 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}اتصل بنور · دقيقة واحدة</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>تحدّث مع نور الآن</a>
-   {B.watch_btn('شاهد الفيديو')}
   </div>
   {B.video_card('فيديو تعريفي · بالصوت','شاهد هالورا في 74 ثانية','واتساب والهاتف ولوحة المالك وتطبيق المرضى')}
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb="دبي">--:-- دبي</span><span class="tk" data-tick="{tick}">نور ترد على المرضى الآن</span></div>
