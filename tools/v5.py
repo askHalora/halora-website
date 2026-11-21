@@ -33,6 +33,7 @@ GLYPH = {
  'sheet': '<rect x="16" y="14" width="32" height="36" rx="5" fill="#fff"/><path d="M16 24h32M16 33h32M16 42h32M28 24v26" stroke="var(--c)" stroke-width="2.2" opacity=".6"/>',
  'users': '<circle cx="25" cy="24" r="7" fill="#fff"/><circle cx="41" cy="26" r="5.5" fill="#fff" opacity=".85"/><path d="M12 47c1-8 6-12 13-12s12 4 13 12z" fill="#fff"/><path d="M37 47c.3-4-1-7.5-3.5-9.8 1.9-1 3.8-1.3 6-1.3 6 0 10 3.6 10.8 11.1z" fill="#fff" opacity=".85"/>',
  'bolt': '<path d="M35 12L18 35h12l-3 17 17-23H32z" fill="#fff"/>',
+ 'plus': '<path d="M26 14h12v12h12v12H38v12H26V38H14V26h12z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/>',
 }
 def clay(k, c, cls=''):
     return f'<span class="clay{(" "+cls) if cls else ""}" style="--c:{c}" aria-hidden="true"><svg viewBox="0 0 64 64">{GLYPH[k]}</svg></span>'
@@ -127,6 +128,15 @@ T = {
 }
 
 # ---------- UI mock-ups ----------
+def bgfx(float_=True):
+    """Hero background: drifting colour mesh, fading dot grid and floating clay shapes (decorative)."""
+    fl = ''
+    if float_:
+        fl = (f'<span class="fz z1" data-depth="18">{clay("tooth","#14a3b8")}</span>'
+              f'<span class="fz z2" data-depth="-14">{clay("plus","#e0627a","sm")}</span>'
+              f'<span class="fz z3" data-depth="24">{clay("chat","#1fa971","sm")}</span>')
+    return f'<div class="bgfx" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i><i class="dots"></i>{fl}</div>'
+
 def chat_ui(t, clinic=None, msgs=None, chip=None, cls=''):
     clinic = clinic or t['clinic']; msgs = msgs or t['wa']; chip = t['wachip'] if chip is None else chip
     m = ''.join(f'<div class="b {w}" style="--d:{.25+i*.5:.2f}s">{x}</div>' for i, (w, x) in enumerate(msgs))
@@ -149,7 +159,7 @@ def dash_ui(t):
     rows = ''.join(f'<tr><td dir="ltr">{a}</td><td>{b}</td><td><span class="st {k}">{c}</span></td></tr>' for a, b, c, k in t['dm_rows'])
     return (f'<div class="dsh"><div class="tb"><span class="dots"><i></i><i></i><i></i></span><span class="mk">{HMARK}</span><nav>{tabs}</nav></div>'
             f'<div class="kp">{kp}</div><div class="chart"><small>{t["dm_chart"]}</small><div class="bars">{bars}</div></div>'
-            f'<table>{rows}</table><div class="cap">{t["dm_cap"]}</div></div>')
+            f'<table role="presentation">{rows}</table><div class="cap">{t["dm_cap"]}</div></div>')
 
 def cal_ui(t):
     times = ['09:00','11:00','13:00','17:00','20:00','22:30']
@@ -178,6 +188,7 @@ def hero(t, video_card):
     meta = ''.join(f'<div><b>{a}</b>{b}</div>' for a, b in t['meta'])
     W = 600
     return f'''<section class="v5h" id="top">
+{bgfx()}
 <div class="wrap">
  <div class="cp">
   <a class="eyebrow" href="#plans"><b>{t['eyebrow_b']}</b>{t['eyebrow']}</a>

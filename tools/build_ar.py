@@ -136,7 +136,7 @@ def compare():
     rows=[('ترد الساعة 2 فجرًا والجمعة والأعياد','n','y'),('أول رد خلال أقل من 10 ثوانٍ','~ عند التفرغ','y'),('عربي وإنجليزي ورسائل صوتية','~ حسب الموظف','y'),('لا تنسى أي تذكير أو متابعة','n','y'),('20 محادثة في نفس الوقت','n','y'),('لمسة إنسانية دافئة في الاستقبال','y','فريقك، بوقت أكثر'),('التكلفة الشهرية','راتب +4,000 درهم، إقامة، إجازات','جزء بسيط من راتب واحد')]
     def cell(v): return '<span class="y">✓</span>' if v=='y' else '<span class="n">✕</span>' if v=='n' else v.replace('~ ','')
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
-    return f'''<section class="sx tight"><div class="wrap" style="max-width:920px">
+    return f'''<section class="sx tight s-cmp"><div class="wrap" style="max-width:920px">
 <div class="hd2 rv"><span class="k">لماذا الاثنان معًا</span><h2>فريقك + نور <b>أفضل من أيٍّ منهما وحده.</b></h2><p>نور لا تحل محل موظفة الاستقبال، بل تتولى العمل المتكرر وما بعد الدوام ليهتم فريقك بالمرضى الموجودين أمامه.</p></div>
 <div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th><span class="vh">المعيار</span></th><th>الاستقبال وحده</th><th>الاستقبال + نور</th></tr></thead><tbody>{tr}</tbody></table></div>
 </div></section>'''

@@ -6,15 +6,15 @@ clay, HMARK = V.clay, V.HMARK
 
 def _plain(s): return re.sub(r'<[^>]+>', '', s).strip()
 
-def split(k, h2, p, visual, items=None, rev=False, id_=''):
+def split(k, h2, p, visual, items=None, rev=False, id_='', band=False):
     li = ''.join(f'<li>{x}</li>' for x in (items or []))
-    return (f'<section class="sx tight"{(" id="+chr(34)+id_+chr(34)) if id_ else ""}><div class="wrap split{" rev" if rev else ""}"><div class="rv"><span class="k2">{k}</span><h2>{h2}</h2><p>{p}</p>'
+    return (f'<section class="sx tight{" band" if band else ""}"{(" id="+chr(34)+id_+chr(34)) if id_ else ""}><div class="wrap split{" rev" if rev else ""}"><div class="rv"><span class="k2">{k}</span><h2>{h2}</h2><p>{p}</p>'
             + (f'<ul class="ticks">{li}</ul>' if li else '') + f'</div><div class="rv vis">{visual}</div></div></section>')
 
 def cards(k, h2, p, items, bg=False, id_=''):
     c = ''.join(f'<div class="f rv">{clay(ic, col)}<h3>{t}</h3><p>{d}</p></div>' for ic, col, t, d in items)
     return (f'<section class="sx tight"{(" id="+chr(34)+id_+chr(34)) if id_ else ""}{" style=\"background:var(--mint)\"" if bg else ""}><div class="wrap">'
-            f'<div class="hd2 rv"><span class="k">{k}</span><h2>{h2}</h2>{"<p>"+p+"</p>" if p else ""}</div><div class="feat">{c}</div></div></section>')
+            f'<div class="hd2 rv"><span class="k">{k}</span><h2>{h2}</h2>{"<p>"+p+"</p>" if p else ""}</div><div class="feat{" f4" if len(items)==4 else ""}">{c}</div></div></section>')
 
 def faqs(k, h2, qa):
     fq = ''.join(f'<details><summary>{q}</summary><p>{a}</p></details>' for q, a in qa)
@@ -71,6 +71,7 @@ def page(B, L, lang, path, pg, body):
     alt = ar if lang == 'en' else en
     c = C[lang]
     hero = f'''<section class="ph pg">
+{V.bgfx()}
 <div class="wrap"><div>
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {pg['crumb']}</div>
 <div style="margin-top:22px">{clay(pg['icon'][0], pg['icon'][1], 'lg')}</div>
@@ -145,7 +146,7 @@ C['en'] = dict(cta1='Start the free pilot', pages={
   h1='See exactly what <span class="glow">Noor brought in.</span>', lead='A private portal for you and your team: every conversation, booking and request in one place, a summary on WhatsApp each morning, and campaigns that bring patients back.',
   visual=V.dash_ui(T['en']),
   body=lambda c, plans, pilot, hf, p: (
-   split('Owner dashboard', 'Bookings, replies and revenue, <b>at a glance.</b>', 'Bookings made by Noor and their value, after-hours replies, phone calls and where patients came from, by day, week and month.', V.cal_ui(T['en']), ['Bookings by Noor and their value', 'After-hours replies and calls', 'Where patients came from'])
+   split('Owner dashboard', 'Bookings, replies and revenue, <b>at a glance.</b>', 'Bookings made by Noor and their value, after-hours replies, phone calls and where patients came from, by day, week and month.', V.cal_ui(T['en']), ['Bookings by Noor and their value', 'After-hours replies and calls', 'Where patients came from'], band=True)
    + split('Inbox take-over', 'Step in <b>with one click.</b>', 'Every chat lives in one inbox. Take over any conversation from the portal or WhatsApp; Noor steps back and can pick up again later.',
            V.chat_ui(T['en'], 'Pearl Dental (demo)', [('p', 'Can Dr. Sara see my son after school?'), ('n', 'Let me check with the team for you.'), ('n', 'Hi, this is Reem from reception. Dr. Sara can see him at 16:00 tomorrow 😊')], 'Reem took over · Noor paused'), ['Owners see everything', 'Reception sees the inbox and requests', 'Hand back to Noor any time'], rev=True)
    + split('Daily PDF report', 'Your clinic’s night, <b>in one message.</b>', 'A short report lands on your WhatsApp every morning, with weekly and monthly summaries.',
@@ -279,7 +280,7 @@ C['ar'] = dict(cta1='ابدأ التجربة المجانية', pages={
   h1='شاهد بالضبط ما <span class="glow">جلبته نور.</span>', lead='بوابة خاصة لك ولفريقك: كل محادثة وحجز وطلب في مكان واحد، وملخص على واتساب كل صباح، وحملات تعيد المرضى.',
   visual=V.dash_ui(TA),
   body=lambda c, plans, pilot, hf, p: (
-   split('لوحة المالك', 'الحجوزات والردود والإيراد <b>بنظرة واحدة.</b>', 'الحجوزات التي تمت عن طريق نور وقيمتها، والردود بعد الدوام، والمكالمات، ومصدر المرضى، يوميًا وأسبوعيًا وشهريًا.', V.cal_ui(TA), ['الحجوزات عبر نور وقيمتها', 'الردود والمكالمات بعد الدوام', 'من أين جاء المرضى'])
+   split('لوحة المالك', 'الحجوزات والردود والإيراد <b>بنظرة واحدة.</b>', 'الحجوزات التي تمت عن طريق نور وقيمتها، والردود بعد الدوام، والمكالمات، ومصدر المرضى، يوميًا وأسبوعيًا وشهريًا.', V.cal_ui(TA), ['الحجوزات عبر نور وقيمتها', 'الردود والمكالمات بعد الدوام', 'من أين جاء المرضى'], band=True)
    + split('التدخل في المحادثة', 'تدخّل <b>بنقرة واحدة.</b>', 'كل المحادثات في صندوق واحد. تدخّل في أي محادثة من البوابة أو من واتساب، ونور تتوقف ويمكنها أن تكمل لاحقًا.',
            V.chat_ui(TA, 'عيادة بيرل للأسنان (تجريبية)', [('p', 'ممكن د. سارة تشوف ولدي بعد المدرسة؟'), ('n', 'خليني أتأكد لك من الفريق.'), ('n', 'مرحبا، معك ريم من الاستقبال. د. سارة تقدر تشوفه بكرة الساعة 4 العصر 😊')], 'تدخّلت ريم · نور متوقفة'), ['المالك يرى كل شيء', 'الاستقبال يرى الرسائل والطلبات', 'أعد المحادثة لنور متى شئت'], rev=True)
    + split('تقرير PDF يومي', 'ليلة عيادتك <b>في رسالة واحدة.</b>', 'تقرير قصير يصلك على واتساب كل صباح، مع ملخص أسبوعي وشهري.',

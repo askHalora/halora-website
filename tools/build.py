@@ -105,6 +105,8 @@ def service_ld(name,desc,path,stype,lang):
 def tidy_base(src):
     """Shared clean-ups for the older lower sections (both languages)."""
     src=re.sub(r'(<div class="label">)\d\d · ',r'\1',src)  # numbering restarted after the v4 sections; drop it
+    src=src.replace('<section><div class="wrap day">','<section class="s-day"><div class="wrap day">',1).replace('<section><div class="wrap founder">','<section class="s-founder"><div class="wrap founder">',1)
+    src=re.sub(r'<section>(<div class="wrap">\s*<div class="sec-h">(?:(?!</section>).)*?<div class="ctrl">)',r'<section class="s-ctrl">\1',src,count=1,flags=re.S)
     emo={'📞':('phone','#c98f22'),'⏰':('bell','#d4669a'),'🔁':('loop','#3b8f5a'),'⭐':('star','#d9a441'),'🎙️':('mic','#5b7fd6'),'📣':('mega','#7c6cf2'),'📊':('chart','#0e5c57'),'🛠️':('tool','#61706c')}
     for k,(i,c) in emo.items(): src=src.replace(f'<span class="xi" aria-hidden="true">{k}</span>',f'<span class="xi gi" style="--c:{c}">{ic(i)}</span>')
     return src
@@ -261,7 +263,7 @@ def compare():
     rows=[('Answers at 2 am, Fridays and Eid','n','y'),('First reply in under 10 seconds','~ When free','y'),('Arabic and English, voice notes too','~ Depends on staff','y'),('Never forgets a reminder or follow-up','n','y'),('Handles 20 chats at the same time','n','y'),('Warm human touch at the desk','y','Your team, freed up'),('Monthly cost','AED 4,000+ salary, visa, leave','A fraction of one salary')]
     def cell(v): return '<span class="y">✓</span>' if v=='y' else '<span class="n">✕</span>' if v=='n' else v.replace('~ ','')
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
-    return f'''<section class="sx tight"><div class="wrap" style="max-width:920px">
+    return f'''<section class="sx tight s-cmp"><div class="wrap" style="max-width:920px">
 <div class="hd2 rv"><span class="k">Why both</span><h2>Your team + Noor <b>beats either alone.</b></h2><p>Noor doesn't replace your receptionist. She takes the repetitive and after-hours work so your team can look after the patients in front of them.</p></div>
 <div class="rv" style="overflow-x:auto"><table class="cmp"><thead><tr><th><span class="vh">What matters</span></th><th>Front desk alone</th><th>Front desk + Noor</th></tr></thead><tbody>{tr}</tbody></table></div>
 </div></section>'''
@@ -335,6 +337,7 @@ def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,ex
 {L['header'](alt)}
 <main>
 <section class="ph">
+{V.bgfx()}
 <div class="wrap"><div>
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {crumb}</div>
 <div style="margin-top:26px">{V.clay(CLAYMAP.get(iconk,'heart'),color,'lg')}</div>

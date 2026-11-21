@@ -21,6 +21,7 @@ Owner: Ziad. Hosted on GitHub Pages from `main` (root). Custom domain askhalora.
 - `assets/site.css`, `assets/site.js`: base styles + chat widget, voice note mic, offer countdown. `site.js` talks to n8n webhooks on autova.app.n8n.cloud. Don't change webhook URLs.
 - `assets/x.css`, `assets/x.js`: v4 layer (animations, night shift, specialties tabs, ROI, video popup, RTL fixes). Its old dark hero/intro code is dormant.
 - v5 "The Pulse" (light clinic look): `tools/v5.py` (clay icons, UI mock-ups, hero, modules section, EN/AR strings), `assets/v5.css`, `assets/v5.js` (Pulse intro once per session via sessionStorage `hlPulse`, skippable, off for reduced motion; sticky touchpoints → 8 module cards). Load order: site → x → v5.
+- Backgrounds (end of v5.css, "v5.1"): hero mesh `V.bgfx()` (4 drifting blobs, dot grid, floating clay tooth/cross/chat with parallax in v5.js), section rhythm via `main>section:nth-of-type` + homepage ids/classes (`s-cmp`, `s-day`, `s-ctrl`, `s-founder`), wave dividers, ECG motif, deep-teal bands on `#plans`, `#portal`, `.band` and `.cta-band`. Avoid `:has()` and huge animated layers: both cost Lighthouse performance.
 - `tools/pages.py`: the 8 pages /how-it-works, /pricing, /for-owners, /security, /integrations, /about, /compare, /pilot in EN and AR (run by build_ar.py). /pricing and /pilot reuse the homepage plans and pilot sections, so prices live in one place.
 - Other pages: `call/` (book a call), `book/` (patient booking demo), `glow/` (skin clinic demo), `sample/` (sample clinic website).
 

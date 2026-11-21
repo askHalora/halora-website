@@ -224,7 +224,7 @@ html[dir=rtl] #pulse .tp{padding:7px 7px 7px 13px}
 @keyframes tpFly{0%{opacity:0;transform:translate(-50%,-50%) translateY(16px) scale(.7)}22%{opacity:1;transform:translate(-50%,-50%) scale(1)}55%{opacity:1;transform:translate(-50%,-50%) scale(1)}100%{opacity:0;transform:translate(calc(-50% + var(--dx)),calc(-50% + var(--dy))) scale(.15)}}
 #pulse .pbks{position:absolute;display:flex;flex-direction:column;gap:7px;width:206px;margin-left:-103px;animation:pFade .4s var(--to) forwards}
 #pulse .pbk{display:flex;align-items:center;gap:9px;background:#fff;border-radius:12px;padding:8px 11px;font-size:12.5px;color:#0f2523;box-shadow:0 14px 28px -18px rgba(15,37,35,.5),inset 0 0 0 1.5px rgba(31,157,107,.4);animation:bkOut .5s var(--t) cubic-bezier(.2,.8,.2,1) both}
-#pulse .pbk em{font-style:normal;font-weight:700;font-size:11px;color:#fff;background:#1f9d6b;border-radius:99px;padding:2px 8px;white-space:nowrap}
+#pulse .pbk em{font-style:normal;font-weight:700;font-size:11px;color:#fff;background:#137a52;border-radius:99px;padding:2px 8px;white-space:nowrap}
 @keyframes bkOut{from{opacity:0;transform:translateY(-34px) scale(.5)}}
 @keyframes pFade{to{opacity:0;transform:scale(.9)}}
 #pulse .hl{position:absolute;left:0;right:0;text-align:center;padding:0 20px;font-weight:400;font-size:clamp(40px,7vw,92px);line-height:1.02;letter-spacing:-.035em;color:#0f2523;opacity:0;animation:pHl .7s var(--th) cubic-bezier(.2,.8,.2,1) forwards}
@@ -309,7 +309,7 @@ html[dir=rtl] .split h2,html[dir=rtl] .story h2,html[dir=rtl] .h2c{font-family:v
 @media(min-width:761px) and (max-width:999px){footer .wrap{grid-template-columns:1fr 1fr 1fr}}
 @media(max-width:760px){footer .wrap{grid-template-columns:1fr 1fr}footer .wrap>div:first-child,footer .wrap>div:last-child{grid-column:1/-1}}
 /* four cards: one row of four on wide screens */
-@media(min-width:1000px){.feat:has(>.f:nth-child(4):last-child){grid-template-columns:repeat(4,1fr)}}
+@media(min-width:1000px){.feat.f4{grid-template-columns:repeat(4,1fr)}}
 /* timeline connector through the step numbers */
 .tline:before{inset-inline-start:47px}
 @media(max-width:600px){.tline:before{inset-inline-start:37px}}
@@ -325,3 +325,156 @@ html[dir=rtl] .split h2,html[dir=rtl] .story h2,html[dir=rtl] .h2c{font-family:v
 .vh{position:absolute!important;width:1px;height:1px;overflow:hidden;clip:rect(0 0 0 0);white-space:nowrap}
 /* never hide content unless the reveal script is actually running */
 html.js:not(.rv-ready) .rv{opacity:1;transform:none}
+
+/* =====================================================================
+   v5.1 "alive but calm" backgrounds: colour mesh, section rhythm,
+   wave dividers, ECG motif, card polish, deep-teal bands. CSS/SVG only.
+   ===================================================================== */
+:root{--b-white:#ffffff;--b-mint:#f0f8f5;--b-sand:#fbf4e8;--b-tint:#e5f2ef;--teal-2:#134e4a;--gold-l:#f3cf7f;
+ --ecg:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='80' viewBox='0 0 600 80'%3E%3Cpath d='M0 50h200l8-6 8 6h18l5 9 9-49 7 30 5-6h20l10-8 10 8h300' fill='none' stroke='%230e5c57' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+ --ecg-l:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='600' height='80' viewBox='0 0 600 80'%3E%3Cpath d='M0 50h200l8-6 8 6h18l5 9 9-49 7 30 5-6h20l10-8 10 8h300' fill='none' stroke='%23f3cf7f' stroke-width='1.6' stroke-linejoin='round' stroke-linecap='round'/%3E%3C/svg%3E");
+ --wave:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 1440 60' preserveAspectRatio='none'%3E%3Cpath d='M0 60V34C180 6 360 0 540 14s360 40 540 34 270-26 360-36v48z'/%3E%3C/svg%3E");
+ --plus:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M9 3h6v6h6v6h-6v6H9v-6H3V9h6z' fill='none' stroke='%230e5c57' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E");
+ --tooth:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M7 4c2 0 3 1 5 1s3-1 5-1 3 2 3 5-2 4-2 7-1 4-2 4-1.5-4-4-4-3 4-4 4-2-1-2-4-2-4-2-7 1-5 3-5z' fill='none' stroke='%230e5c57' stroke-width='1.3' stroke-linejoin='round'/%3E%3C/svg%3E");
+ --heart:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M12 20s-7-4.4-7-9.5A4 4 0 0 1 12 8a4 4 0 0 1 7 2.5C19 15.6 12 20 12 20z' fill='none' stroke='%23b9811f' stroke-width='1.4' stroke-linejoin='round'/%3E%3C/svg%3E");
+}
+
+/* ---------- 1. hero mesh ---------- */
+.v5h,.ph{isolation:isolate}
+.v5h:before,.ph:before{display:none}
+.v5h{background:#fbfdfc}
+.ph{background:#f7fbf9}
+.bgfx{position:absolute;inset:0;overflow:hidden;z-index:-1;pointer-events:none}
+.bgfx .bl{position:absolute;border-radius:50%;will-change:transform;width:min(60vw,720px);aspect-ratio:1}
+.bgfx .b1{background:radial-gradient(circle,#dff3ec 0,rgba(223,243,236,.6) 35%,rgba(223,243,236,0) 68%);top:-14%;inset-inline-end:-12%;animation:bl1 26s ease-in-out infinite alternate}
+.bgfx .b2{background:radial-gradient(circle,#cfe9e4 0,rgba(207,233,228,.55) 35%,rgba(207,233,228,0) 68%);width:min(46vw,560px);top:24%;inset-inline-start:22%;animation:bl2 30s ease-in-out infinite alternate}
+.bgfx .b3{background:radial-gradient(circle,#f6ead2 0,rgba(246,234,210,.6) 35%,rgba(246,234,210,0) 68%);bottom:-18%;inset-inline-start:-14%;animation:bl3 24s ease-in-out infinite alternate}
+.bgfx .b4{background:radial-gradient(circle,#ece8fb 0,rgba(236,232,251,.55) 35%,rgba(236,232,251,0) 68%);width:min(40vw,480px);bottom:-8%;inset-inline-end:8%;animation:bl2 28s ease-in-out infinite alternate-reverse}
+@keyframes bl1{to{transform:translate3d(-6%,8%,0)}}
+@keyframes bl2{to{transform:translate3d(8%,-6%,0)}}
+@keyframes bl3{to{transform:translate3d(7%,-5%,0)}}
+@media(max-width:760px){.bgfx .bl{width:110vw}.bgfx .b1{top:-6%}.bgfx .b2{width:80vw;top:30%;inset-inline-start:-10%}.bgfx .b3{bottom:-6%}.bgfx .b4{width:70vw}}
+.bgfx .dots{position:absolute;inset:0;background-image:radial-gradient(rgba(14,92,87,.16) 1.2px,transparent 1.3px);background-size:22px 22px;
+ -webkit-mask-image:radial-gradient(62% 60% at 60% 42%,#000 0,rgba(0,0,0,.45) 50%,transparent 78%);mask-image:radial-gradient(62% 60% at 60% 42%,#000 0,rgba(0,0,0,.45) 50%,transparent 78%)}
+.bgfx .fz{position:absolute;opacity:.92;will-change:transform;transition:transform .6s cubic-bezier(.2,.8,.2,1)}
+.bgfx .fz .clay{animation:bob 7s ease-in-out infinite}
+.bgfx .z1{top:12%;inset-inline-start:44%}.bgfx .z1 .clay{--s:56px;transform:rotate(-10deg)}
+.bgfx .z2{bottom:12%;inset-inline-start:3%}.bgfx .z2 .clay{animation-delay:-3s}
+.bgfx .z3{top:7%;inset-inline-end:3%}.bgfx .z3 .clay{animation-delay:-5s}
+.ph .bgfx .z1{top:auto;bottom:9%;inset-inline-start:46%}.ph .bgfx .z2{bottom:auto;top:10%;inset-inline-start:auto;inset-inline-end:44%}
+.v5h .hv .f1,.v5h .hv .f2{display:none} /* the hero mesh now carries the floating shapes */
+@media(max-width:980px){.bgfx .z1{top:auto;bottom:34%;inset-inline-start:auto;inset-inline-end:4%}.bgfx .z1 .clay{--s:44px}.bgfx .z2{bottom:auto;top:30%;inset-inline-start:auto;inset-inline-end:2%}.bgfx .z3{top:3%;inset-inline-end:3%}.ph .bgfx .z1,.ph .bgfx .z2{display:none}}
+@media(max-width:560px){.bgfx .fz{opacity:.75}.bgfx .z2{display:none}}
+
+/* ---------- 2. section rhythm ---------- */
+main>section{position:relative;border-top:0}
+main>section.v5h{background:#fbfdfc}main>section.ph{background:#f7fbf9}
+main>section.mods{background:linear-gradient(180deg,#fbfdfc 0%,var(--b-mint) 100%)}
+main>section.ns{background:var(--b-sand)}
+main>section:nth-of-type(4n+2){background:var(--b-mint)}
+main>section:nth-of-type(4n+3){background:var(--b-white)}
+main>section:nth-of-type(4n){background:var(--b-sand)}
+main>section:nth-of-type(4n+1){background:var(--b-tint)}
+/* homepage order: hero · modules · night · specialties · ROI · compare · problem · channels · extras · day · owners · control · plans · pilot · founder · FAQ */
+#specialties{background:var(--b-white)!important}
+#roi{background:linear-gradient(180deg,var(--b-sand) 0%,#fdf9f1 100%)!important}
+main>section.s-cmp{background:var(--b-white)!important}
+#problem{background:var(--b-tint)!important}
+#what{background:var(--b-white)!important}
+#extras{background:var(--b-mint)!important}
+main>section.s-day{background:var(--b-sand)!important}
+main>section.s-ctrl{background:var(--b-white)!important}
+#pilot{background:var(--b-mint)!important}
+main>section.s-founder{background:var(--b-sand)!important}
+#faq{background:var(--b-white)!important}
+
+/* curved dividers: a soft wave in the section's own colour rises into the one above */
+#specialties,#roi,#problem,#extras,#pilot,main>section.s-founder,#faq,main>section.s-day,.ph+section,main>section.band+section,.sx[style*="paper-2"],.sx[style*="var(--mint)"]{--wv:var(--b-white)}
+#specialties:before,#roi:before,#problem:before,#extras:before,#pilot:before,main>section.s-founder:before,main>section.s-day:before,.band:before,#plans:before,#portal:before{
+ content:"";position:absolute;left:0;right:0;top:-46px;height:47px;background:var(--wv);-webkit-mask:var(--wave) center/100% 100% no-repeat;mask:var(--wave) center/100% 100% no-repeat;pointer-events:none;z-index:1}
+#specialties{--wv:var(--b-white)}#roi{--wv:var(--b-sand)}#problem{--wv:var(--b-tint)}#extras{--wv:var(--b-mint)}#pilot{--wv:var(--b-mint)}
+main>section.s-founder{--wv:var(--b-sand)}main>section.s-day{--wv:var(--b-sand)}
+.band,#plans,#portal{--wv:#0f5752}
+@media(max-width:600px){#specialties:before,#roi:before,#problem:before,#extras:before,#pilot:before,main>section.s-founder:before,main>section.s-day:before,.band:before,#plans:before,#portal:before{top:-26px;height:27px}}
+
+/* ---------- 3. details ---------- */
+/* faint heartbeat line running behind some sections */
+#problem:after,#what:after,#pilot:after,#faq:after,main>section.s-cmp:after,.pg~section:nth-of-type(3n+2):after{
+ content:"";position:absolute;left:0;right:0;top:50%;height:80px;margin-top:-40px;background:var(--ecg) repeat-x center/600px 80px;opacity:.09;pointer-events:none;z-index:0}
+main>section>.wrap{position:relative;z-index:2}
+/* thin gold accent lines under the small section labels */
+.hd2 .k:after,.k2:after{content:"";display:block;width:36px;height:2px;margin:10px auto 0;border-radius:2px;background:linear-gradient(90deg,transparent,#D9A441,transparent)}
+.k2:after{margin-inline:0;background:linear-gradient(90deg,#D9A441,rgba(217,164,65,0))}
+html[dir=rtl] .k2:after{background:linear-gradient(270deg,#D9A441,rgba(217,164,65,0))}
+.sec-h .label{color:#8a6414}
+.sec-h .label:after{content:"";display:block;width:28px;height:2px;margin-top:10px;background:#D9A441;border-radius:2px}
+/* cards: soft gradient, inner glow, soft shadow */
+.feat .f,.mod,.xf,.bc:not(.dk),.int,.tline li,.ihub .in,.ns .ev.on,.sp .info,.roi .ctl,.cw,.dsh,.pdf,.camp,.tgl,.letter,.fm,.cnt div{
+ background:linear-gradient(180deg,#ffffff 0%,#f8fcfa 100%);
+ box-shadow:inset 0 1px 0 #fff,inset 0 0 0 1px rgba(255,255,255,.6),inset 0 -22px 36px -30px rgba(127,240,223,.55),0 18px 40px -30px rgba(15,37,35,.38),0 2px 6px -3px rgba(15,37,35,.08)}
+.feat .f,.xf{border-radius:22px;border-color:rgba(14,92,87,.12)}
+.xf{padding:24px}
+.feat .f{position:relative;overflow:hidden}
+.feat .f:after{content:"";position:absolute;top:-40px;inset-inline-end:-40px;width:120px;height:120px;border-radius:50%;background:radial-gradient(circle,rgba(127,240,223,.22),transparent 70%);pointer-events:none}
+/* small decorative icons in section corners */
+#extras>.wrap:before,#what>.wrap:before,#faq>.wrap:before,.pg~section:nth-of-type(4n+2)>.wrap:before{
+ content:"";position:absolute;top:-34px;inset-inline-end:8px;width:30px;height:30px;background:var(--plus) center/contain no-repeat;opacity:.28}
+#extras>.wrap:after,#faq>.wrap:after,.pg~section:nth-of-type(4n+2)>.wrap:after{
+ content:"";position:absolute;bottom:-38px;inset-inline-start:8px;width:28px;height:28px;background:var(--tooth) center/contain no-repeat;opacity:.24}
+#what>.wrap:after{content:"";position:absolute;bottom:-40px;inset-inline-start:8px;width:28px;height:28px;background:var(--heart) center/contain no-repeat;opacity:.35}
+
+/* ---------- 4. deep teal bands: owners, pricing, final CTA ---------- */
+#plans,#portal,.band{
+ background:
+  radial-gradient(36% 46% at 100% 42%,rgba(217,164,65,.20) 0,rgba(217,164,65,0) 70%),
+  radial-gradient(36% 50% at 0% 100%,rgba(127,240,223,.14) 0,rgba(127,240,223,0) 70%),
+  linear-gradient(135deg,#0e5c57 0%,#134e4a 100%)!important;
+ color:#eaf4f1}
+#plans:after,#portal:after,.band:after{content:"";position:absolute;left:0;right:0;top:50%;height:80px;margin-top:-40px;background:var(--ecg-l) repeat-x center/600px 80px;opacity:.12;pointer-events:none;z-index:0}
+#plans>.wrap:before,#portal>.wrap:before,.band>.wrap:before{content:"";position:absolute;top:-30px;inset-inline-start:24px;width:80px;height:2px;border-radius:2px;background:linear-gradient(90deg,#D9A441,rgba(217,164,65,0))}
+html[dir=rtl] #plans>.wrap:before,html[dir=rtl] #portal>.wrap:before,html[dir=rtl] .band>.wrap:before{background:linear-gradient(270deg,#D9A441,rgba(217,164,65,0))}
+#plans h2,#portal h2,.band h2{color:#fff}
+.band h2 b,#portal h2 b{color:var(--gold-l)}
+#plans .sec-h p,#portal>.wrap>div>p,.band p{color:#d4e7e2!important}
+#plans .label,#portal .label,.band .k2{color:var(--gold-l)}
+#plans .sec-h .label:after,#portal .label:after{background:var(--gold-l)}
+#plans .plans-note{color:#c9ddd8}
+#plans .plans-note a{color:#fff}
+/* plan cards float on the teal band */
+#plans .plans{border:0;gap:16px;background:none}
+#plans .plan{background:linear-gradient(180deg,#fff 0%,#f7fbf9 100%);border:0;border-radius:22px;color:var(--ink);box-shadow:inset 0 1px 0 #fff,0 30px 60px -36px rgba(0,0,0,.55)}
+#plans .plan.mark{background:linear-gradient(180deg,#fffaf0 0%,#f8edd7 100%);box-shadow:inset 0 0 0 2px #D9A441,0 30px 60px -30px rgba(0,0,0,.6)}
+#plans .plan:hover{background:linear-gradient(180deg,#fff 0%,#f2f9f6 100%)}
+#plans .plan .label{color:var(--mute)}
+#plans .offer{background:rgba(6,30,28,.45);border:1px solid rgba(217,164,65,.55);border-radius:20px;backdrop-filter:blur(6px)}
+#plans .offer .tag{border-radius:6px}
+@media(max-width:960px){#plans .plans{gap:12px}#plans .plan{border-bottom:0}}
+/* owners section on teal */
+#portal .list{border-color:rgba(255,255,255,.22)}
+#portal .list li{border-color:rgba(255,255,255,.16)}
+#portal .list li b{color:#fff}#portal .list li span{color:#cfe3de}
+#portal .mock{border:0;border-radius:20px;overflow:hidden;color:var(--ink);box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+.band .ticks li{color:#e3f0ec}.band .ticks li:before{background:rgba(255,255,255,.14);color:var(--gold-l)}
+.band .cw,.band .dsh,.band .pdf,.band .dev{color:var(--ink);box-shadow:0 30px 60px -30px rgba(0,0,0,.6)}
+/* final call-to-action band */
+.cta-band{position:relative;overflow:hidden;background:
+  radial-gradient(50% 90% at 100% 0%,rgba(217,164,65,.28) 0,rgba(217,164,65,0) 70%),
+  radial-gradient(40% 80% at 0% 100%,rgba(127,240,223,.18) 0,rgba(127,240,223,0) 70%),
+  linear-gradient(135deg,#0e5c57 0%,#134e4a 100%);box-shadow:inset 0 0 0 1px rgba(217,164,65,.35),0 40px 80px -40px rgba(14,92,87,.7)}
+.cta-band:before{content:"";position:absolute;left:0;right:0;bottom:16px;height:80px;background:var(--ecg-l) repeat-x center/600px 80px;opacity:.16;pointer-events:none}
+.cta-band>*{position:relative}
+.cta-band h2 b{color:var(--gold-l)}
+.cta-band .bx.glass{background:rgba(255,255,255,.1);color:#fff;border:1px solid rgba(255,255,255,.35)}
+
+/* the ROI result panel matches the bands */
+.roi .out{background:radial-gradient(60% 80% at 100% 0,rgba(217,164,65,.2),transparent 70%),linear-gradient(135deg,#0e5c57 0%,#134e4a 100%)}
+
+/* ---------- motion & safety ---------- */
+@media(prefers-reduced-motion:reduce){.bgfx .bl,.bgfx .fz .clay{animation:none!important}.bgfx .fz{transition:none}}
+
+/* contrast (WCAG AA) */
+.hd2 .k,.k2,.ns .k,.vcard small{color:#8a6414}
+.hv .fcal .r.f span{color:#5f6e69}
+.hv .fcal .r.b em{color:#11603f}
+/* no background drift while the intro is on screen */
+html.pulse-on .bgfx .bl,html.pulse-on .bgfx .fz .clay{animation-play-state:paused}

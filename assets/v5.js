@@ -84,6 +84,18 @@ var rtl=h.dir==='rtl';
  if(d.fonts&&d.fonts.ready)d.fonts.ready.then(measure);measure();
 })();
 
+/* ===== hero background: floating clay shapes drift with the pointer and scroll ===== */
+(function(){
+ var F=$$('.bgfx .fz');if(!F.length||rm)return;
+ var fine=matchMedia('(pointer:fine)').matches,mx=0,my=0,q=false;
+ var hero=F[0].closest('section');
+ function draw(){q=false;var r=hero.getBoundingClientRect();if(r.bottom<0)return;var sy=Math.max(0,-r.top);
+  F.forEach(function(f){var k=+f.getAttribute('data-depth')||10;f.style.transform='translate3d('+(mx*k).toFixed(1)+'px,'+(my*k-sy*k/60).toFixed(1)+'px,0)'})}
+ function req(){if(!q){q=true;requestAnimationFrame(draw)}}
+ if(fine)hero.addEventListener('mousemove',function(e){var r=hero.getBoundingClientRect();mx=(e.clientX-r.left)/r.width-.5;my=(e.clientY-r.top)/r.height-.5;req()});
+ addEventListener('scroll',req,{passive:true});
+})();
+
 /* ===== mobile menu: expose state to assistive tech ===== */
 var mb=$('.mbtn');if(mb)mb.addEventListener('click',function(){mb.setAttribute('aria-expanded',d.body.classList.contains('mopen')?'true':'false')});
 })();
