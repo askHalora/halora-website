@@ -48,8 +48,9 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}اتصل بنور · دقيقة واحدة</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>تحدّث مع نور الآن</a>
-   <a class="bx play" href="{B.VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>شاهد الفيديو</a>
+   {B.watch_btn('شاهد الفيديو')}
   </div>
+  {B.video_card('فيديو تعريفي · بالصوت','شاهد هالورا في 74 ثانية','واتساب والهاتف ولوحة المالك وتطبيق المرضى')}
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb="دبي">--:-- دبي</span><span class="tk" data-tick="{tick}">نور ترد على المرضى الآن</span></div>
   <div class="meta"><div><b dir="ltr">&lt;10 ث</b>أول رد</div><div><b>24/7</b>حتى الجمعة والأعياد</div><div><b>ع · EN</b>عربي وإنجليزي</div><div><b>14 يومًا</b>تجربة مجانية</div></div>
   <p class="note2">التجربة تفتح عيادة أسنان وهمية، ولا يتم حجز أي موعد حقيقي. <a href="/glow/">تجربة عيادة الجلدية</a> · <a href="/book/">صفحة الحجز للمرضى</a></p>
@@ -170,7 +171,7 @@ src=B.set_head(src,B.seo(src[:src.index('</head>')],'ar','موظفة استقب�
 open(f'{ROOT}/ar/index.html','w',encoding='utf-8').write(B.with_intro(src,'كل مريض · يجد ردًّا'))
 
 # ---------- Arabic sub-pages ----------
-AR=dict(lang='ar',pre='/ar',home='/ar/',crumb_home='هالورا',try_='جرّب نور الآن',call='احجز مكالمة 20 دقيقة',
+AR=dict(lang='ar',pre='/ar',home='/ar/',crumb_home='هالورا',try_='جرّب نور الآن',watch='شاهد الفيديو',call='احجز مكالمة 20 دقيقة',
  what_k='ماذا تحصل',what_h='مصمّمة على طريقة عمل <b>عيادات الخليج</b>.',live_k='الإطلاق',live_h='جاهزة خلال <b>أسبوع تقريبًا.</b> ونحن نتولى الإعداد.',
  q_k='أسئلة',q_h='معلومات تهمّك',band='جرّبها مجانًا لمدة 14 يومًا. <b>وادفع فقط إذا جلبت لك مرضى.</b>',band1='ابدأ التجربة المجانية',band2='اطّلع على الباقات',
  replies='نور · ترد فورًا',trybar='تحدّث مع نور',voice='0:07',

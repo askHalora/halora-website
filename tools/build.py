@@ -47,6 +47,12 @@ SPECS=[('dental','Dental clinics','Whitening, implants, aligners, emergencies','
 SITE='https://askhalora.com'
 FONT_URL='https://fonts.googleapis.com/css2?family=Readex+Pro:wght@300;400;500;600&display=swap'
 VIDEO='/assets/halora-explainer.mp4'
+VIDEO_LEN='1:14'
+def watch_btn(label):
+    return f'<a class="bx vdo" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic("play")}</span>{label}<span class="len" dir="ltr">{VIDEO_LEN}</span></a>'
+def video_card(kicker,title,sub):
+    return (f'<a class="vcard" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="th"><img src="/assets/halora-explainer-thumb.jpg" width="240" height="426" alt="" decoding="async">'
+            f'<span class="pb">{ic("play")}</span><span class="len" dir="ltr">{VIDEO_LEN}</span></span><span class="tx"><small>{kicker}</small><b>{title}</b><em>{sub}</em></span></a>')
 ORG_LD={"@context":"https://schema.org","@type":"Organization","@id":SITE+"/#org","name":"Halora","url":SITE+"/","logo":SITE+"/assets/halora-512.png","image":SITE+"/assets/og.png","email":"ziad.elhoseiny@askhalora.com",
  "description":"AI receptionist for clinics in Dubai and the Gulf: answers WhatsApp, website chat and phone calls in English and Arabic, 24/7, and books appointments.",
  "areaServed":["AE","SA","QA","KW","BH","OM"],"knowsLanguage":["en","ar"],"founder":{"@type":"Person","name":"Ziad Elhoseiny"},"sameAs":[]}
@@ -133,8 +139,9 @@ def hero():
   <div class="cta">
    <a class="bx gold" href="#" data-voice>{ic('phone')}Call Noor · 1 min</a>
    <a class="bx glass" href="#" data-chat><span class="pulse"></span>Chat with Noor live</a>
-   <a class="bx play" href="{VIDEO}" data-video aria-haspopup="dialog"><span class="pi">{ic('play')}</span>Watch the demo</a>
+   {watch_btn('Watch the demo')}
   </div>
+  {video_card('Product demo · sound on','Watch Halora in 74 seconds','WhatsApp, phone, owner dashboard and patient app')}
   <div class="live"><span class="pulse" style="width:9px;height:9px;border-radius:50%;background:#2fe0a0;flex:none"></span><span class="clk" data-dxb>--:-- Dubai</span><span class="tk" data-tick="{tick}">Noor is answering patients right now</span></div>
   <div class="meta"><div><b>&lt;10 s</b>first reply</div><div><b>24/7</b>incl. Fridays &amp; Eid</div><div><b>EN · ع</b>Arabic &amp; English</div><div><b>14 days</b>free pilot</div></div>
   <p class="note2">Demo opens a fictional dental clinic. Nothing is really booked. <a href="/glow/">Skin clinic demo</a> · <a href="/book/">Patient booking page</a></p>
@@ -275,7 +282,7 @@ open(f'{ROOT}/index.html','w',encoding='utf-8').write(with_intro(src,'Every pati
 
 # ---------- sub-pages (shared by English and Arabic) ----------
 HEAD_EN=src[:src.index('</head>')]
-EN=dict(lang='en',pre='',home='/',crumb_home='Halora',try_='Try Noor now',call='Book a 20-min call',
+EN=dict(lang='en',pre='',home='/',crumb_home='Halora',try_='Try Noor now',watch='Watch the demo',call='Book a 20-min call',
  what_k='What you get',what_h='Built for the way <b>Gulf clinics</b> work.',live_k='Going live',live_h='Live in <b>about a week.</b> We do the setup.',
  q_k='Questions',q_h='Good to know',band='Try it free for 14 days. <b>Pay only if it brings in patients.</b>',band1='Start the free pilot',band2='See pricing',
  replies='Noor · replies instantly',trybar='Talk to Noor',voice='0:07',
@@ -311,7 +318,7 @@ def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,ex
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {crumb}</div>
 <div style="margin-top:26px">{ico3(iconk,color)}</div>
 <h1>{h1}</h1><p class="lead">{lead}</p>
-<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>{L['try_']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a></div>
+<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>{L['try_']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a>{watch_btn(L['watch'])}</div>
 </div>{chatmock(chat,clinic,L)}</div></section>
 <section class="sx"><div class="wrap"><div class="hd2 rv"><span class="k">{L['what_k']}</span><h2>{L['what_h']}</h2></div><div class="feat">{fe}</div></div></section>
 {extra}
