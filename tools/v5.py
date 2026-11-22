@@ -151,7 +151,7 @@ def sticky_bar(t):
     return (f'<nav class="sbar" aria-label="{t["sbl"]}"><a class="sb-call" href="{t["callurl"]}" data-call>{t["callq"]}</a>'
             f'<a class="sb-go" href="{t["gsurl"]}">{t["gs"]}</a></nav>')
 
-def bgfx(float_=True):
+def bgfx(float_=False):
     """Hero background: drifting colour mesh, fading dot grid and floating clay shapes (decorative)."""
     fl = ''
     if float_:

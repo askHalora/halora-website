@@ -31,7 +31,6 @@ html.pt-enter body{animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
 if(!vt&&!rm){h.classList.add('pt-enter');setTimeout(function(){h.classList.remove('pt-enter')},500);}
 addEventListener('pageshow',function(e){if(e.persisted)h.classList.remove('pt-leave')});
 d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');if(!el)return;
- if(!rm&&(el.matches('.btn,button,.way,.slot,.day,.go'))){var r=el.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,c=d.createElement('span');c.className='pt-ripple';c.style.width=c.style.height=s+'px';c.style.left=(e.clientX-r.left-s/2)+'px';c.style.top=(e.clientY-r.top-s/2)+'px';if(getComputedStyle(el).position==='static')el.style.position='relative';el.style.overflow='hidden';el.appendChild(c);setTimeout(function(){c.remove()},600);}
  if(el.tagName!=='A'||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||el.target==='_blank'||el.hasAttribute('data-chat')||el.hasAttribute('download'))return;
  var u=new URL(el.href,location.href);if(u.origin!==location.origin)return;
  if(u.pathname===location.pathname&&u.hash){var t=d.getElementById(u.hash.slice(1));if(t){setTimeout(function(){t.classList.remove('pt-flash');void t.offsetWidth;t.classList.add('pt-flash')},450)}return;}
@@ -61,7 +60,7 @@ d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');
 </div></header>
 <main>
 <section class="ph">
-<div class="bgfx" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i><i class="dots"></i><span class="fz z1" data-depth="18"><span class="clay" style="--c:#14a3b8" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M21 17c4-3 7.5-1.5 11-1.5s7-1.5 11 1.5c4 3 4 9.5 2 14.5-1.7 4.3-2 9-3.2 13-.9 3-4.3 3-5.2 0l-1.9-6.6c-.8-2.4-4.6-2.4-5.4 0L26.4 44.5c-.9 3-4.3 3-5.2 0-1.2-4-1.5-8.7-3.2-13-2-5-2-11.5 3-14.5z" fill="#fff"/></svg></span></span><span class="fz z2" data-depth="-14"><span class="clay sm" style="--c:#e0627a" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M26 14h12v12h12v12H38v12H26V38H14V26h12z" fill="#fff" stroke="#fff" stroke-width="3" stroke-linejoin="round"/></svg></span></span><span class="fz z3" data-depth="24"><span class="clay sm" style="--c:#1fa971" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M15 23a8 8 0 0 1 8-8h18a8 8 0 0 1 8 8v11a8 8 0 0 1-8 8H30l-8.5 6.5V42H23a8 8 0 0 1-8-8z" fill="#fff"/><circle cx="25" cy="28.5" r="2.6" fill="var(--c)"/><circle cx="32" cy="28.5" r="2.6" fill="var(--c)"/><circle cx="39" cy="28.5" r="2.6" fill="var(--c)"/></svg></span></span></div>
+<div class="bgfx" aria-hidden="true"><i class="bl b1"></i><i class="bl b2"></i><i class="bl b3"></i><i class="bl b4"></i><i class="dots"></i></div>
 <div class="wrap"><div>
 <div class="crumbs"><a href="/">Halora</a> / Specialties / Aesthetics & skin</div>
 <div style="margin-top:26px"><span class="clay lg" style="--c:#d4669a" aria-hidden="true"><svg viewBox="0 0 64 64"><path d="M30 13l3.6 10.4L44 27l-10.4 3.6L30 41l-3.6-10.4L16 27l10.4-3.6z" fill="#fff"/><path d="M45 37l1.8 5.2L52 44l-5.2 1.8L45 51l-1.8-5.2L38 44l5.2-1.8z" fill="#fff"/></svg></span></div>

@@ -70,8 +70,7 @@ var io='IntersectionObserver' in w?new IntersectionObserver(function(es){es.forE
 d.documentElement.classList.add('rv-ready');
 $$('.rv').forEach(function(e,i){if(io)io.observe(e);else e.classList.add('in')});
 
-/* tilt cards */
-if(!rm&&matchMedia('(pointer:fine)').matches)$$('.bc,.tilt').forEach(function(c){c.addEventListener('mousemove',function(e){var r=c.getBoundingClientRect(),x=(e.clientX-r.left)/r.width-.5,y=(e.clientY-r.top)/r.height-.5;c.style.transform='perspective(900px) rotateY('+x*6+'deg) rotateX('+(-y*6)+'deg) translateY(-4px)'});c.addEventListener('mouseleave',function(){c.style.transform=''})});
+/* (card tilt removed: kept the layout calm) */
 
 /* night shift (sticky scroll) */
 var ns=$('.ns');

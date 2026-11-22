@@ -140,7 +140,6 @@ html.pt-enter body{animation:hlIn .38s cubic-bezier(.2,.7,.2,1) both}
 if(!vt&&!rm){h.classList.add('pt-enter');setTimeout(function(){h.classList.remove('pt-enter')},500);}
 addEventListener('pageshow',function(e){if(e.persisted)h.classList.remove('pt-leave')});
 d.addEventListener('click',function(e){var el=e.target.closest('a,button,.btn');if(!el)return;
- if(!rm&&(el.matches('.btn,button,.way,.slot,.day,.go'))){var r=el.getBoundingClientRect(),s=Math.max(r.width,r.height)*2.2,c=d.createElement('span');c.className='pt-ripple';c.style.width=c.style.height=s+'px';c.style.left=(e.clientX-r.left-s/2)+'px';c.style.top=(e.clientY-r.top-s/2)+'px';if(getComputedStyle(el).position==='static')el.style.position='relative';el.style.overflow='hidden';el.appendChild(c);setTimeout(function(){c.remove()},600);}
  if(el.tagName!=='A'||e.defaultPrevented||e.button||e.metaKey||e.ctrlKey||e.shiftKey||el.target==='_blank'||el.hasAttribute('data-chat')||el.hasAttribute('download'))return;
  var u=new URL(el.href,location.href);if(u.origin!==location.origin)return;
  if(u.pathname===location.pathname&&u.hash){var t=d.getElementById(u.hash.slice(1));if(t){setTimeout(function(){t.classList.remove('pt-flash');void t.offsetWidth;t.classList.add('pt-flash')},450)}return;}

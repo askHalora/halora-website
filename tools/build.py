@@ -394,7 +394,7 @@ subpage('/product/phone/','Product / Phone receptionist','AI phone receptionist 
   ('lang','#7c6cf2','Natural voice, two languages','Warm, clear Arabic and English. Patients can switch any time.'),
   ('users','#d4669a','Transfers to your team','Urgent or complex calls go straight to a person.'),
   ('doc','#61706c','Call summaries','Every call is summarised in the portal and the daily report.')],
- STEPS,visual=V.call_ui(V.T['en']),faqs=[('Which plan includes calls?','Phone answering is included in Front Desk + Phone and Group. You can also add it to Starter or Front Desk as an add-on.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
+ STEPS,visual=V.call_ui(V.T['en']),faqs=[('Which plan includes calls?','Phone answering is included in Front Desk + Phone and Group. You can also add it to Front Desk as an add-on.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
 
 subpage('/product/growth/','Product / Reminders & reviews','Appointment reminders & Google reviews for clinics · Halora','Fewer no-shows. <span class="glow">More five-star reviews.</span>',
  'Noor reminds every patient before their visit, refills cancelled slots from your waitlist, asks happy patients for a Google review and brings old patients back with approved recall messages.',
@@ -416,7 +416,7 @@ subpage('/product/portal/','Product / Owner portal','Clinic owner portal & daily
   ('users','#d4669a','Team access','Give each receptionist or manager their own login.'),
   ('bell','#c98f22','Daily PDF report','A short summary on WhatsApp every morning.'),
   ('star','#7c6cf2','Campaigns','Send approved recall and offer messages to the right patients.')],
- STEPS,visual=V.dash_ui(V.T['en']),faqs=[('Which plan includes the portal?','The owner portal is included in every plan, from Starter up. Plans with WhatsApp (Front Desk and above) also get the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
+ STEPS,visual=V.dash_ui(V.T['en']),faqs=[('Which plan includes the portal?','The owner portal is included in every plan, together with the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
 
 WEB_FEATS=[('bolt','#c98f22','Ready in days','Built from your setup-form answers: services, prices, doctors and hours. No designer needed.'),
   ('chat','#1fa971','Noor built in','Visitors ask questions and request appointments right on the page, day and night.'),

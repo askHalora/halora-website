@@ -633,3 +633,27 @@ html[dir=rtl] .demo-box h2{font-family:var(--ar);letter-spacing:0}
 @media(max-width:860px){.legal .lg-grid{grid-template-columns:1fr;gap:20px}.legal .toc{position:static}}
 .legal .doc a,footer a{text-decoration:underline;text-underline-offset:3px}
 .crumbs a{text-decoration:underline;text-underline-offset:3px}
+
+/* =====================================================================
+   v5.4 premium polish: no ripples, tilt, pulsing rings or floating shapes over text
+   ===================================================================== */
+.pt-ripple{display:none!important}
+.bx.vdo .pi:after{content:none}
+.vcard .pb{animation:none;box-shadow:0 10px 22px -10px rgba(217,164,65,.9)}
+.vcard:hover .pb{transform:scale(1.06)}
+.vcard .pb{transition:transform .2s}
+.brw .bub{animation:none}
+.hclay>span[class^=hc]{animation:none}
+.hv .fl{animation:none}
+.hv .f3{display:none}
+/* the stat cards next to the hero phone stay put after they appear */
+.hv .fc{animation:fcIn .7s cubic-bezier(.2,.8,.2,1) both}
+.hv .fcal{animation-delay:1.6s}.hv .fcall{animation-delay:2.4s}
+/* small corner icons only where there is room */
+@media(max-width:900px){#extras>.wrap:before,#what>.wrap:before,#faq>.wrap:before,#extras>.wrap:after,#faq>.wrap:after,#what>.wrap:after,.pg~section>.wrap:before,.pg~section>.wrap:after{display:none}}
+/* hover: a calm lift instead of tilt */
+.bc,.mod,.feat .f,.xf,.int{transition:transform .25s ease,box-shadow .25s ease,border-color .25s ease}
+.bc:hover,.mod:hover,.int:hover{transform:translateY(-3px)}
+.bx:hover{transform:translateY(-1px)}
+/* phones: soft backgrounds stay, the slow drift stops (saves work on mobile) */
+@media(max-width:760px){.bgfx .bl{animation:none!important;will-change:auto}}
