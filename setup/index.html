@@ -167,6 +167,7 @@ const AR={title:'لنجهّز <em>نور الخاصة بكم</em>',lead:'عرّ�
 const EN={};document.querySelectorAll('[data-t]').forEach(e=>EN[e.dataset.t]=e.innerHTML);
 const PH={services:{en:['Service (e.g. Teeth whitening)','Price (e.g. 1200 or 300-500)','Minutes'],ar:['الخدمة (مثل تبييض الأسنان)','السعر (مثل 1200 أو 300-500)','الدقائق']},doctors:{en:['Doctor name','Specialty','Services they do','Working days & languages'],ar:['اسم الطبيب','التخصص','الخدمات التي يقدمها','أيام العمل واللغات']},faqs:{en:['Question patients ask','Your answer'],ar:['سؤال يسأله المرضى','إجابتكم']}};
 let lang='en';try{lang=localStorage.getItem('hlSetupLang')||'en'}catch(e){}
+const QP=new URLSearchParams(location.search);if(QP.get('lang')==='ar'||QP.get('lang')==='en')lang=QP.get('lang');
 const $=s=>document.querySelector(s),f=$('#f');
 function hoursUI(){const h=$('#hours');h.innerHTML=DAYS.map(d=>`<span>${lang==='ar'?{saturday:'السبت',sunday:'الأحد',monday:'الاثنين',tuesday:'الثلاثاء',wednesday:'الأربعاء',thursday:'الخميس',friday:'الجمعة'}[d]:d[0].toUpperCase()+d.slice(1)}</span><input name="h_${d}" aria-label="${d} hours" placeholder="${d==='friday'?'16:00-22:00':'09:00-21:00'}">`).join('')}
 function rep(kind,v={}){const box=$('#'+kind),p=PH[kind][lang],d=document.createElement('div');d.className='rep '+(kind==='doctors'?'doc':kind==='faqs'?'faq':'');
@@ -198,6 +199,8 @@ f.addEventListener('submit',async e=>{e.preventDefault();const err=$('#err');err
   try{localStorage.removeItem('hlSetup')}catch(_){}
   $('#app').innerHTML=`<section class="done" style="margin-top:40px"><div class="ok">✓</div><h1 style="margin-top:0">${lang==='ar'?'وصلتنا معلوماتكم!':'Thank you, we have everything!'}</h1><p class="lead">${lang==='ar'?'سنجهّز نور الخاصة بعيادتكم ونرسل لكم رابط التجربة على واتساب خلال 24–48 ساعة.':'We\'re setting up Noor for your clinic now. You\'ll get your pilot link on WhatsApp within 24–48 hours.'}</p><p><a href="/" style="color:var(--teal);font-weight:600">askhalora.com</a></p></section>`;scrollTo(0,0)}
  catch(_){err.textContent=lang==='ar'?'تعذّر الإرسال. تحققوا من الاتصال وحاولوا مرة أخرى، أو راسلونا على واتساب.':'Could not send. Check your connection and try again, or message us on WhatsApp.';b.disabled=false;b.textContent=lang==='ar'?AR.submit:EN.submit}});
+
+;(function(){var p=QP.get('plan');if(p){var r=document.querySelector('input[name=plan][value="'+p.replace(/[^a-z-]/g,'')+'"]');if(r)r.checked=true}['website','phone','reminders'].forEach(function(k){if(QP.get(k)==='yes'){var c=document.querySelector('input[name=addon_'+k+']');if(c)c.checked=true}})})();
 </script>
 </body>
 </html>
