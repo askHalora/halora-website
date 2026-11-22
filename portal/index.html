@@ -1,1 +1,92 @@
-<!-- placeholder -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex">
+<title>Owner portal · Halora</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+:root{--paper:#f3f5f2;--ink:#0f2523;--teal:#0e5c57;--gold:#e0b34f;--line:#dfe6e2;--muted:#5d716d;--mint:#e6f4ef;--red:#c2410c}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Readex Pro',system-ui,sans-serif}
+.top{background:var(--teal);color:#fff}.top .w{display:flex;justify-content:space-between;align-items:center;height:64px;gap:10px}
+.w{max-width:1100px;margin:0 auto;padding:0 18px}.top b{font-size:18px}.top small{opacity:.8}
+.tabs{display:flex;gap:6px;margin:18px 0;flex-wrap:wrap}.tabs button{border:1px solid var(--line);background:#fff;border-radius:999px;padding:8px 14px;font:inherit;cursor:pointer;color:var(--muted)}
+.tabs button.on{background:var(--ink);color:#fff;border-color:var(--ink)}
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.k{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px}.k small{color:var(--muted);font-size:13px}.k b{display:block;font-size:30px;margin-top:4px}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:18px;margin-top:14px}
+.card h3{margin:0 0 12px;font-size:17px}
+table{width:100%;border-collapse:collapse;font-size:14.5px}th,td{text-align:left;padding:10px 8px;border-bottom:1px solid var(--line);vertical-align:top}th{color:var(--muted);font-weight:500;font-size:13px}
+.st{display:inline-block;border-radius:999px;padding:2px 10px;font-size:12.5px}.st.new{background:#fff4e0;color:#9a5b00}.st.done{background:var(--mint);color:var(--teal)}
+.btn{border:0;border-radius:10px;padding:8px 12px;font:inherit;font-size:13.5px;cursor:pointer;background:var(--teal);color:#fff;text-decoration:none;display:inline-block}
+.btn.l{background:#fff;border:1px solid var(--line);color:var(--teal)}
+.conv{border:1px solid var(--line);border-radius:12px;padding:12px;margin-bottom:10px}.conv summary{cursor:pointer;font-weight:500}
+.m{padding:7px 10px;border-radius:10px;margin:6px 0;max-width:85%;font-size:14px;white-space:pre-wrap}.m.u{background:var(--teal);color:#fff;margin-left:auto}.m.a{background:#eef4f1}
+.row{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;padding:12px 0;border-bottom:1px solid var(--line)}.row:last-child{border:0}
+.row small{color:var(--muted);display:block}.on{color:var(--teal);font-weight:600}.off{color:var(--muted)}
+textarea{width:100%;min-height:110px;border:1px solid var(--line);border-radius:12px;padding:12px;font:inherit}
+.muted{color:var(--muted)}#msg{padding:120px 20px;text-align:center;color:var(--muted)}
+@media(max-width:700px){table thead{display:none}table td{display:block;border:0;padding:4px 0}table tr{display:block;border-bottom:1px solid var(--line);padding:10px 0}}
+</style>
+</head>
+<body>
+<div id="msg">Loading your portal...</div>
+<div id="app" hidden>
+<div class="top"><div class="w"><div><b id="nm"></b><br><small id="pk"></small></div><button class="btn l" id="rf">Refresh</button></div></div>
+<div class="w">
+<div class="tabs"><button class="on" data-t="ov">Overview</button><button data-t="rq">Appointment requests</button><button data-t="cv">Conversations</button><button data-t="ch">Channels</button><button data-t="ed">Update info</button></div>
+<div id="ov">
+ <div class="kpis" id="kpis"></div>
+ <div class="card"><h3>Newest requests</h3><div id="ov-rq"></div></div>
+</div>
+<div id="rq" hidden><div class="card"><h3>Appointment requests</h3><p class="muted" style="margin-top:-6px">Call or WhatsApp the patient to confirm, then mark it done.</p><table><thead><tr><th>When</th><th>Patient</th><th>Service</th><th>Preferred time</th><th>From</th><th>Status</th><th></th></tr></thead><tbody id="rq-t"></tbody></table></div></div>
+<div id="cv" hidden><div class="card"><h3>Recent conversations</h3><div id="cv-l"></div></div></div>
+<div id="ch" hidden><div class="card"><h3>Your channels</h3><div id="ch-l"></div></div></div>
+<div id="ed" hidden><div class="card"><h3>Update prices, hours or answers</h3><p class="muted" style="margin-top:-6px">Tell us what changed. We update your assistant and website within 24 hours.</p><textarea id="tx" placeholder="Example: Whitening is now 1,000 AED. We are closed on 2 December."></textarea><p><button class="btn" id="sendch">Send update</button> <span id="sent" class="muted"></span></p></div></div>
+<p class="muted" style="font-size:12.5px;margin:30px 0">Keep this link private. It gives access to your clinic data. · <a href="https://askhalora.com" style="color:inherit">Halora</a></p>
+</div>
+</div>
+<script>
+(function(){
+var API='https://autova.app.n8n.cloud/webhook/halora-clinic-api-9f2a71';
+var qs=new URLSearchParams(location.search),c=(qs.get('c')||'').toLowerCase(),k=qs.get('k')||'';
+var $=function(i){return document.getElementById(i)};
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+function when(t){if(!t)return'';var d=new Date(t);return d.toLocaleDateString([], {day:'numeric',month:'short'})+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+function call(body){body.c=c;body.k=k;return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(body)}).then(function(r){return r.json()})}
+document.querySelectorAll('.tabs button').forEach(function(b){b.onclick=function(){document.querySelectorAll('.tabs button').forEach(function(x){x.classList.toggle('on',x===b)});['ov','rq','cv','ch','ed'].forEach(function(id){$(id).hidden=id!==b.dataset.t})}});
+function rqRow(x){return '<tr><td>'+esc(when(x.at))+'</td><td><b>'+esc(x.name)+'</b><br><a href="tel:'+esc(x.phone)+'">'+esc(x.phone)+'</a></td><td>'+esc(x.service)+(x.note?'<br><small class="muted">'+esc(x.note)+'</small>':'')+'</td><td>'+esc(x.time)+'</td><td>'+(x.via==='phone'?'📞 Phone':'💬 Chat')+'</td><td><span class="st '+(x.status==='done'?'done':'new')+'">'+esc(x.status==='done'?'Done':'New')+'</span></td><td>'+(x.status!=='done'?'<button class="btn" data-done="'+x.id+'">Mark done</button>':'')+'</td></tr>'}
+function load(){
+ call({action:'portal'}).then(function(j){
+  if(!j||!j.ok){$('msg').textContent='This portal link is not valid. Please contact Halora.';return}
+  var cl=j.clinic,s=j.stats,f=String(cl.features||'').split(',');
+  $('nm').textContent=cl.name;$('pk').textContent='Package: '+(cl.package||'').replace(/-/g,' ');
+  var K=[['Conversations',s.conversations],['Patient messages',s.patient_messages],['Appointment requests',s.requests],['Waiting for you',s.new_requests],['Requests this week',s.requests_week],['Messages outside office hours',s.after_hours]];
+  $('kpis').innerHTML=K.map(function(x){return '<div class="k"><small>'+x[0]+'</small><b>'+(x[1]||0)+'</b></div>'}).join('');
+  $('ov-rq').innerHTML=j.requests.length?'<table><tbody>'+j.requests.slice(0,5).map(rqRow).join('')+'</tbody></table>':'<p class="muted">No requests yet. Share your chat link to start receiving them.</p>';
+  $('rq-t').innerHTML=j.requests.map(rqRow).join('')||'<tr><td class="muted">No requests yet.</td></tr>';
+  $('cv-l').innerHTML=j.conversations.map(function(cv){var first=(cv.msgs.filter(function(m){return m.r==='user'})[0]||{}).t||'';return '<details class="conv"><summary>'+esc(when(cv.last))+' · '+esc(first.slice(0,80))+'</summary>'+cv.msgs.map(function(m){return '<div class="m '+(m.r==='user'?'u':'a')+'">'+esc(m.t)+'</div>'}).join('')+'</details>'}).join('')||'<p class="muted">No conversations yet.</p>';
+  var CH=[
+   ['💬 Website chat',true,'Live',cl.chat_url?'<a class="btn l" target="_blank" href="'+esc(cl.chat_url)+'">Open</a> <button class="btn l" data-copy="'+esc('<iframe src="'+cl.chat_url+'&embed=1" style="width:380px;height:560px;border:0;border-radius:16px"></iframe>')+'">Copy embed code</button>':''],
+   ['🌐 Clinic website',f.indexOf('website')>-1,'Live',cl.site_url?'<a class="btn l" target="_blank" href="'+esc(cl.site_url)+'">Open</a>':''],
+   ['📞 AI phone receptionist',f.indexOf('phone')>-1,cl.agent_id?'Voice ready · phone number being connected':'Being set up',''],
+   ['🟢 WhatsApp',f.indexOf('whatsapp')>-1,cl.whatsapp_status==='live'?'Live':'We will connect your number with you (10 minutes)',''],
+   ['🔔 Reminders & reviews',f.indexOf('reminders')>-1,'Starts when WhatsApp is connected','']];
+  $('ch-l').innerHTML=CH.map(function(x){return '<div class="row"><div><b>'+x[0]+'</b><small>'+(x[1]?x[2]:'Not in your package')+'</small></div><div><span class="'+(x[1]?'on':'off')+'">'+(x[1]?'Included':'Add-on')+'</span> '+(x[1]?x[3]:'')+'</div></div>'}).join('');
+  $('msg').hidden=true;$('app').hidden=false;
+ }).catch(function(){$('msg').textContent='Connection problem. Please refresh.'});
+}
+document.addEventListener('click',function(e){
+ var d=e.target.getAttribute('data-done');if(d){e.target.disabled=true;call({action:'done',id:d}).then(load);}
+ var cp=e.target.getAttribute('data-copy');if(cp){navigator.clipboard&&navigator.clipboard.writeText(cp);e.target.textContent='Copied';}
+});
+$('rf').onclick=load;
+$('sendch').onclick=function(){var t=$('tx').value.trim();if(!t)return;$('sendch').disabled=true;call({action:'change',text:t}).then(function(){$('sent').textContent='Sent. We will confirm on WhatsApp.';$('tx').value='';$('sendch').disabled=false})};
+if(!c||!k){$('msg').textContent='This portal link is not valid.';return}
+load();
+})();
+</script>
+</body>
+</html>
