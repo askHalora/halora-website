@@ -76,9 +76,9 @@ def page(B, L, lang, path, pg, body):
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {pg['crumb']}</div>
 <div style="margin-top:22px">{clay(pg['icon'][0], pg['icon'][1], 'lg')}</div>
 <h1>{pg['h1']}</h1><p class="lead">{pg['lead']}</p>
-<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L['pre']}/pilot/">{c['cta1']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a></div>
+<div class="cta cta1"><a class="bx gold go1" href="{V.T[lang]['gsurl']}">{V.T[lang]['gsfree']}<span class="ar" aria-hidden="true"></span></a><a class="bx quiet" href="/call/" data-call>{V.T[lang]['callq']}</a></div>
 </div>{pg['visual']}</div></section>'''
-    band = f'<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L["band"]}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L["pre"]}/pilot/">{L["band1"]}</a><a class="bx glass" href="{L["pre"]}/pricing/">{L["band2"]}</a></div></div></div></section>'
+    band = f'<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L["band"]}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{V.T[lang]["gsurl"]}">{V.T[lang]["gsfree"]}</a><a class="bx glass" href="{L["pre"]}/pricing/">{L["band2"]}</a></div></div></div></section>'
     html_ = f'''{L['body']}
 {L['offer']}
 {L['header'](alt)}

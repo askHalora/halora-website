@@ -96,6 +96,10 @@ var rtl=h.dir==='rtl';
  addEventListener('scroll',req,{passive:true});
 })();
 
+/* ===== phones: the chat pill appears only after the hero, above the sticky bar ===== */
+(function(){var q=false;function u(){q=false;d.body.classList.toggle('past-hero',scrollY>innerHeight*.8)}
+ addEventListener('scroll',function(){if(!q){q=true;requestAnimationFrame(u)}},{passive:true});u()})();
+
 /* ===== mobile menu: expose state to assistive tech ===== */
 var mb=$('.mbtn');if(mb)mb.addEventListener('click',function(){mb.setAttribute('aria-expanded',d.body.classList.contains('mopen')?'true':'false')});
 })();

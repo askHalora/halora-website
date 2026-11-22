@@ -129,7 +129,7 @@ def roi():
 </div><div class="out"><span style="font-size:14px;color:#9fb8b2">الإيراد الذي قد تستعيده نور شهريًا</span>
 <div class="big" data-r="rev" dir="ltr">$0</div>
 <div style="margin-top:22px"><div class="row"><span>استفسارات تضيع شهريًا</span><b data-r="lost">0</b></div><div class="row"><span>حجوزات إضافية شهريًا</span><b data-r="won">0</b></div><div class="row"><span>العائد على باقة مكتب الاستقبال</span><b data-r="x" dir="ltr">0×</b></div></div>
-<p><a class="bx gold" href="#pilot" style="margin-top:18px">قِسها مجانًا لمدة 14 يومًا ←</a></p></div></div>
+<p><a class="bx gold" href="/setup/?lang=ar" style="margin-top:18px">ابدأ مجانًا ←</a></p></div></div>
 </div></section>'''
 
 def compare():

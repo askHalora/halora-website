@@ -121,15 +121,15 @@ NAVL={'en':dict(product='Product',spec='Specialties',why='Why Halora',pricing='P
 'ar':dict(product='المنتج',spec='التخصصات',why='لماذا هالورا',pricing='الأسعار',call='احجز مكالمة',pilot='تجربة مجانية',menu='القائمة',other='English',otherlang='en',company='الشركة',tag='موظفة استقبال ذكية للعيادات في دبي والخليج.',signin='دخول العملاء',otherfull='English version',copy='© 2026 هالورا. العيادات التجريبية المعروضة غير حقيقية.',callurl='/call/?lang=ar',contact='تواصل')}
 def site_header(lang,home,alt,prods,specs):
     N=NAVL[lang]; p='' if lang=='en' else '/ar'; b='' if lang=='en' else 'ar/'
-    pilot='#pilot' if home else p+'/pilot/'
+    T_=V.T[lang]
     wm=f'<a class="wm" href="{p}/"'+(' lang="en" dir="ltr"' if lang=='ar' else '')+'>Halora<span>.</span></a>'
     why=''.join(f'<a href="{p}/{k}/">{gi(i,c)}<span><b>{t}</b><small>{s_}</small></span></a>' for k,t,s_,i,c in WHY[lang] if k not in ('pricing','pilot'))
     return ('<header class="top"><div class="wrap">\n  '+wm+'\n  <nav>'
       + mm(N['product'],prods,b+'product') + mm(N['spec'],specs,b+'specialties')
       + f'<div class="mm"><button type="button" aria-haspopup="true">{N["why"]}</button><div class="panel">{why}</div></div>'
-      + f'<a href="{p}/pricing/">{N["pricing"]}</a><a href="{p}/pilot/" class="nav-pilot">{N["pilot"]}</a></nav>\n'
-      + f'  <a class="lang" href="{alt}" hreflang="{N["otherlang"]}" lang="{N["otherlang"]}">{N["other"]}</a>\n  <a class="btn line" href="{N["callurl"]}" data-call>{N["call"]}</a>\n'
-      + f'  <a class="btn" href="{pilot}">{N["pilot"]}</a>\n  <button class="mbtn" type="button" aria-label="{N["menu"]}" aria-expanded="false"><i></i><i></i><i></i></button>\n</div></header>')
+      + f'<a href="{p}/pricing/">{N["pricing"]}</a><a href="{T_["gsurl"]}" class="nav-gs">{T_["gs"]}</a></nav>\n'
+      + f'  <a class="lang" href="{alt}" hreflang="{N["otherlang"]}" lang="{N["otherlang"]}">{N["other"]}</a>\n  <a class="btn line quiet" href="{N["callurl"]}" data-call>{N["call"]}</a>\n'
+      + f'  <a class="btn gs" id="gs" href="{T_["gsurl"]}">{T_["gs"]}</a>\n  <button class="mbtn" type="button" aria-label="{N["menu"]}" aria-expanded="false"><i></i><i></i><i></i></button>\n</div></header>')
 def site_footer(lang,alt,prods,specs):
     N=NAVL[lang]; p='' if lang=='en' else '/ar'
     pl=''.join(f'<a href="{p}/product/{k}/">{t}</a><br>' for k,t,*_ in prods)
@@ -142,7 +142,8 @@ def site_footer(lang,alt,prods,specs):
   <div><p><b>{N['spec']}</b><br>{sl}</p></div>
   <div><p><b>{N['company']}</b><br>{cl}</p></div>
   <div><p><b>{N['contact']}</b><br><a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a><br><a href="{N['callurl']}">{N['call']}</a><br><a href="{alt}" lang="{N['otherlang']}">{N['otherfull']}</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">{N['signin']}</a></p><p>{N['copy']}</p></div>
-</div></footer>'''
+</div></footer>
+{V.sticky_bar(V.T[lang])}'''
 def header(home=False,alt='/ar/'): return site_header('en',home,alt,PRODUCTS,SPECS)
 
 STORY=[
@@ -256,7 +257,7 @@ def roi():
 </div><div class="out"><span style="font-size:13px;letter-spacing:.14em;text-transform:uppercase;color:#9fb8b2">Revenue Noor could win back / month</span>
 <div class="big" data-r="rev">$0</div>
 <div style="margin-top:22px"><div class="row"><span>Enquiries slipping through / month</span><b data-r="lost">0</b></div><div class="row"><span>Extra bookings / month</span><b data-r="won">0</b></div><div class="row"><span>Return on the Front Desk plan</span><b data-r="x">0×</b></div></div>
-<p><a class="bx gold" href="#pilot" style="margin-top:18px">Measure it free for 14 days →</a></p></div></div>
+<p><a class="bx gold" href="/setup/" style="margin-top:18px">Get started free →</a></p></div></div>
 </div></section>'''
 
 def compare():
@@ -342,13 +343,14 @@ def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,ex
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {crumb}</div>
 <div style="margin-top:26px">{V.clay(CLAYMAP.get(iconk,'heart'),color,'lg')}</div>
 <h1>{h1}</h1><p class="lead">{lead}</p>
-<div class="cta" style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="#" data-chat><span class="pulse"></span>{L['try_']}</a><a class="bx glass" href="/call/" data-call>{L['call']}</a>{watch_btn(L['watch'])}</div>
+<div class="cta cta1"><a class="bx gold go1" href="{V.T[L['lang']]['gsurl']}">{V.T[L['lang']]['gsfree']}<span class="ar" aria-hidden="true"></span></a><a class="bx quiet" href="/call/" data-call>{V.T[L['lang']]['callq']}</a></div>
+<div class="sub2">{watch_btn(L['watch'])}</div>
 </div>{visual or V.chat_ui(V.T[L['lang']],clinic,[(w_,t_) for w_,t_ in chat if w_!='c' and t_!='~voice'],next((t_ for w_,t_ in chat if w_=='c'),''))}</div></section>
 <section class="sx"><div class="wrap"><div class="hd2 rv"><span class="k">{L['what_k']}</span><h2>{L['what_h']}</h2></div><div class="feat">{fe}</div></div></section>
 {extra}
 <section class="sx tight" style="background:var(--paper-2)"><div class="wrap"><div class="hd2 rv"><span class="k">{L['live_k']}</span><h2>{L['live_h']}</h2></div><div class="steps4">{stp}</div></div></section>
 <section class="sx tight" id="faq"><div class="wrap" style="max-width:820px"><div class="hd2 rv"><span class="k">{L['q_k']}</span><h2>{L['q_h']}</h2></div><div class="faq">{fq}</div></div></section>
-<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L['band']}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{L['pre']}/pilot/">{L['band1']}</a><a class="bx glass" href="{L['pre']}/pricing/">{L['band2']}</a></div></div></div></section>
+<section class="sx tight"><div class="wrap"><div class="cta-band rv"><h2>{L['band']}</h2><div style="display:flex;gap:12px;flex-wrap:wrap"><a class="bx gold" href="{V.T[L['lang']]['gsurl']}">{V.T[L['lang']]['gsfree']}</a><a class="bx glass" href="{L['pre']}/pricing/">{L['band2']}</a></div></div></div></section>
 </main>
 {L['footer'](alt)}
 {L['askbar']()}

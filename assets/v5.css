@@ -478,3 +478,95 @@ html[dir=rtl] #plans>.wrap:before,html[dir=rtl] #portal>.wrap:before,html[dir=rt
 .hv .fcal .r.b em{color:#11603f}
 /* no background drift while the intro is on screen */
 html.pulse-on .bgfx .bl,html.pulse-on .bgfx .fz .clay{animation-play-state:paused}
+
+/* =====================================================================
+   v5.2 one clear path: Get started (primary) · Book a call (quiet)
+   ===================================================================== */
+/* header: two actions only */
+.top .btn.gs{background:linear-gradient(180deg,#f0c766,#D9A441);border-color:#D9A441;color:#2a1d05;box-shadow:0 8px 18px -10px rgba(217,164,65,.9)}
+.top .btn.gs:hover{background:#e7b955;border-color:#e7b955;color:#2a1d05}
+.top .btn.line.quiet{border-color:transparent;background:none;color:var(--ink-2);text-decoration:underline;text-decoration-color:rgba(15,37,35,.25);text-underline-offset:5px;padding-inline:10px}
+.top .btn.line.quiet:hover{background:none;color:var(--teal);text-decoration-color:currentColor}
+.top nav .nav-gs{display:none}
+@media(max-width:900px){body.mopen .top nav .nav-gs{display:block;font-weight:600;color:var(--teal)!important}}
+@media(max-width:600px){.top .btn.gs{padding:10px 16px}}
+
+/* hero: one big primary, one quiet secondary */
+.cta1{display:flex;flex-wrap:wrap;gap:14px;align-items:center}
+.bx.go1{font-size:17px;padding:18px 28px;min-height:60px;box-sizing:border-box;border-radius:16px}
+.bx.go1 .ar{width:18px;height:18px;flex:none;background:currentColor;-webkit-mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;mask:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 24 24'%3E%3Cpath d='M5 12h14M13 6l6 6-6 6' fill='none' stroke='%23000' stroke-width='2.4' stroke-linecap='round' stroke-linejoin='round'/%3E%3C/svg%3E") center/contain no-repeat;transition:transform .2s}
+html[dir=rtl] .bx.go1 .ar{transform:scaleX(-1)}
+.bx.go1:hover .ar{transform:translateX(3px)}html[dir=rtl] .bx.go1:hover .ar{transform:scaleX(-1) translateX(3px)}
+.bx.quiet{background:none;border:0;box-shadow:none;color:var(--ink);padding:12px 6px;font-weight:600;gap:10px}
+.bx.quiet:hover{transform:none;color:var(--teal)}
+.bx.quiet .ph-i{width:40px;height:40px;border-radius:50%;display:grid;place-items:center;background:#fff;border:1px solid var(--rule);color:var(--teal);box-shadow:0 6px 14px -10px rgba(15,37,35,.4)}
+.bx.quiet .ph-i svg{width:18px;height:18px}
+.ph .bx.quiet{text-decoration:underline;text-decoration-color:rgba(15,37,35,.25);text-underline-offset:6px}
+.v5h .cta1 .bx,.ph .cta1 .bx{min-height:0}
+.v5h .cta1 .bx.go1,.ph .cta1 .bx.go1{min-height:60px}
+@media(max-width:560px){.cta1 .bx.go1{flex:1 1 100%;justify-content:center}.cta1 .bx.quiet{flex:1 1 100%;justify-content:center}}
+@media(min-width:1240px){.ph .cta1,.v5h .cta1{width:auto;flex-wrap:wrap!important}}
+/* sub-pages: the demo video is a small link under the buttons */
+.sub2{margin-top:14px}
+.ph .sub2 .bx.vdo{background:none;border:0;box-shadow:none;padding:4px 0;min-height:0;color:var(--ink-2);font-weight:500;font-size:14.5px}
+.ph .sub2 .bx.vdo .pi{width:28px;height:28px}.ph .sub2 .bx.vdo .pi svg{width:11px;height:11px}
+.ph .sub2 .bx.vdo:hover{color:var(--teal)}
+
+/* "See it in action" strip under the homepage hero */
+main>section.demo{background:#fff;padding:44px 0;border-top:1px solid rgba(14,92,87,.08);border-bottom:1px solid rgba(14,92,87,.08)}
+.demo .wrap{display:flex;align-items:center;justify-content:space-between;gap:28px;flex-wrap:wrap}
+.demo h2{font-family:var(--serif);font-weight:300;font-size:clamp(24px,2.6vw,32px);line-height:1.15;margin:0;max-width:440px;letter-spacing:-.02em}
+.demo h2 b{font-weight:500;color:var(--teal)}
+html[dir=rtl] .demo h2{font-family:var(--ar);letter-spacing:0;line-height:1.4}
+.demo .dact{display:flex;align-items:center;gap:18px;flex-wrap:wrap}
+.demo .vcard{margin:0}
+.demo .dor{color:var(--mute);font-size:14px}
+.bx.line2{background:#fff;color:var(--ink);border:1px solid var(--rule);box-shadow:0 6px 16px -12px rgba(15,37,35,.35)}
+.bx.line2:hover{border-color:var(--teal)}
+.bx.line2 .pulse{width:9px;height:9px;border-radius:50%;background:#22c58b;box-shadow:0 0 0 0 rgba(34,197,139,.6);animation:pl 1.8s infinite}
+@media(max-width:700px){.demo .dact{width:100%}.demo .vcard{width:100%}.demo .dor{display:none}.demo .bx.line2{width:100%;justify-content:center}}
+
+/* plans: four packages + add-ons */
+.plans.p4{grid-template-columns:repeat(4,minmax(0,1fr))}
+@media(max-width:1100px){.plans.p4{grid-template-columns:repeat(2,minmax(0,1fr))}}
+@media(max-width:640px){.plans.p4{grid-template-columns:1fr}}
+.plan .btn.choose{justify-content:center;width:100%;box-sizing:border-box;margin-top:auto}
+#plans .plan .btn.choose{border-radius:12px}
+#plans .plan.mark .btn.choose{background:linear-gradient(180deg,#f0c766,#D9A441);border-color:#D9A441;color:#2a1d05}
+.plan .setup{min-height:1.4em}
+.addons{margin-top:18px;background:rgba(255,255,255,.08);border:1px solid rgba(255,255,255,.18);border-radius:20px;padding:18px 20px;display:grid;grid-template-columns:200px 1fr;gap:18px;align-items:start}
+.addons .adh b{display:block;color:#fff;font-size:17px}.addons .adh span{color:#cfe3de;font-size:13.5px}
+.addons ul{list-style:none;margin:0;padding:0;display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:12px}
+.addons li{background:#fff;border-radius:14px;padding:12px 14px;color:var(--ink);display:flex;flex-direction:column;gap:2px}
+.addons li b{font-size:14.5px}.addons .ap{font-weight:700;color:var(--teal);font-size:14px}.addons small{color:var(--mute);font-size:12.5px;line-height:1.4}
+@media(max-width:900px){.addons{grid-template-columns:1fr}.addons ul{grid-template-columns:1fr}}
+.found{margin:16px 0 0;color:#fff;font-size:15px}
+.found b{color:var(--gold-l)}
+/* homepage pilot section: Get started first, the contact form second */
+.gs-row{margin:24px 0 0}
+.btn.gs-big{background:linear-gradient(180deg,#f0c766,#D9A441);border-color:#D9A441;color:#2a1d05;padding:16px 22px;font-size:16px;border-radius:14px;box-shadow:0 12px 24px -14px rgba(217,164,65,.9)}
+.btn.gs-big:hover{background:#e7b955;border-color:#e7b955;color:#2a1d05}
+.fm-h{margin:0 0 4px;font-size:14.5px;color:var(--ink-2)}.fm-h b{display:block;color:var(--ink);font-size:16px;margin-bottom:2px}
+
+/* sticky bottom bar on phones */
+.sbar{display:none}
+@media(max-width:700px){
+ .sbar{display:flex;position:fixed;left:0;right:0;bottom:0;z-index:70;gap:10px;align-items:center;padding:10px 12px calc(10px + env(safe-area-inset-bottom));background:rgba(255,255,255,.94);backdrop-filter:blur(12px);-webkit-backdrop-filter:blur(12px);border-top:1px solid var(--rule);box-shadow:0 -10px 30px -18px rgba(15,37,35,.35)}
+ .sbar a{text-decoration:none;font-weight:600;border-radius:12px;display:flex;align-items:center;justify-content:center;min-height:46px}
+ .sbar .sb-go{flex:1;background:linear-gradient(180deg,#f0c766,#D9A441);color:#2a1d05;font-size:16px}
+ .sbar .sb-call{padding:0 12px;color:var(--ink-2);font-size:14px;text-decoration:underline;text-underline-offset:4px;text-decoration-color:rgba(15,37,35,.3)}
+ html[dir=rtl] .sbar a{font-family:var(--ar)}
+ footer{padding-bottom:110px}
+ /* the floating chat never covers the bar */
+ .askbar{display:none!important}
+ .trybar{bottom:calc(78px + env(safe-area-inset-bottom))!important;inset-inline-end:12px;display:inline-flex!important;border-radius:99px;padding:10px 16px;font-size:13.5px;box-shadow:0 10px 24px -12px rgba(15,37,35,.6)}
+ .trybar.hide{display:none!important}
+ body:not(.past-hero) .trybar{opacity:0;pointer-events:none;transform:translateY(10px)}
+ .trybar{transition:opacity .25s,transform .25s}
+ .sbar{transition:transform .3s cubic-bezier(.2,.8,.2,1)}
+ body:not(.past-hero) .sbar{transform:translateY(110%)}
+ .bgfx .z3{display:none}
+ #nw-b{bottom:calc(78px + env(safe-area-inset-bottom))!important}
+ #nw-p{bottom:calc(78px + env(safe-area-inset-bottom))!important;max-height:calc(100vh - 150px)!important}
+}
+@media(min-width:601px) and (max-width:900px){.top .btn.line.quiet{display:inline-flex}}

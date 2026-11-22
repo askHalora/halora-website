@@ -54,6 +54,9 @@ def ecg_path(w=600, h=64, beats=(0.18, 0.5, 0.82), amp=1.0):
 T = {
 'en': dict(
   dir='ltr', pre='',
+  gs='Get started', gsfree='Get started free', gsurl='/setup/', hear='Hear Noor live', callq='Book a call', callurl='/call/',
+  dk='See it in action', dh='Watch Noor work, or <b>try her yourself.</b>', dchat='Chat with Noor live', dor='or',
+  sbl='Get started with Halora',
   eyebrow_b='New', eyebrow='Founding clinic offer · 25% off until 31 Dec',
   h1a='Every patient,', h1b='answered.',
   lead="Noor is the AI receptionist for clinics in Dubai and the Gulf. She answers WhatsApp, calls, voice notes and website chat in Arabic and English, and books patients straight into your calendar, day and night.",
@@ -93,6 +96,9 @@ T = {
 ),
 'ar': dict(
   dir='rtl', pre='/ar',
+  gs='ابدأ الآن', gsfree='ابدأ مجانًا', gsurl='/setup/?lang=ar', hear='استمع لنور الآن', callq='احجز مكالمة', callurl='/call/?lang=ar',
+  dk='شاهدها وهي تعمل', dh='شاهد نور وهي تعمل، أو <b>جرّبها بنفسك.</b>', dchat='تحدّث مع نور الآن', dor='أو',
+  sbl='ابدأ مع هالورا',
   eyebrow_b='جديد', eyebrow='عرض العيادات المؤسِّسة · خصم 25% حتى 31 ديسمبر',
   h1a='كل مريض،', h1b='يجد ردًّا.',
   lead='نور هي موظفة الاستقبال الذكية لعيادات دبي والخليج. ترد على واتساب والمكالمات والرسائل الصوتية ودردشة الموقع بالعربية والإنجليزية، وتحجز المرضى مباشرة في تقويمك، ليلًا ونهارًا.',
@@ -128,6 +134,10 @@ T = {
 }
 
 # ---------- UI mock-ups ----------
+def sticky_bar(t):
+    return (f'<nav class="sbar" aria-label="{t["sbl"]}"><a class="sb-call" href="{t["callurl"]}" data-call>{t["callq"]}</a>'
+            f'<a class="sb-go" href="{t["gsurl"]}">{t["gs"]}</a></nav>')
+
 def bgfx(float_=True):
     """Hero background: drifting colour mesh, fading dot grid and floating clay shapes (decorative)."""
     fl = ''
@@ -195,18 +205,21 @@ def hero(t, video_card):
   <h1><span>{t['h1a']}</span> <span class="g">{t['h1b']}</span></h1>
   <svg class="ecg" viewBox="0 0 {W} 64" preserveAspectRatio="none" aria-hidden="true"><path class="base" d="{ecg_path(W)}"/><path class="run" d="{ecg_path(W)}"/></svg>
   <p class="lead">{t['lead']}</p>
-  <div class="cta">
-   <a class="bx gold" href="#" data-voice><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg>{t['call']}</a>
-   <a class="bx glass" href="#" data-chat><span class="pulse"></span>{t['chat']}</a>
+  <div class="cta cta1">
+   <a class="bx gold go1" href="{t['gsurl']}">{t['gsfree']}<span class="ar" aria-hidden="true"></span></a>
+   <a class="bx quiet" href="#" data-voice><span class="ph-i"><svg viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.8" stroke-linecap="round" stroke-linejoin="round" aria-hidden="true"><path d="M5 4h4l2 5-2.5 1.5a11 11 0 0 0 5 5L15 13l5 2v4a1 1 0 0 1-1 1A16 16 0 0 1 4 5a1 1 0 0 1 1-1z"/></svg></span>{t['hear']}</a>
   </div>
-  {video_card}
   <div class="live"><span class="pulse"></span><span class="clk" data-dxb="{t['dxb']}">--:-- {t['dxb']}</span><span class="tk" data-tick="{t['tick']}">{t['live']}</span></div>
   <div class="meta">{meta}</div>
   <p class="note2">{t['note']}</p>
  </div>
  {hero_visual(t)}
 </div>
-</section>'''
+</section>
+<section class="demo" aria-labelledby="demo-h"><div class="wrap">
+ <div class="dtx"><span class="k2">{t['dk']}</span><h2 id="demo-h">{t['dh']}</h2></div>
+ <div class="dact">{video_card}<span class="dor">{t['dor']}</span><a class="bx line2" href="#" data-chat><span class="pulse"></span>{t['dchat']}</a></div>
+</div></section>'''
 
 def modules(t):
     tps = ''.join(f'<div class="tp" data-i="{i}">{clay(k,c,"sm")}<span><b>{a}</b><small>{q}</small></span></div>' for i, (k, c, a, q) in enumerate(t['tps']))
