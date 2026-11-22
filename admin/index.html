@@ -1,1 +1,97 @@
-<!-- placeholder -->
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width,initial-scale=1">
+<meta name="robots" content="noindex,nofollow">
+<title>Halora Admin</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Readex+Pro:wght@400;500;600;700&display=swap" rel="stylesheet">
+<style>
+[hidden]{display:none!important}
+:root{--paper:#f3f5f2;--ink:#0f2523;--teal:#0e5c57;--gold:#e0b34f;--line:#dfe6e2;--muted:#5d716d;--mint:#e6f4ef}
+*{box-sizing:border-box}body{margin:0;background:var(--paper);color:var(--ink);font-family:'Readex Pro',system-ui,sans-serif;font-size:15px}
+.w{max-width:1180px;margin:0 auto;padding:0 18px}
+.top{background:var(--ink);color:#fff}.top .w{display:flex;align-items:center;justify-content:space-between;height:62px;gap:10px}
+.top b{font-size:18px}.top b span{color:var(--gold)}
+.btn{border:0;border-radius:10px;padding:9px 13px;font:inherit;font-size:13.5px;cursor:pointer;background:var(--teal);color:#fff;text-decoration:none;display:inline-flex;align-items:center;gap:6px;white-space:nowrap}
+.btn.l{background:#fff;border:1px solid var(--line);color:var(--teal)}.btn.g{background:var(--gold);color:var(--ink)}.btn.wa{background:#1fa971}
+.kpis{display:grid;gap:12px;grid-template-columns:repeat(auto-fill,minmax(160px,1fr));margin:18px 0}
+.k{background:#fff;border:1px solid var(--line);border-radius:14px;padding:14px}.k small{color:var(--muted)}.k b{display:block;font-size:26px;margin-top:2px}
+.bar{display:flex;flex-wrap:wrap;gap:10px;align-items:center;justify-content:space-between;margin:10px 0 14px}
+.bar input,.bar select{border:1px solid var(--line);border-radius:10px;padding:9px 12px;font:inherit;background:#fff}
+.card{background:#fff;border:1px solid var(--line);border-radius:16px;padding:16px;margin-bottom:12px}
+.head{display:flex;flex-wrap:wrap;justify-content:space-between;gap:10px;align-items:flex-start}
+.head h3{margin:0;font-size:17px}.meta{color:var(--muted);font-size:13px;margin-top:3px}
+.chips{display:flex;flex-wrap:wrap;gap:6px;margin:10px 0}.chip{background:var(--mint);color:var(--teal);border-radius:999px;padding:3px 10px;font-size:12.5px}
+.acts{display:flex;flex-wrap:wrap;gap:8px;margin-top:10px}
+.sw{display:flex;flex-wrap:wrap;gap:16px;margin-top:12px;padding-top:12px;border-top:1px solid var(--line);font-size:13.5px}
+.sw label{display:flex;align-items:center;gap:6px;cursor:pointer}
+.tg{appearance:none;width:36px;height:20px;border-radius:20px;background:#cfd8d4;position:relative;cursor:pointer;transition:.2s}
+.tg:checked{background:var(--teal)}.tg::after{content:'';position:absolute;width:16px;height:16px;border-radius:50%;background:#fff;top:2px;left:2px;transition:.2s}.tg:checked::after{left:18px}
+.badge{border-radius:999px;padding:3px 10px;font-size:12.5px;font-weight:500}.on{background:var(--mint);color:var(--teal)}.off{background:#fde8e8;color:#b42318}.new{background:#fff4e0;color:#9a5b00}
+table{width:100%;border-collapse:collapse;font-size:14px}th,td{text-align:left;padding:9px 6px;border-bottom:1px solid var(--line)}th{color:var(--muted);font-weight:500;font-size:12.5px}
+.login{max-width:380px;margin:120px auto;background:#fff;border:1px solid var(--line);border-radius:18px;padding:26px}
+.login input{width:100%;border:1px solid var(--line);border-radius:10px;padding:12px;font:inherit;margin:12px 0}
+.toast{position:fixed;bottom:18px;left:50%;transform:translateX(-50%);background:var(--ink);color:#fff;padding:10px 16px;border-radius:10px;font-size:14px}
+h2{font-size:18px;margin:26px 0 10px}
+@media(max-width:700px){table thead{display:none}table td{display:block;border:0;padding:2px 0}table tr{display:block;border-bottom:1px solid var(--line);padding:8px 0}}
+</style>
+</head>
+<body>
+<div class="login" id="login" hidden><b style="font-size:18px">Halora Admin</b><p class="meta">Enter your admin key (from the n8n table halora_admin).</p><input id="key" type="password" placeholder="Admin key"><button class="btn" id="go">Open dashboard</button><p class="meta" id="lerr"></p></div>
+<div id="app" hidden>
+<div class="top"><div class="w"><b>Halora<span>.</span> Admin</b><div style="display:flex;gap:8px"><a class="btn g" href="/setup/" target="_blank">+ New clinic</a><button class="btn l" id="rf">Refresh</button><button class="btn l" id="out">Log out</button></div></div></div>
+<div class="w">
+<div class="kpis" id="kpis"></div>
+<div class="card"><b>Send a setup link to a clinic</b><p class="meta" style="margin:4px 0 10px">Pick their package, copy the link, and send it on WhatsApp or email. When they submit it, everything is built automatically and appears below.</p>
+<div class="acts"><select id="spk"><option value="starter">Starter $199</option><option value="front-desk" selected>Front Desk $299</option><option value="front-desk-phone">Front Desk + Phone $489</option><option value="group">Group $890+</option></select>
+<label class="meta"><input type="checkbox" id="sw1"> Website</label><label class="meta"><input type="checkbox" id="sw2"> Phone</label><label class="meta"><input type="checkbox" id="sw3"> Reminders</label><label class="meta"><input type="checkbox" id="sar"> Arabic</label>
+<button class="btn" id="scopy">Copy setup link</button><a class="btn wa" id="swa" target="_blank">Send on WhatsApp</a></div></div>
+<div class="bar"><h2 style="margin:0">Clinics</h2><input id="q" placeholder="Search clinics..."></div>
+<div id="list"></div>
+<h2>Latest appointment requests (all clinics)</h2>
+<div class="card" style="padding:8px 14px"><table><thead><tr><th>When</th><th>Clinic</th><th>Patient</th><th>Service</th><th>Preferred</th><th>From</th><th>Status</th></tr></thead><tbody id="rq"></tbody></table></div>
+<p class="meta" style="margin:30px 0">Private page. Change the key in n8n → halora_admin to lock old links.</p>
+</div></div>
+<script>
+(function(){
+var API='https://autova.app.n8n.cloud/webhook/halora-admin-api-5c1e8d',K='';
+var $=function(i){return document.getElementById(i)};
+function esc(t){return String(t==null?'':t).replace(/[&<>"]/g,function(m){return{'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;'}[m]})}
+function when(t){if(!t)return'';var d=new Date(t);return d.toLocaleDateString([], {day:'numeric',month:'short'})+' '+d.toLocaleTimeString([], {hour:'2-digit',minute:'2-digit'})}
+function toast(t){var x=document.createElement('div');x.className='toast';x.textContent=t;document.body.appendChild(x);setTimeout(function(){x.remove()},1800)}
+function copy(t){(navigator.clipboard?navigator.clipboard.writeText(t):Promise.reject()).then(function(){toast('Copied')}).catch(function(){prompt('Copy this:',t)})}
+function call(b){b.k=K;return fetch(API,{method:'POST',headers:{'Content-Type':'application/json'},body:JSON.stringify(b)}).then(function(r){return r.json()})}
+var DATA=null;
+function msg(c){return 'Hi '+(c.contact||'there')+', your Halora assistant for '+c.name+' is ready!\n\nYour private owner portal: '+c.portal_url+'\nYour AI chat: '+c.chat_url+(c.site_url?'\nYour new website: '+c.site_url:'')+(c.agent?'\nYour AI phone receptionist is ready; we will connect your phone number with you.':'')+'\n\nTo add the chat to your own website, open the portal → Channels → Copy embed code.\nAny changes, just reply here. – Ziad, Halora'}
+function render(){
+ var q=($('q').value||'').toLowerCase(),cl=DATA.clinics.filter(function(c){return !q||(c.name+' '+c.contact+' '+c.c).toLowerCase().indexOf(q)>-1});
+ var live=DATA.clinics.filter(function(c){return c.enabled==='yes'}).length,nr=DATA.clinics.reduce(function(a,c){return a+c.new_requests},0),tr=DATA.clinics.reduce(function(a,c){return a+c.requests},0);
+ $('kpis').innerHTML=[['Clinics',DATA.clinics.length],['Live',live],['Phone agents',DATA.clinics.filter(function(c){return c.agent}).length],['Requests',tr],['Waiting',nr]].map(function(x){return '<div class="k"><small>'+x[0]+'</small><b>'+x[1]+'</b></div>'}).join('');
+ $('list').innerHTML=cl.map(function(c,i){
+  var f=c.features.split(','),m=encodeURIComponent(msg(c));
+  return '<div class="card"><div class="head"><div><h3>'+esc(c.name)+'</h3><div class="meta">'+esc((c.package||'').replace(/-/g,' '))+' · '+esc(c.status||'')+' · created '+esc(when(c.created))+(c.contact?' · '+esc(c.contact):'')+(c.phone?' · +'+esc(c.phone):'')+(c.email?' · '+esc(c.email):'')+'</div></div><div><span class="badge '+(c.enabled==='yes'?'on':'off')+'">'+(c.enabled==='yes'?'Live':'Off')+'</span> '+(c.new_requests?'<span class="badge new">'+c.new_requests+' new requests</span>':'')+'</div></div>'+
+  '<div class="chips">'+f.map(function(x){return '<span class="chip">'+esc(x)+'</span>'}).join('')+'</div>'+
+  '<div class="acts"><a class="btn l" target="_blank" href="'+esc(c.chat_url)+'">Chat</a>'+(c.site_url?'<a class="btn l" target="_blank" href="'+esc(c.site_url)+'">Website</a>':'')+(c.portal_url?'<a class="btn l" target="_blank" href="'+esc(c.portal_url)+'">Owner portal</a>':'')+
+  '<button class="btn l" data-cp="'+i+'">Copy message</button>'+(c.phone?'<a class="btn wa" target="_blank" href="https://wa.me/'+esc(c.phone)+'?text='+m+'">Send links on WhatsApp</a>':'')+(c.email?'<a class="btn" href="mailto:'+esc(c.email)+'?subject='+encodeURIComponent('Your Halora assistant for '+c.name+' is ready')+'&body='+m+'">Send links by email</a>':'')+'</div>'+
+  '<div class="sw"><label><input type="checkbox" class="tg" data-f="enabled" data-c="'+esc(c.c)+'" '+(c.enabled==='yes'?'checked':'')+'> Assistant on</label><label><input type="checkbox" class="tg" data-f="alert_clinic" data-c="'+esc(c.c)+'" '+(c.alert_clinic==='yes'?'checked':'')+'> Alerts to clinic</label>'+(f.indexOf('whatsapp')>-1?'<label><input type="checkbox" class="tg" data-f="whatsapp_status" data-on="live" data-off="needs_meta_connect" data-c="'+esc(c.c)+'" '+(c.whatsapp_status==='live'?'checked':'')+'> WhatsApp connected</label>':'')+'<label><select data-f="status" data-c="'+esc(c.c)+'">'+['pilot','active','paused','cancelled'].map(function(s){return '<option'+(s===c.status?' selected':'')+'>'+s+'</option>'}).join('')+'</select> Status</label></div></div>'}).join('')||'<div class="card meta">No clinics yet. Send a setup link to your first clinic above.</div>';
+ $('rq').innerHTML=DATA.requests.map(function(r){return '<tr><td>'+esc(when(r.at))+'</td><td>'+esc(r.clinic)+'</td><td><b>'+esc(r.name)+'</b><br>'+esc(r.phone)+'</td><td>'+esc(r.service)+'</td><td>'+esc(r.time)+'</td><td>'+(r.via==='phone'?'📞':'💬')+'</td><td><span class="badge '+(r.status==='done'?'on':'new')+'">'+esc(r.status)+'</span></td></tr>'}).join('')||'<tr><td class="meta">No requests yet.</td></tr>';
+}
+function load(){call({action:'list'}).then(function(j){if(!j||!j.ok){localStorage.removeItem('halora_admin');$('app').hidden=true;$('login').hidden=false;$('lerr').textContent='Wrong key.';return}DATA=j;$('login').hidden=true;$('app').hidden=false;render()}).catch(function(){toast('Connection problem')})}
+document.addEventListener('change',function(e){var t=e.target,f=t.getAttribute('data-f');if(!f)return;var v=t.tagName==='SELECT'?t.value:(t.checked?(t.getAttribute('data-on')||'yes'):(t.getAttribute('data-off')||'no'));call({action:'set',c:t.getAttribute('data-c'),field:f,value:v}).then(function(j){toast(j&&j.ok?'Saved':'Not saved');load()})});
+document.addEventListener('click',function(e){var i=e.target.getAttribute('data-cp');if(i!=null)copy(msg(DATA.clinics.filter(function(c){var q=($('q').value||'').toLowerCase();return !q||(c.name+' '+c.contact+' '+c.c).toLowerCase().indexOf(q)>-1})[i]))});
+function setupLink(){var u='https://askhalora.com/setup/?plan='+$('spk').value;if($('sw1').checked)u+='&website=yes';if($('sw2').checked)u+='&phone=yes';if($('sw3').checked)u+='&reminders=yes';if($('sar').checked)u+='&lang=ar';return u}
+function upd(){$('swa').href='https://wa.me/?text='+encodeURIComponent(($('sar').checked?'أهلاً! هذا رابط إعداد نور لعيادتكم (حوالي 15 دقيقة): ':'Hi! Here is the link to set up Noor for your clinic (about 15 minutes): ')+setupLink())}
+['spk','sw1','sw2','sw3','sar'].forEach(function(id){$(id).addEventListener('change',upd)});upd();
+$('scopy').onclick=function(){copy(setupLink())};
+$('q').oninput=render;$('rf').onclick=load;$('out').onclick=function(){try{localStorage.removeItem('halora_admin')}catch(e){}location.href='/admin/'};
+$('go').onclick=function(){K=$('key').value.trim();try{localStorage.setItem('halora_admin',K)}catch(e){}load()};
+$('key').onkeydown=function(e){if(e.key==='Enter')$('go').click()};
+var qk=new URLSearchParams(location.search).get('k');if(qk){try{localStorage.setItem('halora_admin',qk)}catch(e){}history.replaceState(null,'','/admin/')}
+try{K=qk||localStorage.getItem('halora_admin')||''}catch(e){K=qk||''}
+if(K)load();else $('login').hidden=false;
+})();
+</script>
+</body>
+</html>
