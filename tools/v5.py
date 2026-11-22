@@ -82,7 +82,7 @@ T = {
         ('star','#d9a441','Google reviews','Asks happy patients for a review. Unhappy ones reach you first.','/product/growth/',0),
         ('mega','#7c6cf2','Campaigns','Approved recall and offer messages to the right patients.','/for-owners/#campaigns',1),
         ('dash','#0e5c57','Owner dashboard','Every chat and booking in one place, plus a daily PDF report.','/for-owners/',2),
-        ('web','#14a3b8','Clinic website & patient app','A fast website and patient app with booking and Noor built in.','/sample/',3)],
+        ('web','#14a3b8','Clinic website','A fast website built from your setup answers, with booking requests and Noor built in.','/product/website/',3)],
   more='Explore',
   # intro
   skip='Skip intro', bk=['Whitening · Sat 11:30','Cleaning · Thu 11:00','Consultation · Sun 10:00','Check-up · Fri 16:30'], bookedv='Booked ✓',
@@ -123,7 +123,7 @@ T = {
         ('star','#d9a441','تقييمات Google','تطلب التقييم من المرضى الراضين، وغير الراضين يصلونك أولًا.','/ar/product/growth/',0),
         ('mega','#7c6cf2','الحملات','رسائل متابعة وعروض توافق عليها للمرضى المناسبين.','/ar/for-owners/#campaigns',1),
         ('dash','#0e5c57','لوحة المالك','كل المحادثات والحجوزات في مكان واحد، مع تقرير PDF يومي.','/ar/for-owners/',2),
-        ('web','#14a3b8','موقع العيادة وتطبيق المرضى','موقع سريع وتطبيق للمرضى مع الحجز ونور مدمجة.','/sample/',3)],
+        ('web','#14a3b8','موقع العيادة','موقع سريع مبني من إجابات الإعداد، مع طلبات الحجز ونور مدمجة.','/ar/product/website/',3)],
   more='اكتشف',
   skip='تخطَّ المقدمة', bk=['تبييض · السبت 11:30','تنظيف · الخميس 11:00','استشارة · الأحد 10:00','فحص · الجمعة 16:30'], bookedv='تم الحجز ✓',
   cm_name='نور · عيادة بيرل (تجريبية)', cm_state='مكالمة جارية · 00:42', cm=[('p','أبي موعد تنظيف هالأسبوع.'),('n','أكيد. الأربعاء 4 العصر أو الخميس 11 الصبح؟'),('p','الخميس.'),('n','تم الحجز الخميس الساعة 11، وبيوصلك تأكيد على واتساب.')], cm_chip='تم الحجز ✓ الخميس 11:00', cm_btn=['كتم','مكبّر الصوت','تحويل'],
@@ -134,6 +134,19 @@ T = {
 }
 
 # ---------- UI mock-ups ----------
+WEB={'en':dict(url='askhalora.com/site/?c=pearl-demo…',name='Pearl Demo Dental',nav=['Services','Doctors','Visit'],h='Gentle dental care in Jumeirah.',b1='Request an appointment',b2='Chat with us',
+          sv=[('Cleaning','AED 350'),('Whitening','AED 1,200'),('Check-up','AED 250')],bub='Hi! I’m Noor. Ask me anything or request a time.',tag='Demo clinic'),
+     'ar':dict(url='askhalora.com/site/?c=pearl-demo…',name='عيادة بيرل التجريبية',nav=['الخدمات','الأطباء','الموقع'],h='رعاية لطيفة للأسنان في جميرا.',b1='اطلب موعدًا',b2='تحدّث معنا',
+          sv=[('تنظيف','350 درهم'),('تبييض','1,200 درهم'),('فحص','250 درهم')],bub='أهلًا! أنا نور. اسألني أي شيء أو اطلب موعدًا.',tag='عيادة تجريبية')}
+def web_ui(lang):
+    w=WEB[lang]
+    nav=''.join(f'<em>{x}</em>' for x in w['nav'])
+    sv=''.join(f'<span><b>{a}</b><small>{b}</small></span>' for a,b in w['sv'])
+    return (f'<div class="brw" role="img" aria-label="{E(w["name"]+" · "+w["tag"])}"><div class="bb"><i></i><i></i><i></i><span dir="ltr">{w["url"]}</span></div>'
+            f'<div class="bp"><div class="bn"><span class="lg"></span><b>{w["name"]}</b><nav>{nav}</nav></div><div class="bh">{w["h"]}</div>'
+            f'<div class="bt"><span class="p">{w["b1"]}</span><span class="s">{w["b2"]}</span></div><div class="bs">{sv}</div></div>'
+            f'<div class="bub"><span class="av">{HMARK}</span><p>{w["bub"]}</p></div><span class="dtag">{w["tag"]}</span></div>')
+
 def sticky_bar(t):
     return (f'<nav class="sbar" aria-label="{t["sbl"]}"><a class="sb-call" href="{t["callurl"]}" data-call>{t["callq"]}</a>'
             f'<a class="sb-go" href="{t["gsurl"]}">{t["gs"]}</a></nav>')

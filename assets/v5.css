@@ -570,3 +570,66 @@ html[dir=rtl] .demo h2{font-family:var(--ar);letter-spacing:0;line-height:1.4}
  #nw-p{bottom:calc(78px + env(safe-area-inset-bottom))!important;max-height:calc(100vh - 150px)!important}
 }
 @media(min-width:601px) and (max-width:900px){.top .btn.line.quiet{display:inline-flex}}
+
+/* =====================================================================
+   v5.3 audit fixes: mobile menu, focus, website mock-up, legal pages
+   ===================================================================== */
+/* mobile menu: the frosted header trapped the fixed menu inside it */
+@media(max-width:900px){
+ body.mopen .top{backdrop-filter:none;-webkit-backdrop-filter:none;background:#fff}
+ body.mopen .top nav{top:var(--hb,64px)!important;bottom:0;height:auto;box-shadow:0 20px 40px -20px rgba(15,37,35,.35);overscroll-behavior:contain}
+ body.mopen{overflow:hidden}
+ body.mopen .sbar{display:none}
+ body.mopen .top nav .mm>button{padding:14px 0;font-weight:600}
+}
+/* keyboard focus everywhere */
+a:focus-visible,button:focus-visible,summary:focus-visible,input:focus-visible,select:focus-visible,textarea:focus-visible,[tabindex]:focus-visible{outline:2.5px solid #0e5c57;outline-offset:3px;border-radius:8px}
+.band a:focus-visible,#plans a:focus-visible,.cta-band a:focus-visible,#portal a:focus-visible{outline-color:#f3cf7f}
+.mm .panel a:focus-visible{outline-offset:-2px}
+/* plan cards: founding tag */
+.plan .fp{display:inline-block;align-self:flex-start;font-size:11.5px;font-weight:600;color:#7a5414;background:#fbf0d9;border-radius:99px;padding:3px 10px;margin:-8px 0 16px}
+html[dir=rtl] .plan .fp{letter-spacing:0}
+/* footer: legal links + data & safety */
+footer .safe{font-size:13px;color:var(--ink-2);background:var(--b-mint,#f0f8f5);border-radius:12px;padding:10px 12px;max-width:320px}
+footer .safe b{color:var(--teal)}
+/* clinic website mock-up */
+.brw{position:relative;width:100%;max-width:520px;justify-self:center;background:#fff;border-radius:18px;box-shadow:0 40px 80px -40px rgba(15,37,35,.5),0 0 0 1px rgba(14,92,87,.12);overflow:visible}
+.brw .bb{display:flex;align-items:center;gap:6px;padding:10px 12px;border-bottom:1px solid #e6ecea;background:#f6f8f7;border-radius:18px 18px 0 0}
+.brw .bb i{width:9px;height:9px;border-radius:50%;background:#d9e0dd}
+.brw .bb span{margin-inline-start:8px;font-size:11.5px;color:var(--mute);background:#fff;border:1px solid #e1e8e5;border-radius:8px;padding:3px 10px;flex:1;white-space:nowrap;overflow:hidden;text-overflow:ellipsis}
+.brw .bp{padding:18px 20px 34px;background:linear-gradient(180deg,#f3faf7,#fff)}
+.brw .bn{display:flex;align-items:center;gap:8px;font-size:13px}
+.brw .bn .lg{width:22px;height:22px;border-radius:50%;border:4px solid #e7c27c}
+.brw .bn nav{margin-inline-start:auto;display:flex;gap:10px;color:var(--mute)}.brw .bn nav em{font-style:normal}
+.brw .bh{font-size:24px;line-height:1.15;margin:20px 0 14px;max-width:300px;letter-spacing:-.02em}
+html[dir=rtl] .brw .bh{letter-spacing:0;line-height:1.4}
+.brw .bt{display:flex;gap:8px;flex-wrap:wrap}.brw .bt span{font-size:12.5px;font-weight:600;border-radius:10px;padding:8px 12px}
+.brw .bt .p{background:var(--teal);color:#fff}.brw .bt .s{border:1px solid var(--rule);color:var(--ink)}
+.brw .bs{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin-top:18px}
+.brw .bs span{background:#fff;border:1px solid #e6ecea;border-radius:12px;padding:10px;font-size:12px}.brw .bs b{display:block;font-size:13px}.brw .bs small{color:var(--teal);font-weight:600}
+.brw .bub{position:absolute;inset-inline-end:-14px;bottom:-46px;display:flex;gap:10px;align-items:flex-end;max-width:250px;background:#fff;border-radius:16px;padding:10px 12px;box-shadow:0 20px 40px -20px rgba(15,37,35,.5);font-size:12.5px;animation:bob 6s ease-in-out infinite}
+.brw .bub .av{flex:none;width:30px;height:30px;border-radius:9px;overflow:hidden}.brw .bub .av svg{width:30px;height:30px;display:block}
+.brw .bub p{margin:0;color:var(--ink-2)}
+.brw .dtag{position:absolute;top:-12px;inset-inline-start:16px;background:var(--gold);color:#2a1d05;font-size:11.5px;font-weight:700;border-radius:99px;padding:3px 10px}
+@media(max-width:560px){.brw .bs{grid-template-columns:repeat(2,1fr)}.brw .bs span:nth-child(3){display:none}.brw .bub{inset-inline-end:-4px;max-width:210px}.brw .bh{font-size:20px}}
+/* website page: live demo box */
+.demo-box{display:flex;justify-content:space-between;align-items:center;gap:28px;flex-wrap:wrap;background:#fff;border:1px solid var(--rule);border-radius:24px;padding:30px;box-shadow:0 24px 50px -36px rgba(15,37,35,.45)}
+.demo-box h2{font-family:var(--serif);font-weight:300;font-size:clamp(26px,3vw,36px);margin:0 0 8px;letter-spacing:-.02em}
+html[dir=rtl] .demo-box h2{font-family:var(--ar);letter-spacing:0}
+.demo-box p{margin:0;color:var(--ink-2);max-width:520px}
+.demo-box .db{display:flex;gap:12px;flex-wrap:wrap}
+@media(max-width:600px){.demo-box{padding:20px}.demo-box .db{width:100%}.demo-box .db .bx{flex:1 1 100%;justify-content:center}}
+/* legal pages */
+.ph.legal-h{padding:48px 0 40px}.ph.legal-h h1{font-size:clamp(36px,5vw,56px)}
+.legal .lg-grid{display:grid;grid-template-columns:240px 1fr;gap:48px;align-items:start}
+.legal .toc{position:sticky;top:96px;font-size:14px}.legal .toc b{display:block;margin-bottom:8px}
+.legal .toc ol{margin:0;padding-inline-start:18px;color:var(--mute);display:grid;gap:6px}.legal .toc a{color:var(--ink-2);text-decoration:none}.legal .toc a:hover{color:var(--teal)}
+.legal .doc{max-width:720px;font-size:16.5px}
+.legal .doc .upd{color:var(--mute);font-size:14px;margin:0 0 18px}
+.legal .doc section{padding:0;border:0;background:none!important;scroll-margin-top:90px}
+.legal .doc h2{font-size:22px;font-weight:600;margin:28px 0 8px}
+.legal .doc p,.legal .doc li{color:var(--ink-2);line-height:1.7}
+.legal .doc ul{padding-inline-start:20px}
+@media(max-width:860px){.legal .lg-grid{grid-template-columns:1fr;gap:20px}.legal .toc{position:static}}
+.legal .doc a,footer a{text-decoration:underline;text-underline-offset:3px}
+.crumbs a{text-decoration:underline;text-underline-offset:3px}

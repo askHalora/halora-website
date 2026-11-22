@@ -1,3 +1,7 @@
 User-agent: *
 Allow: /
+Disallow: /admin/
+Disallow: /portal/
+Disallow: /chat/
+Disallow: /site/
 Sitemap: https://askhalora.com/sitemap.xml

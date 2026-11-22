@@ -3,12 +3,12 @@
 <head>
 <meta charset="utf-8"><meta name="viewport" content="width=device-width,initial-scale=1">
 <title>Sample clinic website by Halora · Lumina Dental (fictional)</title>
+<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23234E70'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%23F2C48D' stroke-width='5'/%3E%3C/svg%3E">
 <meta name="description" content="A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in.">
 <meta name="robots" content="noindex">
-<link rel="icon" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 64 64'%3E%3Crect width='64' height='64' rx='16' fill='%23234E70'/%3E%3Ccircle cx='32' cy='32' r='14' fill='none' stroke='%23F2C48D' stroke-width='5'/%3E%3C/svg%3E">
 <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Fraunces:opsz,wght@9..144,400;9..144,600&family=Inter:wght@400;500;600&display=swap">
 <style>
-:root{--navy:#234E70;--navy2:#173852;--sky:#EAF2F8;--peach:#F2C48D;--ink:#14212B;--ink2:#41505B;--mute:#6B7A85;--line:#DCE5EC;--bg:#FBFCFD}
+:root{--navy:#234E70;--navy2:#173852;--sky:#EAF2F8;--peach:#F2C48D;--ink:#14212B;--ink2:#41505B;--mute:#5A6873;--line:#DCE5EC;--bg:#FBFCFD}
 *{box-sizing:border-box}html{scroll-behavior:smooth}body{margin:0;font:16px/1.6 Inter,system-ui,sans-serif;color:var(--ink);background:var(--bg)}
 a{color:inherit}.wrap{max-width:1140px;margin:0 auto;padding:0 24px}@media(max-width:600px){.wrap{padding:0 16px}}
 .demo{background:var(--ink);color:#cfd9e0;font-size:13px;text-align:center;padding:8px 12px}.demo a{color:var(--peach)}
@@ -47,6 +47,9 @@ footer{border-top:1px solid var(--line);padding:30px 0 70px;color:var(--mute);fo
 .wa{position:fixed;right:20px;bottom:20px;z-index:30;width:56px;height:56px;border-radius:50%;background:#25D366;display:grid;place-items:center;box-shadow:0 14px 30px -12px rgba(0,0,0,.45);transition:transform .2s}.wa:hover{transform:scale(1.07)}
 .rv{opacity:0;transform:translateY(16px);transition:opacity .7s,transform .7s}.rv.in{opacity:1;transform:none}
 @media (prefers-reduced-motion:reduce){.rv{opacity:1;transform:none;transition:none}}
+.logo{white-space:nowrap}header .btn{white-space:nowrap}
+@media(max-width:600px){.float{left:12px;right:12px;max-width:none}}
+@media(max-width:420px){.logo{font-size:18px}header .btn{padding:9px 14px;font-size:14px}}
 .pill{display:inline-flex;align-items:center;gap:8px;background:#fff;border:1px solid var(--line);border-radius:999px;padding:6px 12px;font-size:13px;color:var(--ink2);margin-bottom:6px}.pill i{width:8px;height:8px;border-radius:50%;background:#22c55e;box-shadow:0 0 0 4px rgba(34,197,94,.18)}
 .chips{display:flex;flex-wrap:wrap;gap:10px}.chips span{background:#fff;border:1px solid var(--line);border-radius:999px;padding:8px 16px;font-size:14px;color:var(--ink2)}
 .steps{display:grid;grid-template-columns:repeat(3,1fr);gap:18px}@media(max-width:860px){.steps{grid-template-columns:1fr}}
@@ -56,7 +59,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 70px;color:var(--mute);fo
 .rcp{background:#fff;border:1px solid var(--line);border-radius:24px;padding:22px;box-shadow:0 24px 50px -36px rgba(23,56,82,.6)}.rcp .m{padding:10px 14px;border-radius:16px;margin:8px 0;max-width:88%;font-size:15px;line-height:1.45}.rcp .u{background:var(--sky)}.rcp .b{background:var(--navy);color:#fff;margin-left:auto}.rcp small{color:var(--mute);font-size:12px}
 </style>
 <link rel="canonical" href="https://askhalora.com/sample/">
-<meta property="og:type" content="website"><meta property="og:site_name" content="Halora"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="ar_AE"><meta property="og:title" content="Sample clinic website by Halora · Lumina Dental (fictional)"><meta property="og:description" content="A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in."><meta property="og:url" content="https://askhalora.com/sample/"><meta property="og:image" content="https://askhalora.com/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Halora"><meta property="og:locale" content="en_US"><meta property="og:locale:alternate" content="ar_AE"><meta property="og:title" content="Sample clinic website by Halora · Lumina Dental (fictional)"><meta property="og:description" content="A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in."><meta property="og:url" content="https://askhalora.com/sample/"><meta property="og:image" content="https://askhalora.com/assets/og.png"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="Halora: Every patient, answered.">
 <meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Sample clinic website by Halora · Lumina Dental (fictional)"><meta name="twitter:description" content="A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in."><meta name="twitter:image" content="https://askhalora.com/assets/og.png">
 <script type="application/ld+json">{"@context": "https://schema.org", "@type": "Organization", "@id": "https://askhalora.com/#org", "name": "Halora", "url": "https://askhalora.com/", "logo": "https://askhalora.com/assets/halora-512.png", "image": "https://askhalora.com/assets/og.png", "email": "ziad.elhoseiny@askhalora.com", "description": "AI receptionist for clinics in Dubai and the Gulf: answers WhatsApp, website chat and phone calls in English and Arabic, 24/7, and books appointments.", "areaServed": ["AE", "SA", "QA", "KW", "BH", "OM"], "knowsLanguage": ["en", "ar"], "founder": {"@type": "Person", "name": "Ziad Elhoseiny"}, "sameAs": []}</script>
 </head>
@@ -71,7 +74,7 @@ footer{border-top:1px solid var(--line);padding:30px 0 70px;color:var(--mute);fo
     <h1>Gentle dentistry, <b>booked in seconds.</b></h1>
     <p class="lead">Modern, calm dental care for the whole family. Ask us anything on WhatsApp, chat with our receptionist on this page, or pick your time online, day or night.</p>
     <div class="ctas"><a class="btn" href="#book">Book online</a><a class="btn lt" href="#" data-chat>Chat with our receptionist</a></div>
-    <div class="trust"><div><b>4.9 ★</b>Sample rating</div><div><b>7 days</b>Open every day</div><div><b>EN · AR</b>We speak your language</div></div></div>
+    <div class="trust"><div><b>24/7</b>Replies any time</div><div><b>7 days</b>Open every day</div><div><b>EN · AR</b>We speak your language</div></div></div>
   <div class="photo"><svg viewBox="0 0 400 500" preserveAspectRatio="xMidYMid slice"><circle cx="300" cy="120" r="120" fill="rgba(255,255,255,.18)"/><circle cx="90" cy="420" r="160" fill="rgba(255,255,255,.1)"/><path d="M160 190c-30 0-50 25-46 60 4 40 18 90 34 115 10 15 26 10 30-8l10-45c3-12 21-12 24 0l10 45c4 18 20 23 30 8 16-25 30-75 34-115 4-35-16-60-46-60-20 0-30 10-40 10s-20-10-40-10z" fill="#fff" opacity=".92"/></svg>
     <div class="float"><b>Receptionist · 23:48</b>"Booked ✅ Cleaning on Saturday at 11:30 with Dr. Hana. See you then!"</div></div>
 </div></div>

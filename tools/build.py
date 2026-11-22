@@ -29,6 +29,7 @@ P={
 'mega':'<path d="M4 10v4a1 1 0 0 0 1 1h2l6 4V5L7 9H5a1 1 0 0 0-1 1zM17 9a4 4 0 0 1 0 6M8 15l1 5"/>',
 'tool':'<path d="M14.5 6.5a4 4 0 0 0 5 5L21 13l-8 8-3-3 6.5-6.5a4 4 0 0 1-5-5L13 5zM3 21l6-6"/>',
 'play':'<path d="M8 5.5v13l11-6.5z" fill="currentColor" stroke="none"/>',
+'web':'<rect x="3" y="4" width="18" height="14" rx="2"/><path d="M3 8h18M8 21h8M12 18v3"/>',
 'route':'<circle cx="6" cy="6" r="2.5"/><circle cx="18" cy="18" r="2.5"/><path d="M8.5 6H15a3.5 3.5 0 0 1 0 7H9a3.5 3.5 0 0 0 0 7h6.5"/>',
 'scale':'<path d="M12 4v16M8 20h8M5 7h14M5 7l-3 6a3 3 0 0 0 6 0zM19 7l-3 6a3 3 0 0 0 6 0z"/>',
 'plug':'<path d="M9 3v5M15 3v5M6 8h12v3a6 6 0 0 1-12 0zM12 17v4"/>',
@@ -44,7 +45,8 @@ MARKSQ='<svg viewBox="0 0 64 64" aria-hidden="true"><rect width="64" height="64"
 PRODUCTS=[('whatsapp','WhatsApp & web chat','Instant replies and bookings, 24/7','chat','#1fa971'),
  ('phone','Phone receptionist','Answers calls in a natural voice','phone','#c98f22'),
  ('growth','Reminders & reviews','Fewer no-shows, more 5-star reviews','star','#7c6cf2'),
- ('portal','Owner portal','Inbox, team take-over and reports','grid','#0e5c57')]
+ ('portal','Owner portal','Inbox, team take-over and reports','grid','#0e5c57'),
+ ('website','Clinic website','Auto-built site with booking and Noor','web','#14a3b8')]
 SPECS=[('dental','Dental clinics','Whitening, implants, aligners, emergencies','tooth','#14a3b8'),
  ('aesthetics','Aesthetics & skin','Injectables, lasers, facials, packages','spark','#d4669a'),
  ('physio','Physio & rehab','Session plans, rebooking, packages','move','#3b8f5a'),
@@ -70,22 +72,23 @@ def fonts_nonblocking(h):
       '<link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>\n'
       f'<link rel="preload" as="style" href="{FONT_URL}"><link rel="stylesheet" href="{FONT_URL}" media="print" onload="this.media=\'all\'"><noscript><link rel="stylesheet" href="{FONT_URL}"></noscript>',1)
 
-def seo(h,lang,title,desc,path,en,ar,ld=()):
+def seo(h,lang,title,desc,path,en,ar,ld=(),icons=True):
     """Rewrite a <head> (without </head>) so it has one clean, page-specific set of SEO tags."""
     e=lambda s:html.escape(s,quote=True)
     h=re.sub(r'<title>.*?</title>',f'<title>{e(title)}</title>',h,count=1,flags=re.S)
     if '<meta name="description"' in h: h=re.sub(r'<meta name="description" content="[^"]*">',f'<meta name="description" content="{e(desc)}">',h,count=1)
     else: h=h.replace('</title>',f'</title>\n<meta name="description" content="{e(desc)}">',1)
-    for pat in (r'<link rel="alternate"[^>]*>',r'<link rel="canonical"[^>]*>',r'<meta property="og:[^>]*>',r'<meta name="twitter:[^>]*>',r'<script type="application/ld\+json">.*?</script>'):
+    for pat in ((r'<link rel="(?:icon|apple-touch-icon|manifest)"[^>]*>',r'<meta name="theme-color"[^>]*>') if icons else ())+(r'<link rel="alternate"[^>]*>',r'<link rel="canonical"[^>]*>',r'<meta property="og:[^>]*>',r'<meta name="twitter:[^>]*>',r'<script type="application/ld\+json">.*?</script>'):
         h=re.sub(pat,'',h,flags=re.S)
     h=re.sub(r'\n\s*\n+','\n',h)
-    url=SITE+path; img=SITE+'/assets/og.png'
+    url=SITE+path; img=SITE+('/assets/og-ar.png' if lang=='ar' else '/assets/og.png')
     loc,alt=('ar_AE','en_US') if lang=='ar' else ('en_US','ar_AE')
-    tags=(f'<link rel="canonical" href="{url}">\n'
+    tags=((('<link rel="icon" href="/favicon.ico" sizes="48x48"><link rel="icon" href="/assets/halora-mark.svg" type="image/svg+xml"><link rel="icon" href="/assets/halora-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="/assets/halora-180.png"><link rel="manifest" href="/site.webmanifest"><meta name="theme-color" content="#0e5c57">\n') if icons else '')
+      +f'<link rel="canonical" href="{url}">\n'
       +(f'<link rel="alternate" hreflang="en" href="{SITE+en}"><link rel="alternate" hreflang="ar" href="{SITE+ar}"><link rel="alternate" hreflang="x-default" href="{SITE+en}">\n' if ar else '')+
       f'<meta property="og:type" content="website"><meta property="og:site_name" content="Halora"><meta property="og:locale" content="{loc}"><meta property="og:locale:alternate" content="{alt}">'
       f'<meta property="og:title" content="{e(title)}"><meta property="og:description" content="{e(desc)}"><meta property="og:url" content="{url}">'
-      f'<meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630">\n'
+      f'<meta property="og:image" content="{img}"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="{e("Halora: Every patient, answered." if lang=="en" else "هالورا: كل مريض يجد ردًّا.")}">\n'
       f'<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="{e(title)}"><meta name="twitter:description" content="{e(desc)}"><meta name="twitter:image" content="{img}">\n')
     for d in (ORG_LD,)+tuple(ld):
         tags+='<script type="application/ld+json">'+json.dumps(d,ensure_ascii=False).replace('</','<\\/')+'</script>\n'
@@ -117,8 +120,8 @@ def mm(label,items,base):
 
 WHY={'en':[('how-it-works','How it works','From first call to live in about a week','route','#0e5c57'),('pricing','Pricing','Plans, founding offer and free pilot','tag','#c98f22'),('for-owners','For owners','Dashboard, inbox take-over, daily report','grid','#7c6cf2'),('compare','Compare','Front desk, call centre or Noor','scale','#d4669a'),('security','Safety & guardrails','What Noor will never do','shield','#0f2523'),('integrations','Integrations','WhatsApp, Google Calendar and more','plug','#14a3b8'),('about','About Halora','Why we built Noor','heart','#b9811f'),('pilot','Free 14-day pilot','Try Noor on your own patients','flag','#3b8f5a')],
 'ar':[('how-it-works','كيف تعمل','من أول مكالمة إلى الإطلاق خلال أسبوع تقريبًا','route','#0e5c57'),('pricing','الأسعار','الباقات وعرض المؤسسين والتجربة المجانية','tag','#c98f22'),('for-owners','لأصحاب العيادات','لوحة التحكم والتدخل في المحادثات والتقرير اليومي','grid','#7c6cf2'),('compare','المقارنة','الاستقبال وحده أو مركز اتصال أو نور','scale','#d4669a'),('security','الأمان والضوابط','ما لن تفعله نور أبدًا','shield','#0f2523'),('integrations','التكاملات','واتساب وتقويم Google والمزيد','plug','#14a3b8'),('about','عن هالورا','لماذا بنينا نور','heart','#b9811f'),('pilot','تجربة مجانية 14 يومًا','جرّب نور مع مرضاك الحقيقيين','flag','#3b8f5a')]}
-NAVL={'en':dict(product='Product',spec='Specialties',why='Why Halora',pricing='Pricing',call='Book a call',pilot='Free pilot',menu='Menu',other='العربية',otherlang='ar',company='Company',tag='AI receptionist for clinics in Dubai and the Gulf.',signin='Client sign-in',otherfull='النسخة العربية',copy='© 2026 Halora. Demo clinics shown are fictional.',callurl='/call/',contact='Contact'),
-'ar':dict(product='المنتج',spec='التخصصات',why='لماذا هالورا',pricing='الأسعار',call='احجز مكالمة',pilot='تجربة مجانية',menu='القائمة',other='English',otherlang='en',company='الشركة',tag='موظفة استقبال ذكية للعيادات في دبي والخليج.',signin='دخول العملاء',otherfull='English version',copy='© 2026 هالورا. العيادات التجريبية المعروضة غير حقيقية.',callurl='/call/?lang=ar',contact='تواصل')}
+NAVL={'en':dict(product='Product',spec='Specialties',why='Why Halora',pricing='Pricing',call='Book a call',pilot='Free pilot',menu='Menu',other='العربية',otherlang='ar',company='Company',tag='AI receptionist for clinics in Dubai and the Gulf.',signin='Client sign-in',otherfull='النسخة العربية',copy='© 2026 Halora. Demo clinics shown are fictional.',callurl='/call/',contact='Contact',priv='Privacy policy',terms='Terms of service',safe='<b>Data & safety:</b> Noor never asks patients for ID, card details or medical history.',email='Email us'),
+'ar':dict(product='المنتج',spec='التخصصات',why='لماذا هالورا',pricing='الأسعار',call='احجز مكالمة',pilot='تجربة مجانية',menu='القائمة',other='English',otherlang='en',company='الشركة',tag='موظفة استقبال ذكية للعيادات في دبي والخليج.',signin='دخول العملاء',otherfull='English version',copy='© 2026 هالورا. العيادات التجريبية المعروضة غير حقيقية.',callurl='/call/?lang=ar',contact='تواصل',priv='سياسة الخصوصية',terms='شروط الخدمة',safe='<b>البيانات والأمان:</b> نور لا تطلب من المرضى الهوية أو بيانات البطاقة أو التاريخ المرضي.',email='راسلنا')}
 def site_header(lang,home,alt,prods,specs):
     N=NAVL[lang]; p='' if lang=='en' else '/ar'; b='' if lang=='en' else 'ar/'
     T_=V.T[lang]
@@ -141,7 +144,7 @@ def site_footer(lang,alt,prods,specs):
   <div><p><b>{N['product']}</b><br>{pl}</p></div>
   <div><p><b>{N['spec']}</b><br>{sl}</p></div>
   <div><p><b>{N['company']}</b><br>{cl}</p></div>
-  <div><p><b>{N['contact']}</b><br><a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a><br><a href="{N['callurl']}">{N['call']}</a><br><a href="{alt}" lang="{N['otherlang']}">{N['otherfull']}</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">{N['signin']}</a></p><p>{N['copy']}</p></div>
+  <div><p><b>{N['contact']}</b><br><a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a><br><a href="{N['callurl']}">{N['call']}</a><br><a href="{alt}" lang="{N['otherlang']}">{N['otherfull']}</a><br><a href="https://autova.app.n8n.cloud/webhook/halora-portal" rel="nofollow">{N['signin']}</a><br><a href="{p}/privacy/">{N['priv']}</a><br><a href="{p}/terms/">{N['terms']}</a></p><p class="safe">{N['safe']}</p><p>{N['copy']}</p></div>
 </div></footer>
 {V.sticky_bar(V.T[lang])}'''
 def header(home=False,alt='/ar/'): return site_header('en',home,alt,PRODUCTS,SPECS)
@@ -248,7 +251,7 @@ def specialties():
 
 def roi():
     return f'''<section class="sx" id="roi"><div class="wrap">
-<div class="hd2 rv"><span class="k">ROI calculator</span><h2>What are unanswered messages <b>costing you?</b></h2><p>Move the sliders. Most clinics are surprised.</p></div>
+<div class="hd2 rv"><span class="k">ROI calculator</span><h2>What are unanswered messages <b>costing you?</b></h2><p>Move the sliders for an estimate based on your own numbers.</p></div>
 <div class="roi rv"><div class="ctl">
 <label>Patient messages and calls per week <b data-o="msg">120</b></label><input type="range" aria-label="Patient messages and calls per week" name="msg" min="20" max="500" step="10" value="120">
 <label>Share that get no quick reply (after hours, busy desk) <b data-o="miss">30%</b></label><input type="range" aria-label="Share that get no quick reply" name="miss" min="5" max="60" step="1" value="30">
@@ -261,7 +264,7 @@ def roi():
 </div></section>'''
 
 def compare():
-    rows=[('Answers at 2 am, Fridays and Eid','n','y'),('First reply in under 10 seconds','~ When free','y'),('Arabic and English, voice notes too','~ Depends on staff','y'),('Never forgets a reminder or follow-up','n','y'),('Handles 20 chats at the same time','n','y'),('Warm human touch at the desk','y','Your team, freed up'),('Monthly cost','AED 4,000+ salary, visa, leave','A fraction of one salary')]
+    rows=[('Answers at 2 am, Fridays and Eid','n','y'),('First reply in under 10 seconds','~ When free','y'),('Arabic and English, voice notes too','~ Depends on staff','y'),('Never forgets a reminder or follow-up','n','y'),('Handles many chats at the same time','n','y'),('Warm human touch at the desk','y','Your team, freed up'),('Monthly cost','AED 4,000+ salary, visa, leave','A fraction of one salary')]
     def cell(v): return '<span class="y">✓</span>' if v=='y' else '<span class="n">✕</span>' if v=='n' else v.replace('~ ','')
     tr=''.join(f'<tr><td>{a}</td><td>{cell(b)}</td><td class="h">{cell(c)}</td></tr>' for a,b,c in rows)
     return f'''<section class="sx tight s-cmp"><div class="wrap" style="max-width:920px">
@@ -325,7 +328,7 @@ def chatmock(chat,clinic,L=EN):
 
 SUBPAGES=[]  # (en_path) for sitemap
 def plain(s): return re.sub(r'<[^>]+>','',s).replace('"','').strip()
-CLAYMAP={'chat':'chat','phone':'phone','star':'star','grid':'dash','tooth':'tooth','spark':'spark','move':'move','seed':'heart'}
+CLAYMAP={'web':'web','chat':'chat','phone':'phone','star':'star','grid':'dash','tooth':'tooth','spark':'spark','move':'move','seed':'heart'}
 def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,extra='',L=EN,desc=None,stype='AI receptionist',crumbs=None,visual=None):
     """path is the language-neutral path (/product/x/); Arabic pages live under /ar."""
     url=L['pre']+path; en,ar=path,'/ar'+path
@@ -367,7 +370,7 @@ def subpage(path,crumb,title,h1,lead,iconk,color,chat,clinic,feats,steps,faqs,ex
     open(f'{ROOT}{url}index.html','w',encoding='utf-8').write(head+'</head>\n'+body)
     if L['lang']=='en': SUBPAGES.append(path)
 
-STEPS=[('20-minute call','We learn your services, prices, doctors and hours.'),('We build your Noor','Your knowledge, your tone, your calendar. You change nothing.'),('Your team tests it','Try it on your own phones and tell us what to adjust.'),('Go live','Switch on with a free 14-day pilot and watch the bookings.')]
+STEPS=[('Setup form, 15 minutes','Tell us your services, prices, doctors and hours, or go through them on a 20-minute call.'),('We build your Noor','Your knowledge, your tone, your calendar. You change nothing.'),('Your team tests it','Try it on your own phones and tell us what to adjust.'),('Go live','Switch on with a free 14-day pilot and watch the bookings.')]
 FQ_COMMON=[('Does Noor give medical advice?','No. Noor answers practical questions (prices, times, location, insurance) and hands anything medical to your team.'),('Can my team take over a chat?','Yes, at any moment, from the owner portal or WhatsApp. Noor steps back and can pick up again later.'),('Do I need to change my WhatsApp number?','We connect your WhatsApp Business number to the official WhatsApp Cloud API. We guide you through it and handle the technical part.')]
 
 subpage('/product/whatsapp/','Product / WhatsApp & web chat','WhatsApp AI receptionist for clinics · Halora','Every message answered <span class="glow">in seconds,</span> day and night.',
@@ -391,7 +394,7 @@ subpage('/product/phone/','Product / Phone receptionist','AI phone receptionist 
   ('lang','#7c6cf2','Natural voice, two languages','Warm, clear Arabic and English. Patients can switch any time.'),
   ('users','#d4669a','Transfers to your team','Urgent or complex calls go straight to a person.'),
   ('doc','#61706c','Call summaries','Every call is summarised in the portal and the daily report.')],
- STEPS,visual=V.call_ui(V.T['en']),faqs=[('Which plan includes calls?','Phone answering is part of the Front Desk + Phone plan and the Group plan.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
+ STEPS,visual=V.call_ui(V.T['en']),faqs=[('Which plan includes calls?','Phone answering is included in Front Desk + Phone and Group. You can also add it to Starter or Front Desk as an add-on.'),('Can patients still reach a person?','Yes. Noor transfers calls or arranges a callback whenever a patient asks for a person.')]+FQ_COMMON[:1],stype='AI phone answering')
 
 subpage('/product/growth/','Product / Reminders & reviews','Appointment reminders & Google reviews for clinics · Halora','Fewer no-shows. <span class="glow">More five-star reviews.</span>',
  'Noor reminds every patient before their visit, refills cancelled slots from your waitlist, asks happy patients for a Google review and brings old patients back with approved recall messages.',
@@ -402,7 +405,7 @@ subpage('/product/growth/','Product / Reminders & reviews','Appointment reminder
   ('users','#7c6cf2','Recall campaigns','Approved messages to the right patients, such as 6-month cleanings.'),
   ('chart','#0e5c57','Results you can see','Weekly and monthly reports of bookings, no-shows and reviews.'),
   ('shield','#0f2523','Opt-out respected','Patients can stop messages any time; Noor never spams.')],
- STEPS,FQ_COMMON[:2],stype='Appointment reminders and review requests')
+ STEPS,[('Is this included in my plan?','Reminders & reviews is an add-on you can choose for any package when you set up, and it is included in the Group plan.')]+FQ_COMMON[:2],stype='Appointment reminders and review requests')
 
 subpage('/product/portal/','Product / Owner portal','Clinic owner portal & daily reports · Halora','See every patient Noor <span class="glow">brought in.</span>',
  'One place for the owner and the team: every conversation, every booking, every request. Take over any chat in one click and get a summary on WhatsApp each morning.',
@@ -413,7 +416,21 @@ subpage('/product/portal/','Product / Owner portal','Clinic owner portal & daily
   ('users','#d4669a','Team access','Give each receptionist or manager their own login.'),
   ('bell','#c98f22','Daily PDF report','A short summary on WhatsApp every morning.'),
   ('star','#7c6cf2','Campaigns','Send approved recall and offer messages to the right patients.')],
- STEPS,visual=V.dash_ui(V.T['en']),faqs=[('Which plan includes the portal?','The portal comes with Front Desk + Phone and Group plans. The Front Desk plan includes the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
+ STEPS,visual=V.dash_ui(V.T['en']),faqs=[('Which plan includes the portal?','The owner portal is included in every plan, from Starter up. Plans with WhatsApp (Front Desk and above) also get the daily PDF summary on WhatsApp.')]+FQ_COMMON[1:2],stype='Clinic dashboard and reporting')
+
+WEB_FEATS=[('bolt','#c98f22','Ready in days','Built from your setup-form answers: services, prices, doctors and hours. No designer needed.'),
+  ('chat','#1fa971','Noor built in','Visitors ask questions and request appointments right on the page, day and night.'),
+  ('cal','#0e5c57','Booking requests','Each request reaches your team with the patient’s name and WhatsApp number.'),
+  ('lang','#7c6cf2','Arabic & English','One site in both languages, with right-to-left Arabic done properly.'),
+  ('phone','#d4669a','Fast on phones','Light pages that load quickly, even on mobile data.'),
+  ('shield','#0f2523','Safe by design','The same guardrails as Noor: no medical advice, and no ID or card details asked.')]
+WEB_DEMO={'en':('Live demo','Try a real Noor-built site.','Pearl Demo Dental is a fictional clinic, made to show how the website and chat work. Nothing you send reaches a real clinic.','Open the demo website','Chat with the demo clinic','Opens in a new tab'),
+          'ar':('عرض حي','جرّب موقعًا حقيقيًا بنته نور.','عيادة بيرل التجريبية عيادة وهمية لعرض طريقة عمل الموقع والدردشة. لا يصل أي شيء ترسله إلى عيادة حقيقية.','افتح الموقع التجريبي','تحدّث مع العيادة التجريبية','يفتح في نافذة جديدة')}
+def web_demo(lang):
+    k,h,p,b1,b2,nt=WEB_DEMO[lang]
+    return (f'<section class="sx tight" id="demo"><div class="wrap"><div class="demo-box rv"><div><span class="k2">{k}</span><h2>{h}</h2><p>{p}</p></div>'
+            f'<div class="db"><a class="bx gold" href="/site/?c=pearl-demo-dental-k97sbc0ibk" target="_blank" rel="noopener">{b1} <span aria-hidden="true">↗</span><span class="vh"> ({nt})</span></a>'
+            f'<a class="bx line2" href="/chat/?c=pearl-demo-dental-k97sbc0ibk" target="_blank" rel="noopener">{b2} <span aria-hidden="true">↗</span><span class="vh"> ({nt})</span></a></div></div></div></section>')
 
 SPEC_PAGES={
 'dental':('Dental clinics','The AI receptionist for <span class="glow">dental clinics.</span>','tooth','#14a3b8',
@@ -425,6 +442,14 @@ SPEC_PAGES={
 'ivf':('Fertility & IVF','The AI receptionist for <span class="glow">fertility clinics.</span>','seed','#b9811f',
  [('heart','#d4669a','Kind first replies','A warm, respectful tone for one of the hardest messages to send.'),('users','#7c6cf2','Coordinator handover','Patients are connected to your coordinator quickly.'),('shield','#0f2523','Private by design','Never discusses results or medical details, never asks for ID.'),('lang','#5b7fd6','Arabic & English','Patients choose the language they feel comfortable in.'),('cal','#0e5c57','First consultations','Books couples\' consultations with the right doctor.'),('bolt','#c98f22','Any hour','Many people reach out late at night. Noor is there.')]),
 }
+subpage('/product/website/','Product / Clinic website','Clinic website, built for you · Halora','A clinic website that <span class="glow">builds itself.</span>',
+ 'Answer the setup form once and we build a fast one-page website for your clinic: your services, prices, doctors and hours, with Noor chat and booking requests built in. In Arabic and English.',
+ 'web','#14a3b8',[],'',WEB_FEATS,STEPS,
+ [('How much does it cost?','The clinic website is an add-on you can choose for any package when you set up, and it is included in the Group plan. See the pricing page.'),
+  ('Is the demo a real clinic?','No. Pearl Demo Dental is a fictional clinic, made to show how the website and chat work.'),
+  ('Can you change the site later?','Yes. Tell us about new services, prices or hours and we update it.')]+FQ_COMMON[:1],
+ extra=web_demo('en'),stype='Clinic website',visual=V.web_ui('en'))
+
 SPEC_TITLE={'dental':'AI receptionist for dental clinics in Dubai & the Gulf · Halora','aesthetics':'AI receptionist for aesthetic & skin clinics · Halora','physio':'AI receptionist for physiotherapy clinics · Halora','ivf':'AI receptionist for fertility & IVF clinics · Halora'}
 for k,(crumb,h1,ik,col,feats) in SPEC_PAGES.items():
     s=SPD[k]
@@ -448,5 +473,5 @@ STATIC=[('/call/','Book a 20-minute call with Halora','Book a free 20-minute cal
  ('/sample/','Sample clinic website by Halora · Lumina Dental (fictional)','A sample clinic website built by Halora, with online booking, WhatsApp and Noor, the AI receptionist, built in.',None)]
 for path,t,dsc,ar in STATIC:
     f=f'{ROOT}{path}index.html'; h=open(f,encoding='utf-8').read(); i=h.index('</head>')
-    open(f,'w',encoding='utf-8').write(seo(h[:i],'en',t,dsc,path,path,ar)+h[i:])
+    open(f,'w',encoding='utf-8').write(seo(h[:i],'en',t,dsc,path,path,ar,icons=path not in ('/glow/','/sample/'))+h[i:])
 print('ok')

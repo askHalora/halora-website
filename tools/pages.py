@@ -70,7 +70,14 @@ def page(B, L, lang, path, pg, body):
     url = L['pre'] + path; en, ar = path, '/ar' + path
     alt = ar if lang == 'en' else en
     c = C[lang]
-    hero = f'''<section class="ph pg">
+    if pg.get('legal'):
+        hero = f'''<section class="ph pg legal-h">
+<div class="wrap"><div>
+<div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {pg['crumb']}</div>
+<h1>{pg['h1']}</h1><p class="lead">{pg['lead']}</p>
+</div></div></section>'''
+    else:
+      hero = f'''<section class="ph pg">
 {V.bgfx()}
 <div class="wrap"><div>
 <div class="crumbs"><a href="{L['home']}">{L['crumb_home']}</a> / {pg['crumb']}</div>
@@ -107,7 +114,7 @@ def page(B, L, lang, path, pg, body):
 # English
 # =====================================================================================
 T = V.T
-EN_STEPS = [('chat', '#0e5c57', 'Day 1', 'A 20-minute call', 'We learn your services, prices, doctors, opening hours and how your front desk works today. No preparation needed.'),
+EN_STEPS = [('doc', '#0e5c57', 'Day 1', 'Setup form or a 20-minute call', 'Fill in the setup form in about 15 minutes, or go through it with us on a call. No preparation needed.'),
  ('cal', '#c98f22', 'Days 2–4', 'We build your Noor', 'Your price list, doctors, hours, insurance list and tone of voice. We connect your WhatsApp Business number and Google Calendar. You change nothing.'),
  ('users', '#7c6cf2', 'Days 4–6', 'Your team tests it', 'Message and call Noor from your own phones and tell us what to adjust. Approval mode lets you check replies before they are sent.'),
  ('flag', '#1f9d6b', 'Day 7', 'Go live with a free 14-day pilot', 'Noor starts answering real patients. After 14 days we look at the numbers together, and you decide.')]
@@ -184,6 +191,7 @@ C['en'] = dict(cta1='Start the free pilot', pages={
      ('sheet', '#14a3b8', 'Google Sheets', 'ok', 'Live', 'Patient lists, waitlist and requests kept in a sheet your team can open any time.', 'sheets'),
      ('globe', '#5b7fd6', 'Website chat widget', 'ok', 'Live', 'The same Noor on your website, so visitors book instead of leaving.', 'web'),
      ('doc', '#61706c', 'PDF reports', 'ok', 'Live', 'A daily summary on WhatsApp, plus weekly and monthly reports.', 'reports'),
+     ('heart', '#d4669a', 'Instagram & Facebook messages', 'rq', 'On request', 'Noor can answer direct messages on your Instagram and Facebook pages. Set up on request; ask us on the call.', 'social'),
      ('steth', '#b9811f', 'EMR / practice management', 'rq', 'On request', 'Tell us which system you use. We check what is possible during the call; nothing is promised before that.', 'emr')])
    + '</div></div></section>'
    + faqs('Questions', 'Good to know', [('Do I need a new WhatsApp number?', 'No. Noor runs on your clinic’s WhatsApp Business number. We guide you through connecting it.'), ('Which calendar does it use?', 'Noor books into a shared Google Calendar. If your clinic uses a practice management system, tell us which one and we will check the options.')]))),
@@ -194,7 +202,7 @@ C['en'] = dict(cta1='Start the free pilot', pages={
   visual='<div class="letter rv"><span class="mk">' + HMARK + '</span><p>“Noor is not here to replace your receptionist. She is the colleague who covers the night shift, the weekend and the rush hour, and never forgets to follow up.”</p><b>Ziad Elhoseiny</b><small>Founder, Halora</small></div>',
   body=lambda c, plans, pilot, hf, p: (
    '<section class="sx tight"><div class="wrap story rv"><span class="k2">Why Halora exists</span><h2>A simple problem, <b>every evening.</b></h2>'
-   '<p>Clinics in the Gulf get a large share of their enquiries in the evening, on Fridays and during the busy hour at reception. Patients ask three clinics at once on WhatsApp, and the first clear answer with a time usually wins the booking.</p>'
+   '<p>Clinics in the Gulf get a large share of their enquiries in the evening, on Fridays and during the busy hour at reception. Many patients message several clinics at once on WhatsApp, and the first clear answer with a time often wins the booking.</p>'
    '<p>Ziad started Halora after seeing how many of those messages went unanswered, not because clinics did not care, but because nobody was free at the right moment. Noor is the answer to that: a receptionist who replies in seconds, in Arabic and English, and books straight into the clinic’s calendar.</p>'
    '<p>We are a small, founder-led company. When you start a pilot, Ziad sets it up with you personally and stays on WhatsApp with you until it works the way your clinic needs.</p></div></section>'
    + cards('How we work', 'What we <b>believe.</b>', '', [
@@ -215,7 +223,7 @@ C['en'] = dict(cta1='Start the free pilot', pages={
      ('Knows your prices, doctors and policies', 'y', 'From a script', 'From your approved info'),
      ('Books straight into your calendar', 'y', 'Often takes a message', 'y'),
      ('Arabic and English, voice notes too', 'Depends on staff', 'Depends on the agent', 'y'),
-     ('Handles 20 chats at the same time', 'n', 'One per agent', 'y'),
+     ('Handles many chats at the same time', 'n', 'One per agent', 'y'),
      ('Reminders, waitlist and review requests', 'When remembered', 'n', 'y'),
      ('Warm, in-person care at the desk', 'y', 'n', 'Your team, freed up'),
      ('You see every conversation', 'Partly', 'Reports on request', 'Owner dashboard'),
@@ -241,7 +249,7 @@ C['en'] = dict(cta1='Start the free pilot', pages={
 # =====================================================================================
 # Arabic
 # =====================================================================================
-AR_STEPS = [('chat', '#0e5c57', 'اليوم 1', 'مكالمة 20 دقيقة', 'نتعرّف على خدماتك وأسعارك وأطبائك ومواعيد الدوام وطريقة عمل الاستقبال اليوم. لا تحتاج أي تحضير.'),
+AR_STEPS = [('doc', '#0e5c57', 'اليوم 1', 'نموذج الإعداد أو مكالمة 20 دقيقة', 'املأ نموذج الإعداد في حوالي 15 دقيقة، أو راجعه معنا في مكالمة. لا تحتاج أي تحضير.'),
  ('cal', '#c98f22', 'الأيام 2–4', 'نجهّز نور لعيادتك', 'قائمة أسعارك وأطباؤك ومواعيدك وشركات التأمين وأسلوبكم في الكلام. نربط رقم واتساب للأعمال وتقويم Google، دون أن تغيّر شيئًا.'),
  ('users', '#7c6cf2', 'الأيام 4–6', 'فريقك يجرّبها', 'راسلوا نور واتصلوا بها من هواتفكم وأخبرونا بما تريدون تعديله. وضع الموافقة يتيح لك مراجعة الردود قبل إرسالها.'),
  ('flag', '#1f9d6b', 'اليوم 7', 'الإطلاق مع تجربة مجانية 14 يومًا', 'تبدأ نور بالرد على مرضى حقيقيين. وبعد 14 يومًا نراجع الأرقام معًا، والقرار لك.')]
@@ -318,6 +326,7 @@ C['ar'] = dict(cta1='ابدأ التجربة المجانية', pages={
      ('sheet', '#14a3b8', 'Google Sheets', 'ok', 'متاح', 'قوائم المرضى وقائمة الانتظار والطلبات في ملف يفتحه فريقك متى شاء.', 'sheets'),
      ('globe', '#5b7fd6', 'دردشة الموقع', 'ok', 'متاح', 'نفس نور على موقعك، ليحجز الزوار بدل أن يغادروا.', 'web'),
      ('doc', '#61706c', 'تقارير PDF', 'ok', 'متاح', 'ملخص يومي على واتساب، مع تقارير أسبوعية وشهرية.', 'reports'),
+     ('heart', '#d4669a', 'رسائل إنستغرام وفيسبوك', 'rq', 'عند الطلب', 'يمكن لنور الرد على الرسائل الخاصة في صفحات إنستغرام وفيسبوك. تُفعَّل عند الطلب، اسألنا في المكالمة.', 'social'),
      ('steth', '#b9811f', 'الملف الطبي / نظام إدارة العيادة', 'rq', 'عند الطلب', 'أخبرنا بالنظام الذي تستخدمه، ونتحقق من الإمكانيات خلال المكالمة. لا نعد بشيء قبل ذلك.', 'emr')])
    + '</div></div></section>'
    + faqs('أسئلة', 'معلومات تهمّك', [('هل أحتاج رقم واتساب جديد؟', 'لا. نور تعمل على رقم واتساب للأعمال الخاص بعيادتك، ونرشدك في ربطه.'), ('أي تقويم تستخدم؟', 'نور تحجز في تقويم Google مشترك. وإذا كانت عيادتك تستخدم نظام إدارة، أخبرنا به ونتحقق من الخيارات.')]))),
@@ -328,7 +337,7 @@ C['ar'] = dict(cta1='ابدأ التجربة المجانية', pages={
   visual='<div class="letter rv"><span class="mk">' + HMARK + '</span><p>«نور ليست هنا لتحل محل موظفة الاستقبال، بل هي الزميلة التي تغطي المناوبة الليلية وعطلة نهاية الأسبوع ووقت الذروة، ولا تنسى المتابعة أبدًا.»</p><b>زياد الحسيني</b><small>مؤسس هالورا</small></div>',
   body=lambda c, plans, pilot, hf, p: (
    '<section class="sx tight"><div class="wrap story rv"><span class="k2">لماذا هالورا</span><h2>مشكلة بسيطة، <b>كل مساء.</b></h2>'
-   '<p>تصل لعيادات الخليج نسبة كبيرة من الاستفسارات في المساء وأيام الجمعة ووقت الذروة في الاستقبال. المرضى يراسلون ثلاث عيادات في نفس الوقت على واتساب، وأول رد واضح بموعد يكسب الحجز غالبًا.</p>'
+   '<p>تصل لعيادات الخليج نسبة كبيرة من الاستفسارات في المساء وأيام الجمعة ووقت الذروة في الاستقبال. كثير من المرضى يراسلون عدة عيادات في نفس الوقت على واتساب، وأول رد واضح بموعد يكسب الحجز غالبًا.</p>'
    '<p>بدأ زياد هالورا بعد أن رأى كم من هذه الرسائل يبقى بلا رد، ليس لأن العيادات لا تهتم، بل لأن لا أحد متفرغ في اللحظة المناسبة. نور هي الحل: موظفة استقبال ترد خلال ثوانٍ بالعربية والإنجليزية وتحجز مباشرة في تقويم العيادة.</p>'
    '<p>نحن شركة صغيرة يقودها المؤسس. عندما تبدأ التجربة، يجهّزها زياد معك شخصيًا ويبقى معك على واتساب حتى تعمل بالطريقة التي تحتاجها عيادتك.</p></div></section>'
    + cards('كيف نعمل', 'ما <b>نؤمن به.</b>', '', [
@@ -349,7 +358,7 @@ C['ar'] = dict(cta1='ابدأ التجربة المجانية', pages={
      ('تعرف أسعارك وأطباءك وسياساتك', 'y', 'من نص مكتوب', 'من معلوماتك المعتمدة'),
      ('تحجز مباشرة في تقويمك', 'y', 'غالبًا تأخذ رسالة', 'y'),
      ('عربي وإنجليزي ورسائل صوتية', 'حسب الموظف', 'حسب الموظف', 'y'),
-     ('20 محادثة في نفس الوقت', 'n', 'محادثة لكل موظف', 'y'),
+     ('محادثات كثيرة في نفس الوقت', 'n', 'محادثة لكل موظف', 'y'),
      ('تذكيرات وقائمة انتظار وطلبات تقييم', 'عند التذكر', 'n', 'y'),
      ('رعاية إنسانية دافئة في الاستقبال', 'y', 'n', 'فريقك، بوقت أكثر'),
      ('ترى كل محادثة', 'جزئيًا', 'تقارير عند الطلب', 'لوحة المالك'),
@@ -372,3 +381,74 @@ C['ar'] = dict(cta1='ابدأ التجربة المجانية', pages={
    + pilot
    + faqs('أسئلة', 'عن التجربة', [('كم تكلّف التجربة؟', 'لا شيء. وإذا استمررت بعد 14 يومًا، تدفع رسوم الإعداد لمرة واحدة والشهر الأول كما في صفحة الأسعار.'), ('هل أحتاج توقيع عقد؟', 'لا. الباقات شهرية بدون عقد طويل.'), ('ماذا لو لم تناسبنا؟', 'تنسحب دون أن تدفع شيئًا، ويبقى رقم واتساب والتقويم والبيانات ملكك.')]))),
 })
+
+
+# =====================================================================================
+# Legal pages (plain language; have them reviewed by a lawyer before relying on them)
+# =====================================================================================
+UPDATED = {'en': 'Last updated: 22 November 2026', 'ar': 'آخر تحديث: 22 نوفمبر 2026'}
+def article(lang, sections):
+    toc = ''.join(f'<li><a href="#s{i+1}">{h}</a></li>' for i, (h, _) in enumerate(sections))
+    body = ''.join(f'<section id="s{i+1}"><h2>{h}</h2>{t}</section>' for i, (h, t) in enumerate(sections))
+    return (f'<section class="sx tight legal"><div class="wrap"><div class="lg-grid"><nav class="toc" aria-label="{"On this page" if lang=="en" else "في هذه الصفحة"}"><b>{"On this page" if lang=="en" else "في هذه الصفحة"}</b><ol>{toc}</ol></nav>'
+            f'<article class="doc"><p class="upd">{UPDATED[lang]}</p>{body}</article></div></div></section>')
+
+MAIL = '<a href="mailto:ziad.elhoseiny@askhalora.com" dir="ltr">ziad.elhoseiny@askhalora.com</a>'
+PRIV_EN = [
+ ('Who we are', f'<p>Halora builds Noor, an AI receptionist for clinics in Dubai and the Gulf. In this policy, “we” means Halora. You can reach us at {MAIL}.</p>'),
+ ('What we collect on this website', '<ul><li><b>Forms:</b> when you fill in the setup form, the pilot form or book a call, we collect what you type: your name, clinic name, WhatsApp number, email, city and the clinic details you share.</li><li><b>Demo chat and voice demo:</b> messages you send to the demo Noor are processed to generate replies. The demo clinics are fictional and no real appointment is made.</li><li><b>Basic technical data:</b> our hosting provider may log standard information such as your IP address and browser type for security.</li></ul>'),
+ ('How we use it', '<p>To reply to you, set up and run your pilot or subscription, book calls, improve Noor and keep the service secure. We do not sell your data and we do not use it for third-party advertising.</p>'),
+ ('Patient data at clinics using Noor', '<p>When a clinic uses Noor, the clinic decides how its patient data is used, and we process it on the clinic’s behalf only to provide the service. Conversations run on the clinic’s own WhatsApp Business number, bookings go into the clinic’s own Google Calendar and patient lists stay in the clinic’s own Google Sheets.</p><p><b>Data & safety:</b> Noor never asks patients for ID numbers, card details or medical history, never gives medical advice, and hands anything sensitive to the clinic’s team.</p>'),
+ ('Service providers', '<p>To run the service we use trusted providers, for example: Meta (WhatsApp Business Platform), Google (Calendar and Sheets), our automation and hosting providers, ElevenLabs for the phone voice, and AI model providers that process messages to write Noor’s replies. They only receive what they need to do their part.</p>'),
+ ('How long we keep data', '<p>We keep enquiry and form data while we are in contact with you, and for as long as you are a customer. Demo chat data is cleaned up regularly. You can ask us to delete your data at any time.</p>'),
+ ('Your choices and rights', f'<p>You can ask to see, correct or delete the personal data we hold about you, or ask us to stop contacting you. Email {MAIL} and we will reply within a reasonable time.</p>'),
+ ('Cookies and storage', '<p>We do not use advertising or tracking cookies. The website uses your browser’s local and session storage only for small conveniences, for example to remember that you have already seen the opening animation.</p>'),
+ ('Changes', '<p>If we change this policy, we will update this page and the date at the top.</p>'),
+]
+PRIV_AR = [
+ ('من نحن', f'<p>هالورا تبني نور، موظفة استقبال ذكية للعيادات في دبي والخليج. في هذه السياسة، «نحن» تعني هالورا. يمكنك التواصل معنا عبر {MAIL}.</p>'),
+ ('ما نجمعه على هذا الموقع', '<ul><li><b>النماذج:</b> عندما تملأ نموذج الإعداد أو نموذج التجربة أو تحجز مكالمة، نجمع ما تكتبه: اسمك واسم العيادة ورقم واتساب والبريد الإلكتروني والمدينة وتفاصيل العيادة التي تشاركها.</li><li><b>الدردشة والعرض الصوتي التجريبي:</b> الرسائل التي ترسلها لنور التجريبية تُعالَج لكتابة الردود. العيادات التجريبية وهمية ولا يتم حجز أي موعد حقيقي.</li><li><b>بيانات تقنية أساسية:</b> قد يسجّل مزوّد الاستضافة معلومات عادية مثل عنوان IP ونوع المتصفح لأغراض الأمان.</li></ul>'),
+ ('كيف نستخدمها', '<p>للرد عليك، وتجهيز وتشغيل التجربة أو الاشتراك، وحجز المكالمات، وتحسين نور، والحفاظ على أمان الخدمة. لا نبيع بياناتك ولا نستخدمها لإعلانات جهات أخرى.</p>'),
+ ('بيانات المرضى في العيادات التي تستخدم نور', '<p>عندما تستخدم عيادة نور، فالعيادة هي من تقرر كيفية استخدام بيانات مرضاها، ونحن نعالجها نيابة عنها فقط لتقديم الخدمة. المحادثات تتم على رقم واتساب للأعمال الخاص بالعيادة، والحجوزات في تقويم Google الخاص بها، وقوائم المرضى في ملفات Google Sheets الخاصة بها.</p><p><b>البيانات والأمان:</b> نور لا تطلب من المرضى أرقام الهوية أو بيانات البطاقات أو التاريخ المرضي، ولا تقدّم نصائح طبية، وتحوّل أي أمر حساس لفريق العيادة.</p>'),
+ ('مزوّدو الخدمة', '<p>لتشغيل الخدمة نستعين بمزوّدين موثوقين، مثل: Meta (منصة واتساب للأعمال)، وGoogle (التقويم وSheets)، ومزوّدي الأتمتة والاستضافة، وElevenLabs للصوت في الهاتف، ومزوّدي نماذج الذكاء الاصطناعي التي تعالج الرسائل لكتابة ردود نور. ولا يحصلون إلا على ما يحتاجونه لأداء دورهم.</p>'),
+ ('مدة الاحتفاظ بالبيانات', '<p>نحتفظ ببيانات الاستفسارات والنماذج طوال فترة تواصلنا معك، وطوال فترة اشتراكك. وتُحذف بيانات الدردشة التجريبية بشكل دوري. يمكنك أن تطلب منا حذف بياناتك في أي وقت.</p>'),
+ ('خياراتك وحقوقك', f'<p>يمكنك أن تطلب الاطلاع على بياناتك الشخصية لدينا أو تصحيحها أو حذفها، أو أن نتوقف عن التواصل معك. راسلنا على {MAIL} وسنرد خلال وقت معقول.</p>'),
+ ('ملفات تعريف الارتباط والتخزين', '<p>لا نستخدم ملفات تعريف ارتباط إعلانية أو للتتبّع. يستخدم الموقع التخزين المحلي في متصفحك لأمور بسيطة فقط، مثل تذكّر أنك شاهدت مقدمة الموقع.</p>'),
+ ('التغييرات', '<p>إذا غيّرنا هذه السياسة، سنحدّث هذه الصفحة والتاريخ في أعلاها.</p>'),
+]
+TERMS_EN = [
+ ('The service', '<p>Halora provides Noor, an AI receptionist that answers a clinic’s patients on WhatsApp, website chat and, on some plans, the phone, books appointments and sends reports. Optional add-ons include a clinic website and reminders & reviews.</p>'),
+ ('Free 14-day pilot', '<p>Every plan starts with a free 14-day pilot. You do not pay anything during the pilot. If you decide not to continue, you pay nothing.</p>'),
+ ('Plans, prices and payment', '<p>Plans are monthly with no long contract. Prices are in US dollars, or the same amount in AED at a fixed rate, and are shown on the <a href="/pricing/">pricing page</a>. If you continue after the pilot, you pay the one-time setup fee (where it applies) and your first month. WhatsApp message fees from Meta are billed to your own WhatsApp account.</p>'),
+ ('Founding clinic offer', '<p>Clinics that join by 31 December 2026 get founding prices (25% off the monthly price and the setup fee), locked for 12 months. After that, regular prices apply.</p>'),
+ ('Cancelling', f'<p>You can cancel at any time by emailing {MAIL}. Noor stops answering at the end of the month you have paid for. Your WhatsApp number, calendar and data stay yours.</p>'),
+ ('Your responsibilities', '<ul><li>Give us accurate information about your services, prices, doctors and hours, and tell us when it changes.</li><li>Make sure you are allowed to message your patients, including reminders and campaigns.</li><li>All medical decisions stay with your clinic’s qualified staff.</li></ul>'),
+ ('What Noor does and does not do', '<p>Noor answers from the information you approve, never gives medical advice and hands sensitive or unusual conversations to your team. Like any software, Noor can make mistakes, so your team can review and take over any conversation at any time.</p>'),
+ ('Demos', '<p>Demo clinics on this website, such as BrightSmile Dental, Glow Skin Clinic, Lumina Dental and Pearl Demo Dental, are fictional. Nothing booked in a demo is real.</p>'),
+ ('Liability', '<p>We work hard to keep Noor reliable, but we cannot promise the service will always be uninterrupted or error-free. To the extent the law allows, our total liability is limited to the amount you paid us in the three months before the event.</p>'),
+ ('Contact', f'<p>Questions about these terms? Email {MAIL}.</p>'),
+]
+TERMS_AR = [
+ ('الخدمة', '<p>تقدّم هالورا نور، موظفة استقبال ذكية ترد على مرضى العيادة عبر واتساب ودردشة الموقع، والهاتف في بعض الباقات، وتحجز المواعيد وترسل التقارير. ومن الإضافات الاختيارية موقع العيادة والتذكير والتقييمات.</p>'),
+ ('تجربة مجانية لمدة 14 يومًا', '<p>كل باقة تبدأ بتجربة مجانية لمدة 14 يومًا، ولا تدفع شيئًا خلالها. وإذا قررت عدم الاستمرار، لا تدفع شيئًا.</p>'),
+ ('الباقات والأسعار والدفع', '<p>الباقات شهرية بدون عقد طويل. الأسعار بالدولار الأمريكي، أو ما يعادلها بالدرهم بسعر صرف ثابت، وهي موضحة في <a href="/ar/pricing/">صفحة الأسعار</a>. إذا استمررت بعد التجربة، تدفع رسوم الإعداد لمرة واحدة (إن وُجدت) والشهر الأول. ورسوم رسائل واتساب من Meta تُحسب على حساب واتساب الخاص بعيادتك.</p>'),
+ ('عرض العيادات المؤسِّسة', '<p>العيادات التي تنضم حتى 31 ديسمبر 2026 تحصل على الأسعار المؤسِّسة (خصم 25% على السعر الشهري ورسوم الإعداد)، ثابتة لمدة 12 شهرًا، ثم تُطبَّق الأسعار العادية.</p>'),
+ ('الإلغاء', f'<p>يمكنك الإلغاء في أي وقت بمراسلتنا على {MAIL}. تتوقف نور عن الرد في نهاية الشهر المدفوع. ويبقى رقم واتساب والتقويم والبيانات ملكك.</p>'),
+ ('مسؤولياتك', '<ul><li>تزويدنا بمعلومات صحيحة عن خدماتك وأسعارك وأطبائك ومواعيدك، وإبلاغنا عند تغييرها.</li><li>التأكد من أنك مسموح لك بمراسلة مرضاك، بما في ذلك التذكيرات والحملات.</li><li>كل القرارات الطبية تبقى لدى الكادر المؤهل في عيادتك.</li></ul>'),
+ ('ما تفعله نور وما لا تفعله', '<p>نور تجيب من المعلومات التي توافق عليها، ولا تقدّم نصائح طبية أبدًا، وتحوّل المحادثات الحساسة أو غير المعتادة لفريقك. وككل برنامج، قد تخطئ نور أحيانًا، لذلك يستطيع فريقك مراجعة أي محادثة والتدخّل فيها في أي وقت.</p>'),
+ ('العروض التجريبية', '<p>العيادات التجريبية على هذا الموقع، مثل عيادة برايت سمايل وعيادة جلو للبشرة وعيادة لومينا للأسنان وعيادة بيرل التجريبية، عيادات وهمية، ولا يُعدّ أي حجز فيها حجزًا حقيقيًا.</p>'),
+ ('المسؤولية', '<p>نعمل بجد لتبقى نور موثوقة، لكن لا يمكننا أن نعد بأن تعمل الخدمة دائمًا دون انقطاع أو أخطاء. وفي الحدود التي يسمح بها القانون، تقتصر مسؤوليتنا الإجمالية على المبلغ الذي دفعته لنا خلال الأشهر الثلاثة السابقة للحدث.</p>'),
+ ('التواصل', f'<p>لديك سؤال عن هذه الشروط؟ راسلنا على {MAIL}.</p>'),
+]
+C['en']['pages']['privacy'] = dict(crumb='Privacy policy', icon=('shield', '#0f2523'), legal=True, band=False, visual='',
+  title='Privacy policy · Halora', desc='How Halora collects, uses and protects personal data on askhalora.com and in the Noor AI receptionist service, in plain language.',
+  h1='Privacy policy', lead='How we collect, use and protect personal data, in plain language.', body=lambda c, plans, pilot, hf, p: article('en', PRIV_EN))
+C['en']['pages']['terms'] = dict(crumb='Terms', icon=('doc', '#0e5c57'), legal=True, band=False, visual='',
+  title='Terms of service · Halora', desc='The terms for using Halora and Noor, the AI receptionist for clinics: free 14-day pilot, monthly plans, founding offer, cancelling and responsibilities.',
+  h1='Terms of service', lead='The simple rules for using Halora and Noor.', body=lambda c, plans, pilot, hf, p: article('en', TERMS_EN))
+C['ar']['pages']['privacy'] = dict(crumb='سياسة الخصوصية', icon=('shield', '#0f2523'), legal=True, band=False, visual='',
+  title='سياسة الخصوصية · هالورا', desc='كيف تجمع هالورا البيانات الشخصية وتستخدمها وتحميها على موقع askhalora.com وفي خدمة نور، موظفة الاستقبال الذكية، بلغة واضحة.',
+  h1='سياسة الخصوصية', lead='كيف نجمع البيانات الشخصية ونستخدمها ونحميها، بلغة واضحة.', body=lambda c, plans, pilot, hf, p: article('ar', PRIV_AR))
+C['ar']['pages']['terms'] = dict(crumb='الشروط', icon=('doc', '#0e5c57'), legal=True, band=False, visual='',
+  title='شروط الخدمة · هالورا', desc='شروط استخدام هالورا ونور، موظفة الاستقبال الذكية للعيادات: التجربة المجانية لمدة 14 يومًا، والباقات الشهرية، وعرض المؤسسين، والإلغاء والمسؤوليات.',
+  h1='شروط الخدمة', lead='القواعد البسيطة لاستخدام هالورا ونور.', body=lambda c, plans, pilot, hf, p: article('ar', TERMS_AR))

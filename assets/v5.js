@@ -100,6 +100,14 @@ var rtl=h.dir==='rtl';
 (function(){var q=false;function u(){q=false;d.body.classList.toggle('past-hero',scrollY>innerHeight*.8)}
  addEventListener('scroll',function(){if(!q){q=true;requestAnimationFrame(u)}},{passive:true});u()})();
 
-/* ===== mobile menu: expose state to assistive tech ===== */
-var mb=$('.mbtn');if(mb)mb.addEventListener('click',function(){mb.setAttribute('aria-expanded',d.body.classList.contains('mopen')?'true':'false')});
+/* ===== mobile menu: correct position, closes on link / Esc / resize, state for assistive tech ===== */
+var mb=$('.mbtn');
+if(mb){var hd=$('header.top');
+ function setTop(){if(hd)h.style.setProperty('--hb',Math.max(0,Math.round(hd.getBoundingClientRect().bottom))+'px')}
+ function close(){if(!d.body.classList.contains('mopen'))return;d.body.classList.remove('mopen');mb.setAttribute('aria-expanded','false')}
+ mb.addEventListener('click',function(){setTop();mb.setAttribute('aria-expanded',d.body.classList.contains('mopen')?'true':'false')});
+ $$('.top nav a').forEach(function(a){a.addEventListener('click',close)});
+ addEventListener('keydown',function(e){if(e.key==='Escape'&&d.body.classList.contains('mopen')){close();mb.focus()}});
+ addEventListener('resize',function(){if(innerWidth>900)close();else setTop()});
+}
 })();
