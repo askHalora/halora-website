@@ -128,3 +128,13 @@ if(vb.length){var ar=d.documentElement.lang==='ar',vm,vv,last;
  d.addEventListener('keydown',function(e){if(e.key==='Escape')close()});
  w.closeHaloraVideo=close}
 })();
+
+/* Get started: links every page to the clinic setup form (/setup/). Added 23 Nov 2026. Remove this block to switch off. */
+(function(){var d=document,p=location.pathname;if(/^\/(setup|site|portal|chat|admin)\//.test(p))return;
+var ar=d.documentElement.lang==='ar',u='/setup/'+(ar?'?lang=ar':''),t=ar?'ابدأ الإعداد':'Get started';
+var pilot=d.querySelector('header.top a.btn[href*="pilot"]');
+if(pilot&&!d.getElementById('hl-gs')){var a=d.createElement('a');a.id='hl-gs';a.className='btn';a.href=u;a.textContent=t;a.style.marginInlineStart='8px';a.style.background='#e0b34f';a.style.color='#0f2523';pilot.parentNode.insertBefore(a,pilot.nextSibling);}
+var f=d.querySelector('footer');if(f&&!d.getElementById('hl-gs-band')){var s=d.createElement('section');s.id='hl-gs-band';s.style.padding='0 16px';
+s.innerHTML='<div style="display:flex;flex-wrap:wrap;gap:16px;align-items:center;justify-content:space-between;padding:28px 24px;margin:40px auto;background:#0e5c57;color:#fff;border-radius:20px;max-width:1100px"><div><b style="font-size:21px">'+(ar?'جهّزوا نور لعيادتكم خلال 15 دقيقة':'Set up Noor for your clinic in 15 minutes')+'</b><div style="opacity:.85;margin-top:6px">'+(ar?'اختاروا الباقة، أدخلوا معلومات العيادة، وكل شيء يُجهّز تلقائياً: الدردشة، الموقع، بوابة المالك والهاتف.':'Pick a package, add your clinic details, and everything is built for you: chat, website, owner portal and phone.')+'</div></div><a class="btn" style="background:#e0b34f;color:#0f2523;white-space:nowrap" href="'+u+'">'+t+' →</a></div>';
+f.parentNode.insertBefore(s,f);}
+})();
