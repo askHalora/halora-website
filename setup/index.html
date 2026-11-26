@@ -239,6 +239,15 @@ f.addEventListener('submit',async e=>{e.preventDefault();const err=$('#err');err
  catch(_){err.textContent=lang==='ar'?'تعذّر الإرسال. تحققوا من الاتصال وحاولوا مرة أخرى، أو راسلونا على واتساب.':'Could not send. Check your connection and try again, or message us on WhatsApp.';b.disabled=false;b.textContent=lang==='ar'?AR.submit:EN.submit}});
 
 ;(function(){if(!EGY)return;$('#country').value='eg';$('#currency').value='EGP';var ph={contact_phone:'+20 10…',emergency_number:'123',insurance:'AXA, Allianz, Bupa, MetLife…',payment:'Cash, card, InstaPay, valU…'};for(var k in ph){var el=f[k];if(el&&el.placeholder!==undefined)el.placeholder=ph[k]}var sl=null;try{sl=localStorage.getItem('hlSetupLang')}catch(e){}if(!QP.get('lang')&&!sl){lang='ar';applyLang()}save()})();
+;(function(){/* Arabic placeholders and dropdown labels (values stay the same) */
+var PH={insurance:'AXA، أليانز، بوبا، ميتلايف…',payment:'كاش، فيزا، إنستاباي، valU…',policies:'العربون، المطلوب إحضاره، سن المريض، أول زيارة…',insurers:'AXA، أليانز، بوبا، ميتلايف، جلوب ميد…',installments:'valU، سيمبل، تقسيط 6 شهور بدون فوائد…',deposit:'عربون 20% للزراعة…',emergency_handling:'ميعاد طوارئ في نفس اليوم، كلموا 010…',booking_alerts:'الاستقبال 010…، المدير 011…',brand_voice:'راقي وهادي، بالعامية المصرية، دايماً تقول "حضرتك"…',never_topics:'أسعار العمليات بالظبط، العيادات المنافسة، جرعات الأدوية…',before_after:'بتتعرض في العيادة بس…',contact_role:'المالك، المدير…',assistant_name:'نور',address:'العنوان بالتفصيل',parking:'متاح جراج / ركن في الشارع…',closed_dates:'إجازات أو أيام قافلين فيها…',description:'نبذة قصيرة عن العيادة…'};
+var OP={'Dental':'أسنان','Dermatology / skin':'جلدية','Aesthetics':'تجميل','Physiotherapy':'علاج طبيعي','Fertility / IVF':'خصوبة / حقن مجهري','General / polyclinic':'عام / مجمع عيادات','Other':'أخرى','Yes, if a slot is free':'أيوه لو فيه ميعاد فاضي','No':'لأ','Accepted':'متاح','Appointments only':'بالحجز بس','English, Arabic':'إنجليزي وعربي','Arabic first, English':'عربي أولاً ثم إنجليزي','English only':'إنجليزي بس','Warm & friendly':'ودود وقريب','Formal & professional':'رسمي ومحترف'};
+var en={};document.querySelectorAll('input[name],textarea[name]').forEach(function(i){en[i.name]=i.placeholder});
+document.querySelectorAll('select option').forEach(function(o){if(!o.hasAttribute('value'))o.setAttribute('value',o.textContent);o.dataset.en=o.textContent});
+function tr(){var ar=lang==='ar';for(var k in PH){var el=document.querySelector('[name="'+k+'"]');if(el)el.placeholder=ar?PH[k]:(en[k]||'')}
+ document.querySelectorAll('select option').forEach(function(o){var t=o.dataset.en;o.textContent=ar&&OP[t]?OP[t]:t})}
+var _al=applyLang;applyLang=function(){_al();tr()};tr();})();
+
 ;(function(){var p=QP.get('plan');if(p){var r=document.querySelector('input[name=plan][value="'+p.replace(/[^a-z-]/g,'')+'"]');if(r)r.checked=true}['website','phone','reminders'].forEach(function(k){if(QP.get(k)==='yes'){var c=document.querySelector('input[name=addon_'+k+']');if(c)c.checked=true}})})();
 </script>
 </body>
